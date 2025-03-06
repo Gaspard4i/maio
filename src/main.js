@@ -6,6 +6,14 @@ let y = canvas.height / 2;
 let vx = 0;
 let vy = 0;
 
+const position = [
+	[200, 200],
+	[600, 600],
+	[246, 478],
+	[234, 646],
+	[987, 789],
+];
+
 const canvasResizeObserver = new ResizeObserver(() => resampleCanvas());
 canvasResizeObserver.observe(canvas);
 
@@ -26,7 +34,9 @@ function draw() {
 
 function render() {
 	context.clearRect(0, 0, canvas.width, canvas.height);
+
 	draw();
+	loadImg();
 	requestAnimationFrame(render);
 }
 
@@ -77,6 +87,12 @@ document.addEventListener('keyup', event => {
 const tache1 = new Image();
 tache1.src = '/image/stain.png';
 tache1.addEventListener('load', event => {
-	context.drawImage(tache1, 200, 200, 40, 40);
+	loadImg();
 	console.log('loaded');
 });
+
+function loadImg() {
+	position.forEach(element => {
+		context.drawImage(tache1, element[0], element[1], 40, 40);
+	});
+}
