@@ -89,7 +89,7 @@ document.addEventListener('keyup', event => {
 });
 
 const tache1 = new Image();
-tache1.src = '/image/stain.png';
+tache1.src = 'src/assets/stain.png';
 tache1.addEventListener('load', event => {
 	loadImg();
 	console.log('loaded');
