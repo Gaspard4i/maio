@@ -5,10 +5,11 @@ import {
 	handleKeyUp,
 	drawPlayer,
 } from './player.js';
-import { stains } from './entities.js';
+import { stains, createNewStains } from './entities.js';
 
 function draw() {
 	drawPlayer(context);
+	createNewStains();
 	stains.forEach(entity => entity.draw(context));
 }
 
