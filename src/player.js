@@ -136,8 +136,8 @@ export function handleKeyUp(event) {
 }
 
 canvas.addEventListener('mousemove', event => {
-	const dx = event.offsetX - player.x;
-	const dy = event.offsetY - player.y;
+	const dx = event.offsetX + camera.x - player.x;
+	const dy = event.offsetY + camera.y - player.y;
 	player.updateMouseMovement(dx, dy);
 });
 
