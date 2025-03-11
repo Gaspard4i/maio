@@ -3,8 +3,9 @@ import { Entity } from './entity.js';
 import { stains } from './entities.js';
 
 const COLOR = 'rgba(255, 255, 255)';
-const PLAYER_SPEED = 15;
 const STAIN_SIZE = 40;
+
+const PLAYER_SPEED = 5;
 
 export class Player extends Entity {
 	constructor(radius, x, y, vx, vy) {
@@ -12,6 +13,7 @@ export class Player extends Entity {
 		this.color = COLOR;
 		this.vx = vx;
 		this.vy = vy;
+		this.speed = PLAYER_SPEED;
 	}
 
 	draw(context) {
@@ -24,24 +26,28 @@ export class Player extends Entity {
 	}
 
 	slow() {
-		this.vx *= 0.5;
-		this.vy *= 0.5;
+		this.speed = PLAYER_SPEED / Math.sqrt(this.radius / 30);
+		console.log(this.speed);
 	}
 
 	grow() {
-		this.radius += 5;
+		const maxRadius = Math.min(canvas.width, canvas.height) / 2;
+		this.radius = Math.min(this.radius + 10, maxRadius);
 		this.slow();
 	}
 
 	checkStainCollisionFromCenter() {
 		for (let i = 0; i < stains.length; i++) {
-			const stainCenterX = stains[i].x + STAIN_SIZE / 2;
-			const stainCenterY = stains[i].y + STAIN_SIZE / 2;
+			const stain = stains[i];
+			const stainCenterX = stain.x + STAIN_SIZE / 2;
+			const stainCenterY = stain.y + STAIN_SIZE / 2;
 			const dx = stainCenterX - this.x;
 			const dy = stainCenterY - this.y;
 			const distance = Math.sqrt(dx * dx + dy * dy);
 
-			if (distance <= this.radius) {
+			const stainRadius = STAIN_SIZE / 2;
+			const overlap = this.radius - distance + stainRadius;
+			if (overlap >= stainRadius * 0.75) {
 				stains.splice(i, 1);
 				i--;
 				this.grow();
@@ -72,16 +78,19 @@ export function movePlayer() {
 export function handleKeyDown(event) {
 	switch (event.key) {
 		case 'ArrowRight':
-			player.vx = PLAYER_SPEED;
+			player.vx = player.speed;
 			break;
 		case 'ArrowLeft':
-			player.vx = -PLAYER_SPEED;
+			player.vx = -player.speed;
 			break;
 		case 'ArrowUp':
-			player.vy = -PLAYER_SPEED;
+			player.vy = -player.speed;
 			break;
 		case 'ArrowDown':
-			player.vy = PLAYER_SPEED;
+			player.vy = player.speed;
+			break;
+		case 'Shift':
+			player.speed += 10;
 			break;
 	}
 }
@@ -95,6 +104,9 @@ export function handleKeyUp(event) {
 		case 'ArrowUp':
 		case 'ArrowDown':
 			player.vy = 0;
+			break;
+		case 'Shift':
+			player.speed -= 10;
 			break;
 	}
 }
