@@ -6,11 +6,15 @@ import {
 	drawPlayer,
 } from './player.js';
 import { stains, createNewStains } from './entities.js';
+import { camera } from './camera.js';
 
 function draw() {
+	context.save();
+	context.translate(-camera.x, -camera.y);
 	drawPlayer(context);
 	createNewStains();
 	stains.forEach(entity => entity.draw(context));
+	context.restore();
 }
 
 function render() {

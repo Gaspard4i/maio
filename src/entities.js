@@ -1,17 +1,17 @@
 import { Stain } from './stain.js';
-import { canvas } from './canvas.js';
+import { canvas, maxHeight, maxWidth} from './canvas.js';
 
 export const stains = [];
-for (let i = 0; i < 20; i++) {
-	const x = Math.floor(Math.random() * canvas.clientWidth - 10);
-	const y = Math.floor(Math.random() * canvas.clientHeight - 10);
+for (let i = 0; i < 1000; i++) {
+	const x = Math.floor(Math.random() * maxWidth - 10);
+	const y = Math.floor(Math.random() * maxHeight - 10);
 	stains.push(new Stain(20, x, y));
 }
 
 export function createNewStains() {
-	while (stains.length < 20) {
-		const x = Math.floor(Math.random() * canvas.clientWidth - 10);
-		const y = Math.floor(Math.random() * canvas.clientHeight - 10);
+	while (stains.length < 1000) {
+		const x = Math.floor(Math.random() * maxWidth - 10);
+		const y = Math.floor(Math.random() * maxHeight - 10);
 		stains.push(new Stain(20, x, y));
 	}
 }
