@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MA.IO</title>
+    <link rel="stylesheet" href="css/home.css">
+    <script src="build/main.bundle.js" defer></script>
+</head>
+<body>
+    <!-- User Profile & Progress Bar -->
+    <header id="home-header">
+        <div class="profile">
+            <img src="src/assets/UI/user.png" alt="Profil">
+        </div>
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+    </header>
+
+    <!-- Main Game Menu -->
+    <main id="home-main">
+        <!-- Leaderboard -->
+        <section class="leaderboard">
+            <h2>LEADERBOARD</h2>
+            <ul>
+                <li><span>Pseudo</span> <span>10000 PTS</span></li>
+                <li><span>Pseudo</span> <span>10000 PTS</span></li>
+                <li><span>Pseudo</span> <span>10000 PTS</span></li>
+                <li><span>Pseudo</span> <span>10000 PTS</span></li>
+                <li><span>Pseudo</span> <span>10000 PTS</span></li>
+            </ul>
+        </section>
+
+        <!-- Play Button & Game Title -->
+        <section class="main-menu">
+            <div class="title">
+                <img src="src/assets/Maio_logo.png" alt="Logo MA.IO">
+            </div>
+            <div class="play-text" id="play-button">
+                <h1>PLAY</h1>
+            </div>
+            <div class="menu-options">
+                <img src="src/assets/UI/setting.png" alt="Réglages">
+                <img src="src/assets/UI/group_on.png" alt="Multijoueur">
+            </div>
+        </section>
+
+        <!-- Customization Section -->
+        <section class="customization">
+            <img src="src/assets/UI/left_arrow.png" class="left-arrow" alt="Gauche">
+            <img src="src/assets/skins/ketchup.png" alt="Ketchup">
+            <img src="src/assets/skins/mayonnaise.png" alt="Mayonnaise">
+            <img src="src/assets/skins/bbq-sauce.png" alt="BBQ Sauce">
+            <img src="src/assets/UI/right_arrow.png" class="right-arrow" alt="Droite">
+        </section>
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+	<footer id="home-footer">
+		<nav>
+			<a href="#">Crédits</a>
+			<a href="#">À propos</a>
+			<a href="#">Contact</a>
+		</nav>
+	</footer>
+
+    <!-- Game Canvas -->
+    <canvas id="game-canvas" class="gameCanvas hidden" width="600" height="400"></canvas>
+</body>
+</html>

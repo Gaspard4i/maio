@@ -1,0 +1,172 @@
+@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Chewy&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #2c3e50;
+    font-family: 'Luckiest Guy', cursive;
+    text-align: center;
+    overflow: hidden; 
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-size: 1rem;
+}
+
+/* ===== HEADER ===== */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1.2vh 1.2vw;
+    background: #34495e;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+}
+
+.profile img {
+    width: 4vw;
+    height: 4vw;
+    margin-right: 0.7vw;
+}
+
+.progress-bar {
+    width: 16vw;
+    height: 2.2vh;
+    background-color: #7f8c8d;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+} 
+
+.progress-bar .progress {
+    width: 75%;
+    height: 100%;
+    background-color: #27ae60;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* ===== MAIN CONTENT ===== */
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    gap: 2vw;
+}
+
+/* ===== LEADERBOARD ===== */
+.leaderboard {
+    font-family: 'Luckiest Guy', cursive;
+    width: 26vw;
+    background: #34495e;
+    padding: 1.2vh;
+    border-radius: 15px;
+    color: #ecf0f1;
+}
+
+.leaderboard ul {
+    list-style: none;
+    text-align: left;
+    padding: 0.7vh;
+}
+
+.leaderboard li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.3rem;
+    color: #ecf0f1;
+}
+
+/* ===== MAIN MENU ===== */
+.main-menu {
+    background: #34495e;
+    width: 36vw;
+    padding: 2.2vh;
+    border-radius: 20px;
+}
+
+
+
+.play-text {
+    cursor: pointer;
+}
+
+.play-text h1 {
+    color: #ecf0f1;
+    background: none;
+    font-size: 4.6rem;
+    font-family: 'Luckiest Guy', cursive;
+}
+
+.menu-options {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.2vh;
+}
+
+.menu-options img {
+    width: 4vw;
+    cursor: pointer;
+}
+
+.title img {
+    width: 13vw;
+}
+
+
+/* ===== CUSTOMIZATION ===== */
+.customization {
+    width: 26vw;
+    background: #34495e;
+    padding: 1.2vh;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.customization img {
+    width: 6vw;
+    height: 6vw;
+    object-fit: contain;
+}
+
+/* ===== FOOTER NAVIGATION ===== */
+footer {
+    background: #34495e;
+    padding: 1.2vh;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
+
+nav a {
+    color: #ecf0f1;
+    font-size: 1.3rem;
+    margin: 0 0.7vw;
+    text-decoration: none;
+    font-family: 'Luckiest Guy', cursive;
+}
+
+canvas {
+	background-color: #ecf0f1;
+	width: 100vw;
+	height: 100vh;
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.hidden {
+    display: none;
+}

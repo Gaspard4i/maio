@@ -1,31 +1,38 @@
-
 * {
-	box-sizing: border-box;
+    box-sizing: border-box;
 }
 html,
 body {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
+    background: #2c3e50; /* Met le fond de la page en #2c3e50 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
 }
-body {
-	min-height: 100vh;
-	/* max-height: 100vh; */
-	background: rgba(14, 16, 20, 1);
-	background: #d6d6d6;
-	color: #acb2b8;
-	color: #777;
-	font-size: 14px;
-	font-family: 'Motiva Sans', Helvetica, Arial, sans-serif;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-}
+
 h1 {
-	font-weight: 100;
+    font-weight: 100;
+    color: #ecf0f1;
+    margin-top: 20px; /* Ajoute un espace en haut */
 }
+
 h1 em {
-	font-style: normal;
-	font-weight: bold;
-	color: #777;
+    font-style: normal;
+    font-weight: bold;
+    color: #ecf0f1; 
+}
+
+canvas {
+    background-color: #34495e;
+    border: 3px dashed #ecf0f1;
+    width: 95%; /* Réduit légèrement la largeur */
+    height: 95%; /* Réduit légèrement la hauteur */
+    position: absolute;
+    top: 2.5%;
+    left: 2.5%;
+    border: none;
+    border-radius: 15px; /* Arrondit les coins du canvas */
 }

@@ -6,6 +6,7 @@ let x = canvas.width / 2;
 let y = canvas.height / 2;
 let vx = 0;
 let vy = 0;
+let color = 'rgba(204, 80, 97)';
 
 function slow() {
 	vx *= 0.5;
@@ -85,6 +86,8 @@ export function drawPlayer(context) {
 	context.moveTo(0, 0);
 	context.beginPath();
 	context.arc(x, y, radius, 0, 2 * Math.PI);
+	context.fillStyle = color;
 	context.fill();
+	context.strokeStyle = color;
 	context.stroke();
 }
