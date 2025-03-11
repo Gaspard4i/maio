@@ -1,8 +1,8 @@
 import { Entity } from './entity.js';
 
 export class Stain extends Entity {
-	constructor(radius, x, y, vx, vy) {
-		super(radius, x, y, vx, vy);
+	constructor(radius, x, y) {
+		super(radius, x, y);
 		this.image = new Image();
 		this.image.src = 'src/assets/stain.png';
 	}
