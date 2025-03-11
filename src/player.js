@@ -1,10 +1,38 @@
 import { canvas } from './canvas.js';
+import { position,IMAGE_SIZE } from './imageLoader.js';
 
 let radius = 30;
 let x = canvas.width / 2;
 let y = canvas.height / 2;
 let vx = 0;
 let vy = 0;
+
+function slow() {
+	vx *= 0.5;
+	vy *= 0.5;
+}
+
+function grow() {
+	radius += 5;
+	slow();
+}
+
+function checkStainCollisionFromCenter() {
+	for (let i = 0; i < position.length; i++) {
+		let stainCenterX = position[i][0] + IMAGE_SIZE / 2;
+		let stainCenterY = position[i][1] + IMAGE_SIZE / 2;
+
+		let dx = stainCenterX - x;
+        let dy = stainCenterY - y;
+        let distance = Math.sqrt(dx * dx + dy * dy);
+		if (distance <= radius) {
+			position.splice(i, 1);
+			i--;
+			grow();
+		}
+	}
+}
+
 
 export function movePlayer() {
 	x += vx;
@@ -20,6 +48,7 @@ export function movePlayer() {
 	} else if (y + radius > canvas.height) {
 		y = canvas.height - radius;
 	}
+	checkStainCollisionFromCenter();
 }
 
 export function handleKeyDown(event) {

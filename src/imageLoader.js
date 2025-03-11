@@ -1,6 +1,7 @@
 import { context } from './canvas.js';
 
-const position = [
+export const IMAGE_SIZE = 40;
+export const position = [
 	[200, 200],
 	[600, 600],
 	[246, 478],
@@ -13,7 +14,7 @@ tache1.src = 'src/assets/stain.png';
 
 export function loadImg() {
 	position.forEach(element => {
-		context.drawImage(tache1, element[0], element[1], 40, 40);
+		context.drawImage(tache1, element[0], element[1], IMAGE_SIZE, IMAGE_SIZE);
 	});
 }
 
