@@ -1,6 +1,7 @@
-import { canvas } from './canvas.js';
+import { canvas, maxWidth, maxHeight } from './canvas.js';
 import { Entity } from './entity.js';
 import { stains } from './entities.js';
+import { camera } from './camera.js';
 
 const PLAYER_COLOR = 'rgba(255, 255, 255)';
 const STAIN_SIZE = 40;
@@ -98,15 +99,19 @@ export function movePlayer() {
 
 	if (player.x - radius < 0) {
 		player.x = radius;
-	} else if (player.x + radius > canvasWidth) {
+	} else if (player.x + radius > maxWidth) {
 		player.x = canvasWidth - radius;
 	}
 	if (player.y - radius < 0) {
 		player.y = radius;
-	} else if (player.y + radius > canvasHeight) {
+	} else if (player.y + radius > maxHeight) {
 		player.y = canvasHeight - radius;
 	}
 	player.checkStainCollisionFromCenter();
+
+	// Update camera position
+	camera.x = player.x - canvas.width / 2;
+	camera.y = player.y - canvas.height / 2;
 }
 
 export function handleKeyDown(event) {
