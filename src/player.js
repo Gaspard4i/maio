@@ -2,6 +2,7 @@ import { canvas, maxWidth, maxHeight } from './canvas.js';
 import { Entity } from './entity.js';
 import { stains } from './entities.js';
 import { camera } from './camera.js';
+import { Bonus, BonusType } from './bonus.js';
 
 const PLAYER_COLOR = 'rgba(255, 255, 255)';
 const STAIN_SIZE = 40;
@@ -32,10 +33,18 @@ export class Player extends Entity {
 
 	grow() {
 		this.score += 10;
-		this.radius = 30 + Math.sqrt(this.score * 1.1) * 1.5;
+		this.radius += Math.sqrt(this.score * 1.1) * 1.1;
 		console.log('Score = ' + this.score);
 		document.querySelector('.score h2').innerHTML = this.score;
 		this.updateSpeed();
+	}
+
+	bonus(bt) {
+		if (bt === BonusType.VITESSE) {
+			this.speed += 10;
+		} else if (bt === BonusType.TAILLE) {
+			this.radius += 5;
+		}
 	}
 
 	checkStainCollisionFromCenter() {
@@ -52,6 +61,7 @@ export class Player extends Entity {
 			if (overlap >= stainRadius * 0.75) {
 				stains.splice(i, 1);
 				this.grow();
+				if (stain instanceof Bonus) this.bonus(stain.bonus);
 			}
 		}
 	}
