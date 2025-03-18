@@ -8,12 +8,12 @@ import {
 import { stains, createNewStains } from './entities.js';
 import { camera } from './camera.js';
 import { io } from 'socket.io-client';
+import { player } from './player.js';
 const socket = io(window.location.hostname + ':8080');
 
 socket.on('log', () => {
 	console.log('logged');
 });
-import { player } from './player.js';
 
 function draw() {
     context.save();
