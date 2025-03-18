@@ -7,6 +7,12 @@ import {
 } from './player.js';
 import { stains, createNewStains } from './entities.js';
 import { camera } from './camera.js';
+import { io } from 'socket.io-client';
+const socket = io(window.location.hostname + ':8080');
+
+socket.on('log', () => {
+	console.log('logged');
+});
 import { player } from './player.js';
 
 function draw() {

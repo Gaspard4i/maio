@@ -8,9 +8,11 @@
   "scripts": {
     "test": "node --test",
     "test:watch": "node --test --watch --test-reporter=spec",
-    "build": "webpack --mode=production",
-    "watch": "webpack --mode=development --watch",
-    "start": "webpack serve --mode=development"
+    "client:build": "webpack --mode=production",
+    "client:watch": "webpack --mode=development --watch",
+    "client:start": "webpack serve --mode=development",
+    "server": "node .",
+    "server:watch": "node --watch ."
   },
   "author": "Thomas Fritsch <thomas.fritsch@univ-lille.fr> (https://gitlab.univ-lille.fr/thomas.fritsch)",
   "homepage": "https://gitlab.univ-lille.fr/jsae",
@@ -24,5 +26,9 @@
     "webpack": "^5.90.2",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.2"
+  },
+  "dependencies": {
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1"
   }
 }
