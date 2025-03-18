@@ -1,4 +1,4 @@
-import { Entity } from './entity.js';
+import { Entity } from '../entity.js';
 
 export class Stain extends Entity {
 	constructor(radius, x, y) {

@@ -1,0 +1,94 @@
+import { canvas, maxWidth, maxHeight } from './canvas.js';
+import { Entity } from './entity.js';
+import { camera } from './camera.js';
+
+///////////////////CONSTANTES///////////////////
+const PLAYER_COLOR = 'rgba(255, 255, 255)';
+const BASE_PLAYER_SPEED = 10;
+const ACCELERATED_SPEED = 15;
+const FRICTION = 0.9;
+
+///////////////////CLASSE PLAYER///////////////////
+export class Player extends Entity {
+	constructor(radius, x, y, vx, vy, useKeyboard = false) {
+		super(radius, x, y);
+		this.vx = vx;
+		this.vy = vy;
+		this.speed = BASE_PLAYER_SPEED;
+		this.keys = {};
+		this.useKeyboard = useKeyboard;
+		this.isAccelerating = false;
+		this.isSliding = false;
+	}
+
+	///////////////////DÉPLACEMENT///////////////////
+	updateVelocity() {
+		if (!this.useKeyboard) return;
+
+		this.vx = 0;
+		this.vy = 0;
+		const speed = this.isAccelerating ? ACCELERATED_SPEED : this.speed;
+		if (this.keys['ArrowRight']) this.vx += speed;
+		if (this.keys['ArrowLeft']) this.vx -= speed;
+		if (this.keys['ArrowUp']) this.vy -= speed;
+		if (this.keys['ArrowDown']) this.vy += speed;
+
+		this.isSliding = false;
+	}
+
+	updateMouseMovement(dx, dy) {
+		if (this.useKeyboard) return;
+
+		const maxDistance = Math.min(canvas.width, canvas.height) / 4;
+		const distance = Math.sqrt(dx * dx + dy * dy);
+		const speedFactor = Math.min(distance / maxDistance, 1);
+		const speed =
+			speedFactor * (this.isAccelerating ? ACCELERATED_SPEED : this.speed);
+
+		if (distance > this.radius) {
+			this.vx = (dx / distance) * speed;
+			this.vy = (dy / distance) * speed;
+		} else {
+			this.vx = 0;
+			this.vy = 0;
+		}
+	}
+
+	applyFriction() {
+		if (this.isSliding) {
+			this.vx *= FRICTION;
+			this.vy *= FRICTION;
+
+			if (Math.abs(this.vx) < 0.1) this.vx = 0;
+			if (Math.abs(this.vy) < 0.1) this.vy = 0;
+
+			if (this.vx === 0 && this.vy === 0) {
+				this.isSliding = false;
+			}
+		}
+	}
+}
+
+///////////////////FONCTIONS GLOBALES///////////////////
+export function movePlayer() {
+	player.x += player.vx;
+	player.y += player.vy;
+
+	player.applyFriction();
+
+	const radius = player.radius;
+
+	if (player.x - radius < 0) {
+		player.x = radius;
+	} else if (player.x + radius > maxWidth) {
+		player.x = maxWidth - radius;
+	}
+	if (player.y - radius < 0) {
+		player.y = radius;
+	} else if (player.y + radius > maxHeight) {
+		player.y = maxHeight - radius;
+	}
+
+	camera.x = player.x - canvas.width / 2;
+	camera.y = player.y - canvas.height / 2;
+}
