@@ -1,7 +1,7 @@
 import { canvas, maxWidth, maxHeight } from './canvas.js';
 import { Entity } from './entity.js';
 import { stains } from './entities.js';
-import { camera, adjustZoomForPlayerSize } from './camera.js';
+import { camera } from './camera.js';
 import { Bonus, BonusType } from './bonus.js';
 
 ///////////////////CONSTANTES///////////////////
@@ -53,7 +53,7 @@ export class Player extends Entity {
 		this.score += 15;
 		this.radius += Math.sqrt(15 / 100);
 		console.log('Score = ' + this.score);
-		document.querySelector('.score h2').innerHTML = this.score;
+		// document.querySelector('.score h2').innerHTML = this.score;
 		this.updateSpeed();
 		camera.adjustZoomForPlayerSize(player.radius);
 	}
@@ -163,8 +163,8 @@ export function movePlayer() {
 	player.applyFriction(); // Appliquer la friction pour la glissade
 
 	const radius = player.radius;
-	const canvasWidth = canvas.width;
-	const canvasHeight = canvas.height;
+	// const canvasWidth = canvas.width;
+	// const canvasHeight = canvas.height;
 
 	if (player.x - radius < 0) {
 		player.x = radius;
