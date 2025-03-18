@@ -4,21 +4,25 @@ import { stains } from './entities.js';
 import { camera, adjustZoomForPlayerSize } from './camera.js';
 import { Bonus, BonusType } from './bonus.js';
 
+///////////////////CONSTANTES///////////////////
 const PLAYER_COLOR = 'rgba(255, 255, 255)';
 const STAIN_SIZE = 40;
 const BASE_PLAYER_SPEED = 5;
 const ACCELERATED_SPEED = 15;
 
+///////////////////CLASSE PLAYER///////////////////
 export class Player extends Entity {
-	constructor(radius, x, y, vx, vy) {
+	constructor(radius, x, y, vx, vy, useKeyboard = false) {
 		super(radius, x, y);
 		this.vx = vx;
 		this.vy = vy;
 		this.speed = BASE_PLAYER_SPEED;
 		this.score = 0;
 		this.keys = {};
+		this.useKeyboard = useKeyboard;
 	}
 
+	///////////////////AFFICHAGE///////////////////
 	draw(context) {
 		context.fillStyle = PLAYER_COLOR;
 		context.beginPath();
@@ -26,6 +30,7 @@ export class Player extends Entity {
 		context.fill();
 	}
 
+	///////////////////MISE À JOUR///////////////////
 	updateSpeed() {
 		this.speed = (BASE_PLAYER_SPEED / this.radius) * 30;
 		console.log(this.speed);
@@ -67,7 +72,10 @@ export class Player extends Entity {
 		}
 	}
 
+	///////////////////DÉPLACEMENT///////////////////
 	updateVelocity() {
+		if (!this.useKeyboard) return;
+
 		this.vx = 0;
 		this.vy = 0;
 		const speed = this.keys['Shift'] ? ACCELERATED_SPEED : this.speed;
@@ -82,8 +90,14 @@ export class Player extends Entity {
 	}
 
 	updateMouseMovement(dx, dy) {
-		const speed = this.keys['Shift'] ? ACCELERATED_SPEED : this.speed;
+		if (this.useKeyboard) return;
+
+		const maxDistance = Math.min(canvas.width, canvas.height) / 4;
 		const distance = Math.sqrt(dx * dx + dy * dy);
+		const speedFactor = Math.min(distance / maxDistance, 1);
+		const speed =
+			speedFactor * (this.keys['Shift'] ? ACCELERATED_SPEED : this.speed);
+
 		if (distance > this.radius) {
 			this.vx = (dx / distance) * speed;
 			this.vy = (dy / distance) * speed;
@@ -98,8 +112,10 @@ export class Player extends Entity {
 	}
 }
 
-export const player = new Player(30, canvas.width / 2, canvas.height / 2, 0, 0);
+///////////////////INITIALISATION///////////////////
+const player = new Player(30, canvas.width / 2, canvas.height / 2, 0, 0, false);
 
+///////////////////FONCTIONS GLOBALES///////////////////
 export function movePlayer() {
 	player.x += player.vx;
 	player.y += player.vy;
@@ -131,7 +147,7 @@ export function handleKeyDown(event) {
 		player.keys['Shift'] = true;
 	} else {
 		player.keys[event.key] = true;
-		player.updateVelocity();
+		if (player.useKeyboard) player.updateVelocity();
 	}
 }
 
@@ -140,10 +156,11 @@ export function handleKeyUp(event) {
 		player.keys['Shift'] = false;
 	} else {
 		player.keys[event.key] = false;
-		player.updateVelocity();
+		if (player.useKeyboard) player.updateVelocity();
 	}
 }
 
+///////////////////ÉVÉNEMENTS///////////////////
 canvas.addEventListener('mousemove', event => {
 	const dx = event.offsetX + camera.x - player.x;
 	const dy = event.offsetY + camera.y - player.y;
@@ -151,6 +168,30 @@ canvas.addEventListener('mousemove', event => {
 });
 
 canvas.addEventListener('mousedown', () => {
+	player.useMouse = true;
+});
+
+canvas.addEventListener('touchmove', event => {
+	const touch = event.touches[0];
+	const rect = canvas.getBoundingClientRect();
+	const touchX = touch.clientX - rect.left + camera.x;
+	const touchY = touch.clientY - rect.top + camera.y;
+
+	const dx = touchX - player.x;
+	const dy = touchY - player.y;
+	player.updateMouseMovement(dx, dy);
+});
+
+canvas.addEventListener('touchstart', event => {
+	const touch = event.touches[0];
+	const rect = canvas.getBoundingClientRect();
+	const touchX = touch.clientX - rect.left + camera.x;
+	const touchY = touch.clientY - rect.top + camera.y;
+
+	const dx = touchX - player.x;
+	const dy = touchY - player.y;
+	player.updateMouseMovement(dx, dy);
+
 	player.useMouse = true;
 });
 

@@ -35,3 +35,46 @@ document.addEventListener('keyup', handleKeyUp);
 setInterval(movePlayer, 1000 / 60);
 
 observeCanvas(draw, render);
+
+// Empêcher le zoom avec la molette et les raccourcis clavier
+document.addEventListener(
+	'wheel',
+	function (e) {
+		if (e.ctrlKey) {
+			e.preventDefault();
+		}
+	},
+	{ passive: false }
+);
+
+// Empêcher le zoom par pincement sur les appareils tactiles
+document.addEventListener(
+	'touchstart',
+	function (e) {
+		if (e.touches.length > 1) {
+			e.preventDefault();
+		}
+	},
+	{ passive: false }
+);
+
+document.addEventListener(
+	'touchmove',
+	function (e) {
+		if (e.touches.length > 1) {
+			e.preventDefault();
+		}
+	},
+	{ passive: false }
+);
+
+// Empêcher les gestes tactiles spécifiques (iOS Safari)
+document.addEventListener('gesturestart', function (e) {
+	e.preventDefault();
+});
+document.addEventListener('gesturechange', function (e) {
+	e.preventDefault();
+});
+document.addEventListener('gestureend', function (e) {
+	e.preventDefault();
+});
