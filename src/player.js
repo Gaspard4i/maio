@@ -1,7 +1,7 @@
 import { canvas, maxWidth, maxHeight } from './canvas.js';
 import { Entity } from './entity.js';
 import { stains } from './entities.js';
-import { camera } from './camera.js';
+import { camera, adjustZoomForPlayerSize } from './camera.js';
 import { Bonus, BonusType } from './bonus.js';
 
 const PLAYER_COLOR = 'rgba(255, 255, 255)';
@@ -37,6 +37,7 @@ export class Player extends Entity {
 		console.log('Score = ' + this.score);
 		document.querySelector('.score h2').innerHTML = this.score;
 		this.updateSpeed();
+		camera.adjustZoomForPlayerSize(player.radius);
 	}
 
 	bonus(bt) {
@@ -97,7 +98,7 @@ export class Player extends Entity {
 	}
 }
 
-const player = new Player(30, canvas.width / 2, canvas.height / 2, 0, 0);
+export const player = new Player(30, canvas.width / 2, canvas.height / 2, 0, 0);
 
 export function movePlayer() {
 	player.x += player.vx;
@@ -110,18 +111,19 @@ export function movePlayer() {
 	if (player.x - radius < 0) {
 		player.x = radius;
 	} else if (player.x + radius > maxWidth) {
-		player.x = canvasWidth - radius;
+		player.x = maxWidth - radius;
 	}
 	if (player.y - radius < 0) {
 		player.y = radius;
 	} else if (player.y + radius > maxHeight) {
-		player.y = canvasHeight - radius;
+		player.y = maxHeight - radius;
 	}
 	player.checkStainCollisionFromCenter();
+	camera.adjustZoomForPlayerSize(player.radius);
 
-	// Update camera position
 	camera.x = player.x - canvas.width / 2;
 	camera.y = player.y - canvas.height / 2;
+
 }
 
 export function handleKeyDown(event) {
