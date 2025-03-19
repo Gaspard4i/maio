@@ -2,6 +2,9 @@ import { canvas, context, observeCanvas } from './canvas.js';
 import { io } from 'socket.io-client';
 import { drawPlayer } from './playerDraw.js';
 import { handleKeyDown, handleKeyUp } from './input.js';
+//camera
+//player
+//stains, createNewStains
 
 const socket = io(window.location.hostname + ':8080');
 
