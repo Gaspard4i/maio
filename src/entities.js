@@ -1,6 +1,6 @@
 import { Stain } from './stain.js';
 import { Bonus } from './bonus.js';
-import { maxHeight, maxWidth } from '../../src/canvas.js';
+import { maxHeight, maxWidth } from '../server/index.js';
 
 export const stains = [];
 for (let i = 0; i < 1000; i++) {

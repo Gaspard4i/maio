@@ -1,14 +1,12 @@
 import { canvas, context, observeCanvas } from './canvas.js';
-import {
-	movePlayer,
-	handleKeyDown,
-	handleKeyUp,
-	drawPlayer,
-} from './player.js';
+import { Player } from '../server/player.js';
 import { stains, createNewStains } from './entities.js';
-import { camera } from './camera.js';
+import { camera } from '../server/camera.js';
 import { io } from 'socket.io-client';
-import { player } from './player.js';
+import { player } from '../server/index.js';
+import { drawPlayer } from './playerDraw.js';
+import { handleKeyDown, handleKeyUp } from './input.js';
+
 const socket = io(window.location.hostname + ':8080');
 
 socket.on('log', () => {
