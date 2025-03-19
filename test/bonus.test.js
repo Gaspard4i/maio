@@ -1,4 +1,4 @@
-import { Bonus, BonusType } from '../src/bonus.js';
+import { Bonus, BonusType } from '../server/stains/bonus.js';
 
 describe('Bonus', () => {
 	test('should create a Bonus instance with correct properties', () => {

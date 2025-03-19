@@ -1,4 +1,4 @@
-import { camera } from '../src/camera';
+import { camera } from '../src/camera.js';
 
 test('adjustZoomForPlayerSize sets zoom correctly for large player', () => {
 	const playerRadius = 60;

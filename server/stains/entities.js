@@ -1,5 +1,5 @@
-import { Stain } from '../src/stain.js';
-import { Bonus } from '../src/bonus.js';
+import { Stain } from './stain.js';
+import { Bonus } from './bonus.js';
 import { maxHeight, maxWidth } from '../../src/canvas.js';
 
 export const stains = [];

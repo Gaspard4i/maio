@@ -1,6 +1,6 @@
-import { stains, createNewStains } from '../src/entities.js';
-import { Stain } from '../src/stain.js';
-import { Bonus } from '../src/bonus.js';
+import { stains, createNewStains } from '../server/stains/entities.js';
+import { Stain } from '../server/stains/stain.js';
+import { Bonus } from '../server/stains/bonus.js';
 
 describe('Entities Module', () => {
 	beforeEach(() => {

@@ -1,6 +1,6 @@
-import { canvas, maxWidth, maxHeight } from './canvas.js';
+import { canvas, maxWidth, maxHeight } from '../src/canvas.js';
 import { Entity } from './entity.js';
-import { camera } from './camera.js';
+import { camera } from '../src/camera.js';
 
 ///////////////////CONSTANTES///////////////////
 const PLAYER_COLOR = 'rgba(255, 255, 255)';
