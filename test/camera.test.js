@@ -1,19 +1,23 @@
 import { camera } from '../src/camera.js';
+import { describe, it } from 'node:test';
+import assert from 'node:assert/strict';
 
-test('adjustZoomForPlayerSize sets zoom correctly for large player', () => {
-	const playerRadius = 60;
-	camera.adjustZoomForPlayerSize(playerRadius);
-	expect(camera.zoom).toBe(camera.minZoom);
-});
+describe('Camera Zoom Adjustment', () => {
+	it('should set zoom correctly for large player', () => {
+		const playerRadius = 60;
+		camera.adjustZoomForPlayerSize(playerRadius);
+		assert.strictEqual(camera.zoom, camera.minZoom);
+	});
 
-test('adjustZoomForPlayerSize sets zoom correctly for small player', () => {
-	const playerRadius = 10;
-	camera.adjustZoomForPlayerSize(playerRadius);
-	expect(camera.zoom).toBe(camera.maxZoom);
-});
+	it('should set zoom correctly for small player', () => {
+		const playerRadius = 10;
+		camera.adjustZoomForPlayerSize(playerRadius);
+		assert.strictEqual(camera.zoom, camera.maxZoom);
+	});
 
-test('adjustZoomForPlayerSize sets zoom correctly for medium player', () => {
-	const playerRadius = 30;
-	camera.adjustZoomForPlayerSize(playerRadius);
-	expect(camera.zoom).toBe(1);
+	it('should set zoom correctly for medium player', () => {
+		const playerRadius = 30;
+		camera.adjustZoomForPlayerSize(playerRadius);
+		assert.strictEqual(camera.zoom, 1);
+	});
 });

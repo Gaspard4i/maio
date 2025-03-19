@@ -1,19 +1,23 @@
 import { Bonus, BonusType } from '../server/stains/bonus.js';
+import { describe, it } from 'node:test';
+import assert from 'assert';
 
 describe('Bonus', () => {
-	test('should create a Bonus instance with correct properties', () => {
+	it('should create a Bonus instance with correct properties', () => {
 		const radius = 10;
 		const x = 100;
 		const y = 200;
 		const bonus = new Bonus(radius, x, y);
 
-		expect(bonus).toBeInstanceOf(Bonus);
-		expect(bonus.radius).toBe(radius + 50);
-		expect(bonus.x).toBe(x);
-		expect(bonus.y).toBe(y);
-		expect([BonusType.VITESSE, BonusType.TAILLE]).toContain(bonus.bonus);
-		expect(['src/assets/stainGreen.png', 'src/assets/stainBlue.png']).toContain(
-			bonus.image.src
+		assert(bonus instanceof Bonus);
+		assert.strictEqual(bonus.radius, radius + 50);
+		assert.strictEqual(bonus.x, x);
+		assert.strictEqual(bonus.y, y);
+		assert([BonusType.VITESSE, BonusType.TAILLE].includes(bonus.bonus));
+		assert(
+			['src/assets/stainGreen.png', 'src/assets/stainBlue.png'].includes(
+				bonus.image.src
+			)
 		);
 	});
 });
