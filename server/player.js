@@ -1,6 +1,7 @@
 import { Entity } from './entity.js';
 import { camera } from './camera.js';
 import { maxWidth, maxHeight } from '../server/index.js';
+import { BonusType } from '../src/bonus.js';
 
 ///////////////////CONSTANTES///////////////////
 const PLAYER_COLOR = 'rgba(255, 255, 255)';
@@ -19,6 +20,7 @@ export class Player extends Entity {
 		this.useKeyboard = useKeyboard;
 		this.isAccelerating = false;
 		this.isSliding = false;
+		this.score = 0;
 	}
 
 
@@ -63,10 +65,59 @@ export class Player extends Entity {
 		}
 	}   
 
+	///////////////////MISE À JOUR///////////////////
+	updateSpeed() {
+		this.speed = (BASE_PLAYER_SPEED / this.radius) * 30;
+		console.log(this.speed);
+	}
+
+	grow() {
+		this.score += 15;
+		this.radius += Math.sqrt(15 / 100);
+		console.log('Score = ' + this.score);
+		this.updateSpeed();
+		camera.adjustZoomForPlayerSize(this.radius);
+	}
+
+	bonus(bt) {
+		if (bt === BonusType.VITESSE) {
+			this.speed += 10;
+		} else if (bt === BonusType.TAILLE) {
+			this.radius *= 1.5;
+		}
+	}
+
+	checkStainCollisionFromCenter() {
+		for (let i = stains.length - 1; i >= 0; i--) {
+			const stain = stains[i];
+			const stainCenterX = stain.x + STAIN_SIZE / 2;
+			const stainCenterY = stain.y + STAIN_SIZE / 2;
+			const dx = stainCenterX - this.x;
+			const dy = stainCenterY - this.y;
+			const distance = Math.sqrt(dx * dx + dy * dy);
+
+			const stainRadius = STAIN_SIZE / 2;
+			const overlap = this.radius - distance + stainRadius;
+			if (overlap >= stainRadius * 0.75) {
+				stains.splice(i, 1);
+				this.grow();
+				if (stain instanceof Bonus) this.bonus(stain.bonus);
+			}
+		}
+	}
+
+	applyAcceleration() {
+		this.isAccelerating = this.keys['Shift'];
+		if (this.isAccelerating) {
+			this.radius = Math.max(10, this.radius - 0.1);
+		}
+	}
+
+
 	///////////////////DÉPLACEMENT///////////////////
 	updateVelocity() {
 		if (!this.useKeyboard) return;
-
+		this.applyAcceleration();
 		this.vx = 0;
 		this.vy = 0;
 		const speed = this.isAccelerating ? ACCELERATED_SPEED : this.speed;
