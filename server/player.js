@@ -1,7 +1,8 @@
 import { Entity } from './entity.js';
 import { camera } from './camera.js';
-import { maxWidth, maxHeight } from '../server/index.js';
-import { BonusType } from '../src/bonus.js';
+import { maxWidth, maxHeight } from './index.js';
+import { BonusType } from '../client/src/bonus.js';
+import { stains } from './index.js';
 
 ///////////////////CONSTANTES///////////////////
 const PLAYER_COLOR = 'rgba(255, 255, 255)';
@@ -22,7 +23,6 @@ export class Player extends Entity {
 		this.isSliding = false;
 		this.score = 0;
 	}
-
 
 	movePlayer() {
 		player.x += player.vx;
@@ -49,13 +49,13 @@ export class Player extends Entity {
 
 	updateMouseMovement(dx, dy, canvaWidth, canvasHeight) {
 		if (this.useKeyboard) return;
-	
+
 		const maxDistance = Math.min(canvaWidth, canvaHeight) / 4;
 		const distance = Math.sqrt(dx * dx + dy * dy);
 		const speedFactor = Math.min(distance / maxDistance, 1);
 		const speed =
 			speedFactor * (this.isAccelerating ? ACCELERATED_SPEED : this.speed);
-	
+
 		if (distance > this.radius) {
 			this.vx = (dx / distance) * speed;
 			this.vy = (dy / distance) * speed;
@@ -63,7 +63,7 @@ export class Player extends Entity {
 			this.vx = 0;
 			this.vy = 0;
 		}
-	}   
+	}
 
 	///////////////////MISE À JOUR///////////////////
 	updateSpeed() {
@@ -112,7 +112,6 @@ export class Player extends Entity {
 			this.radius = Math.max(10, this.radius - 0.1);
 		}
 	}
-
 
 	///////////////////DÉPLACEMENT///////////////////
 	updateVelocity() {

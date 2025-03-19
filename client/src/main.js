@@ -1,9 +1,8 @@
 import { canvas, context, observeCanvas } from './canvas.js';
-import { Player } from '../server/player.js';
 import { stains, createNewStains } from './entities.js';
-import { camera } from '../server/camera.js';
+import { camera } from '../../server/camera.js';
 import { io } from 'socket.io-client';
-import { player } from '../server/index.js';
+import { player } from '../../server/index.js';
 import { drawPlayer } from './playerDraw.js';
 import { handleKeyDown, handleKeyUp } from './input.js';
 
@@ -14,17 +13,17 @@ socket.on('log', () => {
 });
 
 function draw() {
-    context.save();
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    context.translate(centerX, centerY);
-    context.scale(camera.zoom, camera.zoom);
-    context.translate(-player.x, -player.y);
+	context.save();
+	const centerX = canvas.width / 2;
+	const centerY = canvas.height / 2;
+	context.translate(centerX, centerY);
+	context.scale(camera.zoom, camera.zoom);
+	context.translate(-player.x, -player.y);
 	drawPlayer(context);
-    createNewStains();
-    stains.forEach(entity => entity.draw(context));
-    
-    context.restore();
+	createNewStains();
+	stains.forEach(entity => entity.draw(context));
+
+	context.restore();
 }
 
 function render() {

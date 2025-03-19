@@ -2,10 +2,10 @@ import path from 'path';
 
 export default {
 	// Fichier d'entrée :
-	entry: './src/main.js',
+	entry: './client/src/main.js',
 	// Fichier de sortie :
 	output: {
-		path: path.resolve(import.meta.dirname, './build'),
+		path: path.resolve(import.meta.dirname, './client/public/build'),
 		filename: 'main.bundle.js',
 		publicPath: '/build/',
 	},
@@ -28,7 +28,7 @@ export default {
 	devServer: {
 		hot: false, // désactivation hot-reload (inutilisé)
 		static: {
-			directory: './', // racine du serveur http
+			directory: './client/public', // racine du serveur http
 			watch: {
 				// optimisation live-reload
 				ignored: 'node_modules',

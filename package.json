@@ -4,7 +4,6 @@
   "description": "",
   "main": "server/index.js",
   "type": "module",
-
   "scripts": {
     "test": "node --test",
     "test:watch": "node --test --watch --test-reporter=spec",
@@ -28,6 +27,7 @@
     "webpack-dev-server": "^5.0.2"
   },
   "dependencies": {
+    "jsae": "file:",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1"
   }

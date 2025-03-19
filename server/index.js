@@ -1,5 +1,4 @@
 import http from 'http';
-import { argv } from 'process';
 import { Server as IOServer } from 'socket.io';
 
 export const maxWidth = 10000;
@@ -20,15 +19,7 @@ const io = new IOServer(httpServer, { cors: true });
 io.on('connection', socket => {
 	console.log(`Nouvelle connexion du client ${socket.id}`);
 
-	player = new Player(
-		30,
-		canvas.width / 2,
-		canvas.height / 2,
-		0,
-		0,
-		false
-	);
-	
+	player = new Player(30, canvas.width / 2, canvas.height / 2, 0, 0, false);
 
 	socket.on('disconnect', () => {
 		console.log(`Déconnexion du client ${socket.id}`);

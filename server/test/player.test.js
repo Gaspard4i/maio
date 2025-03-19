@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it, before } from 'node:test';
-import { Player } from '../server/player.js';
+import { Player } from '../player.js';
 import { BonusType } from '../src/bonus.js';
 
 describe('Player Module', () => {

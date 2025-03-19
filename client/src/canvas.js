@@ -1,5 +1,3 @@
-import { camera } from '../server/camera.js';
-
 export const canvas = document.querySelector('.gameCanvas');
 export const context = canvas.getContext('2d');
 
