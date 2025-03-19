@@ -6,7 +6,7 @@ describe('Camera Zoom Adjustment', () => {
 	it('should set zoom correctly for large player', () => {
 		const playerRadius = 60;
 		camera.adjustZoomForPlayerSize(playerRadius);
-		assert.strictEqual(camera.zoom, camera.minZoom);
+		assert.strictEqual(camera.zoom, 0.5);
 	});
 
 	it('should set zoom correctly for small player', () => {
