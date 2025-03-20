@@ -1,8 +1,6 @@
 import { Entity } from './entity.js';
-import { Camera } from '../client/src/camera.js';
 import { maxWidth, maxHeight } from './constants.js';
 import { BonusType } from './bonus.js'; // Correction du chemin
-import { stains } from './index.js';
 
 ///////////////////CONSTANTES///////////////////
 const PLAYER_COLOR = 'rgba(255, 255, 255)';
@@ -24,7 +22,7 @@ export class Player extends Entity {
 		this.score = 0;
 	}
 
-	movePlayer() {
+	movePlayer(stains) {
 		this.x += this.vx;
 		this.y += this.vy;
 
@@ -42,6 +40,7 @@ export class Player extends Entity {
 		} else if (this.y + radius > maxHeight) {
 			this.y = maxHeight - radius;
 		}
+		checkStainCollisionFromCenter(stains);
 	}
 
 	updateMouseMovement(dx, dy, canvaWidth, canvasHeight) {
@@ -65,13 +64,13 @@ export class Player extends Entity {
 	///////////////////MISE À JOUR///////////////////
 	updateSpeed() {
 		this.speed = (BASE_PLAYER_SPEED / this.radius) * 30;
-		console.log(this.speed);
+		// console.log(this.speed);
 	}
 
 	grow() {
 		this.score += 15;
 		this.radius += Math.sqrt(15 / 100);
-		console.log('Score = ' + this.score);
+		// console.log('Score = ' + this.score);
 		this.updateSpeed();
 	}
 
@@ -83,7 +82,7 @@ export class Player extends Entity {
 		}
 	}
 
-	checkStainCollisionFromCenter() {
+	checkStainCollisionFromCenter(stains) {
 		for (let i = stains.length - 1; i >= 0; i--) {
 			const stain = stains[i];
 			const stainCenterX = stain.x + STAIN_SIZE / 2;
