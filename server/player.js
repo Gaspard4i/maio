@@ -77,7 +77,7 @@ export class Player extends Entity {
 		this.radius += Math.sqrt(15 / 100);
 		console.log('Score = ' + this.score);
 		this.updateSpeed();
-		camera.adjustZoomForPlayerSize(this.radius);
+		this.camera.adjustZoomForPlayerSize(this.radius);
 	}
 
 	bonus(bt) {
