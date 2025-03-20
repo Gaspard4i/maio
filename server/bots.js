@@ -1,6 +1,6 @@
 import { Player } from './player.js';
 import { maxWidth, maxHeight } from './constants.js';
-
+import { stains } from './index.js';
 export class Bots {
 	constructor(count) {
 		this.bots = [];
@@ -20,7 +20,7 @@ export class Bots {
 		this.bots.forEach(bot => {
 			bot.vx = Math.random() * 2 - 1; 
 			bot.vy = Math.random() * 2 - 1; 
-			bot.movePlayer();
+			bot.movePlayer(stains);
 		});
 	}
 }

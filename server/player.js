@@ -40,10 +40,10 @@ export class Player extends Entity {
 		} else if (this.y + radius > maxHeight) {
 			this.y = maxHeight - radius;
 		}
-		checkStainCollisionFromCenter(stains);
+		this.checkStainCollisionFromCenter(stains);
 	}
 
-	updateMouseMovement(dx, dy, canvaWidth, canvasHeight) {
+	updateMouseMovement(dx, dy, canvaWidth, canvaHeight) {
 		if (this.useKeyboard) return;
 
 		const maxDistance = Math.min(canvaWidth, canvaHeight) / 4;
