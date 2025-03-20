@@ -31,13 +31,20 @@ socket.on('connect', () => {
 });
 
 socket.on('updatePlayers', players => {
-	otherPlayers.length = 0;
-	const player = players.get(socket.id);
-	if (player === undefined) {
-		console.error('Impossible de trouver le joueur local');
-		return;
-	} else {
-		Object.assign(currentPlayer, player);
+	// Réinitialise les autres joueurs
+	for (const id in otherPlayers) {
+		if (!players[id]) {
+			delete otherPlayers[id];
+		}
+	}
+
+	// Met à jour les joueurs existants ou en ajoute de nouveaux
+	for (const id in players) {
+		if (id === socket.id) {
+			Object.assign(currentPlayer, players[id]);
+		} else {
+			otherPlayers[id] = players[id];
+		}
 	}
 });
 
