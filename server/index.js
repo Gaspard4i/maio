@@ -1,10 +1,11 @@
 import http from 'http';
 import { Server as IOServer } from 'socket.io';
 import { Player } from './player.js';
-import { Camera } from './camera.js';
+import { Camera } from '../client/src/camera.js';
+import { Bots } from './bots.js';
+import { Stains } from './stains.js';
+import { maxWidth, maxHeight } from './constants.js';
 
-export const maxWidth = 10000;
-export const maxHeight = 10000;
 export let player;
 const httpServer = http.createServer((req, res) => {
 	res.statusCode = 200;
@@ -19,6 +20,8 @@ httpServer.listen(port, () => {
 
 const io = new IOServer(httpServer, { cors: true });
 const players = {}; // Liste des joueurs connectés
+const bots = new Bots(10); // Create 10 bots
+export const stains = new Stains(1000); // Create 1000 stains
 
 io.on('connection', socket => {
 	console.log(`Nouvelle connexion du client ${socket.id}`);
@@ -37,17 +40,16 @@ io.on('connection', socket => {
 			player.vx = data.vx;
 			player.vy = data.vy;
 			player.radius = data.radius;
-
-			// Met à jour la caméra du joueur
-			player.camera.x = player.x - maxWidth / 2;
-			player.camera.y = player.y - maxHeight / 2;
-			player.camera.adjustZoomForPlayerSize(player.radius);
 		}
 	});
 
 	// Envoie les données des joueurs à tous les clients
 	setInterval(() => {
+		bots.updateBots();
+		stains.updateStains();
 		io.emit('updatePlayers', players);
+		io.emit('updateBots', bots);
+		io.emit('updateStains', stains);
 	}, 1000 / 60);
 
 	socket.on('disconnect', () => {

@@ -1,8 +1,8 @@
 import { Entity } from './entity.js';
-import { Camera } from './camera.js';
-import { maxWidth, maxHeight } from '../server/index.js';
+import { Camera } from '../client/src/camera.js';
+import { maxWidth, maxHeight } from './constants.js';
 import { BonusType } from './bonus.js'; // Correction du chemin
-import { stains } from './entities.js';
+import { stains } from './index.js';
 
 ///////////////////CONSTANTES///////////////////
 const PLAYER_COLOR = 'rgba(255, 255, 255)';
@@ -22,10 +22,9 @@ export class Player extends Entity {
 		this.isAccelerating = false;
 		this.isSliding = false;
 		this.score = 0;
-		this.camera = new Camera();
 	}
 
-	movePlayer(canvas) {
+	movePlayer() {
 		this.x += this.vx;
 		this.y += this.vy;
 
@@ -43,9 +42,6 @@ export class Player extends Entity {
 		} else if (this.y + radius > maxHeight) {
 			this.y = maxHeight - radius;
 		}
-
-		this.camera.x = this.x - canvas.width / 2;
-		this.camera.y = this.y - canvas.height / 2;
 	}
 
 	updateMouseMovement(dx, dy, canvaWidth, canvasHeight) {
@@ -77,7 +73,6 @@ export class Player extends Entity {
 		this.radius += Math.sqrt(15 / 100);
 		console.log('Score = ' + this.score);
 		this.updateSpeed();
-		camera.adjustZoomForPlayerSize(this.radius);
 	}
 
 	bonus(bt) {
