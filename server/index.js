@@ -28,6 +28,11 @@ io.on('connection', socket => {
 	const player = new Player(30, maxWidth / 2, maxHeight / 2, 0, 0, false);
 	players[socket.id] = player; // Ajout du joueur dans l'objet
 
+	// Écoute et affiche tous les événements reçus
+	socket.onAny((eventName, ...args) => {
+		console.log(`Événement reçu : ${eventName}`, args);
+	});
+
 	socket.on('updatePlayer', data => {
 		// Met à jour la position et les propriétés du joueur associé
 		const player = players[socket.id];

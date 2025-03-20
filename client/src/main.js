@@ -1,11 +1,12 @@
 import { canvas, context, observeCanvas, drawGame } from './canvas.js';
 import { io } from 'socket.io-client';
 import { Camera } from './camera.js'; // Import de la caméra
+import { handleKeyDown, handleKeyUp } from './input.js';
 //camera
 //player
 //stains, createNewStains
 
-const socket = io(window.location.hostname + ':8080');
+export const socket = io(window.location.hostname + ':8080');
 
 const stains = []; // Liste des entités (taches et bonus)
 
@@ -88,5 +89,9 @@ function render() {
 	drawGame(context, currentPlayer, otherPlayers, stains, camera); // Ajout de camera
 	requestAnimationFrame(render);
 }
+
+// Ajout des gestionnaires d'événements clavier
+window.addEventListener('keydown', event => handleKeyDown(event));
+window.addEventListener('keyup', event => handleKeyUp(event));
 
 observeCanvas(() => {}, render);
