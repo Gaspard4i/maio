@@ -75,7 +75,7 @@ function sendPlayerData() {
 function render() {
 	context.clearRect(0, 0, canvas.width, canvas.height);
 	camera.adjustCameraPosition(player, canvas.width, canvas.height);
-	drawGame(context, player, otherPlayers, stains);
+	drawGame(context, player, otherPlayers, stains, camera);
 	requestAnimationFrame(render);
 }
 

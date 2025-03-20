@@ -62,13 +62,13 @@ export function drawBonus(context, bonus) {
 }
 
 // Méthode principale pour dessiner le jeu
-export function drawGame(context, player, otherPlayers, stains) {
+export function drawGame(context, player, otherPlayers, stains, camera) {
 	context.save();
 	const centerX = canvas.width / 2;
 	const centerY = canvas.height / 2;
 	context.translate(centerX, centerY);
-	context.scale(player.camera.zoom, player.camera.zoom);
-	context.translate(-player.camera.x, -player.camera.y);
+	context.scale(camera.zoom, camera.zoom);
+	context.translate(-camera.x, -camera.y);
 
 	// Dessine le joueur local
 	drawPlayer(context, player);
