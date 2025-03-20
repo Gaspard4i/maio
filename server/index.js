@@ -18,7 +18,7 @@ httpServer.listen(port, () => {
 });
 
 const io = new IOServer(httpServer, { cors: true });
-const players = {}; // Liste des joueurs connectés
+const players = []; // Liste des joueurs connectés
 const bots = new Bots(10); // Create 10 bots
 export const stains = new Stains(10); // Create 1000 stains
 
