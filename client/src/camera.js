@@ -17,8 +17,8 @@ export class Camera {
 	}
 
 	adjustCameraPosition(player, canvasWidth, canvasHeight) {
-		this.x = player.x - canvasWidth / 2;
-		this.y = player.y - canvasHeight / 2;
+		this.x = player.x /* - canvasWidth / 2*/;
+		this.y = player.y /* - canvasHeight / 2*/;
 		this.adjustZoomForPlayerSize(player.radius);
 	}
 }
