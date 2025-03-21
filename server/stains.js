@@ -40,4 +40,8 @@ export class Stains {
 	splice(i, val) {
 		this.stains.splice(i, val);
 	}
+
+	push(stain) {
+		this.stains.push(stain);
+	}
 }
