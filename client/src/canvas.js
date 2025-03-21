@@ -140,7 +140,7 @@ function drawCamera(context, camera, canvasWidth, canvasHeight) {
 
 // ==================== RENDU PRINCIPAL ====================
 
-export function drawGame(context, player, otherPlayers, stains, camera) {
+export function drawGame(context, player, otherPlayers, stains, bots, camera) {
 	context.save();
 	const centerX = canvas.width / 2;
 	const centerY = canvas.height / 2;
@@ -173,6 +173,17 @@ export function drawGame(context, player, otherPlayers, stains, camera) {
 			} else {
 				drawStain(context, entity);
 			}
+		}
+	});
+
+	// Dessine uniquement les entités visibles
+	bots.forEach(entity => {
+		const isVisible = debugCameraEnabled
+			? isEntityVisibleInDebug(entity, camera, canvas.width, canvas.height)
+			: isEntityVisible(entity, camera, canvas.width, canvas.height);
+
+		if (isVisible) {
+			drawPlayer(context, entity);
 		}
 	});
 

@@ -18,8 +18,21 @@ export class Bots {
 
 	updateBots() {
 		this.bots.forEach(bot => {
-			bot.vx = Math.random() * 2 - 1; 
-			bot.vy = Math.random() * 2 - 1; 
+			// Changer la direction de manière aléatoire, mais en douceur
+			if (Math.random() < 0.02) { // 2% de chance de changer de direction à chaque frame
+				bot.vx = (Math.random() * 4 - 2); // Vitesse horizontale entre -2 et 2
+				bot.vy = (Math.random() * 4 - 2); // Vitesse verticale entre -2 et 2
+	
+				// Garantir que la vitesse n'est jamais nulle
+				if (bot.vx === 0) bot.vx = Math.random() < 0.5 ? 1 : -1; // Éviter vx = 0
+				if (bot.vy === 0) bot.vy = Math.random() < 0.5 ? 1 : -1; // Éviter vy = 0
+			}
+	
+			// Appliquer le mouvement
+			bot.x += bot.vx;
+			bot.y += bot.vy;
+	
+			// Mettre à jour la position du bot en fonction des taches (stains)
 			bot.movePlayer(stains);
 		});
 	}

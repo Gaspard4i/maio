@@ -16,6 +16,7 @@ import { handleKeyDown, handleKeyUp } from './input.js';
 export const socket = io(window.location.hostname + ':8080');
 
 const stains = []; // Liste des entités (taches et bonus)
+const bots = []; // Liste des bots
 
 // Initialisation du joueur local
 const currentPlayer = {
@@ -73,6 +74,19 @@ socket.on('updateStains', serverStains => {
 	}
 });
 
+socket.on('updateBots', serverBots => {
+	// Vérifie si serverBots.bots est un tableau avant de le décomposer
+	if (serverBots && Array.isArray(serverBots.bots)) {
+		bots.length = 0;
+		bots.push(...serverBots.bots);
+	} else {
+		console.error(
+			'Les données reçues pour les taches ne sont pas valides :',
+			serverBots
+		);
+	}
+});
+
 socket.on('playerDisconnected', id => {
 	delete otherPlayers[id];
 });
@@ -80,7 +94,7 @@ socket.on('playerDisconnected', id => {
 function render() {
 	context.clearRect(0, 0, canvas.width, canvas.height);
 	camera.adjustCameraPosition(currentPlayer, canvas.width, canvas.height);
-	drawGame(context, currentPlayer, otherPlayers, stains, camera); // Ajout de camera
+	drawGame(context, currentPlayer, otherPlayers, stains, bots, camera); // Ajout de camera
 	requestAnimationFrame(render);
 }
 

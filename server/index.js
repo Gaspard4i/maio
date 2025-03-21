@@ -19,7 +19,7 @@ httpServer.listen(port, () => {
 
 const io = new IOServer(httpServer, { cors: true });
 const players = {}; // Utilisation d'un objet pour stocker les joueurs
-const bots = new Bots(10); // bots
+const bots = new Bots(100); // bots
 export const stains = new Stains(1500); // stains
 const inputQueue = {}; // File d'attente des entrées par joueur
 
