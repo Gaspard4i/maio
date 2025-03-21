@@ -1,4 +1,6 @@
 import { socket } from './main.js';
+import { camera } from './main.js';
+import { canvas } from './canvas.js';
 
 const pressedKeys = {}; // État local des touches
 let lastBitmask = 0; // Dernier bitmask envoyé
@@ -44,3 +46,23 @@ function sendInputs() {
 }
 
 sendInputs(); // Démarre la boucle d'envoi
+
+///////////////////MOUSE AND TOUCH///////////////////
+
+function sendMouseDatas(x, y) {
+	const canvaWidth = canvas.width;
+	const canvaHeight = canvas.height;
+	socket.emit('mousemove', { x, y, canvaWidth, canvaHeight });
+}
+
+canvas.addEventListener('mousemove', event => {
+	const x = event.offsetX;
+	const y = event.offsetY;
+	sendMouseDatas(x, y);
+});
+
+canvas.addEventListener('mousedown', () => {
+	socket.emit('mousedown', true);
+});
+
+

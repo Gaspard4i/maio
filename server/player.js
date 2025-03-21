@@ -42,10 +42,10 @@ export class Player extends Entity {
 		this.checkStainCollisionFromCenter(stains);
 	}
 
-	updateMouseMovement(dx, dy, canvaWidth, canvaHeight) {
+	updateMouseMovement(dx, dy, canvaWidth, canvasHeight) {
 		if (this.useKeyboard) return;
 
-		const maxDistance = Math.min(canvaWidth, canvaHeight) / 4;
+		const maxDistance = Math.min(canvaWidth, canvasHeight) / 4;
 		const distance = Math.sqrt(dx * dx + dy * dy);
 		const speedFactor = Math.min(distance / maxDistance, 1);
 		const speed =

@@ -21,7 +21,7 @@ const currentPlayer = {
 	useKeyboard: true,
 };
 
-const camera = new Camera();
+export const camera = new Camera();
 
 // Liste des autres joueurs
 const otherPlayers = {};
