@@ -82,4 +82,27 @@ function render() {
 window.addEventListener('keydown', event => handleKeyDown(event));
 window.addEventListener('keyup', event => handleKeyUp(event));
 
+// Interdiction de zoomer sur la page
+window.addEventListener(
+	'wheel',
+	event => {
+		if (event.ctrlKey) {
+			event.preventDefault();
+		}
+	},
+	{ passive: false }
+);
+
+window.addEventListener('keydown', event => {
+	if (
+		event.ctrlKey &&
+		(event.key === '+' ||
+			event.key === '-' ||
+			event.key === '0' ||
+			event.key === '=')
+	) {
+		event.preventDefault();
+	}
+});
+
 observeCanvas(() => {}, render);
