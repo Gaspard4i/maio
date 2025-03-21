@@ -44,7 +44,7 @@ socket.on('updatePlayers', players => {
 		if (id === socket.id) {
 			Object.assign(currentPlayer, players[id]);
 		} else {
-			otherPlayers[id] = players[id];
+			otherPlayers[id] = { ...players[id], vx: 0, vy: 0 }; // Initialise la vitesse
 		}
 	}
 });

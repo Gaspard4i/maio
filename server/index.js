@@ -21,6 +21,8 @@ const io = new IOServer(httpServer, { cors: true });
 const players = {}; // Utilisation d'un objet pour stocker les joueurs
 const bots = new Bots(10); // Create 10 bots
 export const stains = new Stains(10); // Create 1000 stains
+const inputQueue = {}; // File d'attente des entrées par joueur
+const TICK_RATE = 1000 / 60; // 60Hz
 
 io.on('connection', socket => {
 	console.log(`Nouvelle connexion du client ${socket.id}`);
@@ -45,6 +47,11 @@ io.on('connection', socket => {
 		}
 	});
 
+	socket.on('input', bitmask => {
+		inputQueue[socket.id] = bitmask; // Stocke les entrées dans la file d'attente
+		//TODO gérer les entrées
+	});
+
 	// Envoie les données des joueurs à tous les clients
 	setInterval(() => {
 		bots.updateBots();
@@ -57,5 +64,33 @@ io.on('connection', socket => {
 	socket.on('disconnect', () => {
 		console.log(`Déconnexion du client ${socket.id}`);
 		delete players[socket.id]; // Suppression du joueur de l'objet
+		delete inputQueue[socket.id]; // Supprime les entrées du joueur déconnecté
 	});
 });
+
+// Traitement des entrées à un tick rate fixe
+setInterval(() => {
+	for (const [id, bitmask] of Object.entries(inputQueue)) {
+		const player = players[id];
+		if (player) {
+			// Applique les entrées au joueur
+			player.keys = {
+				ArrowUp: !!(bitmask & 0b0001),
+				ArrowDown: !!(bitmask & 0b0010),
+				ArrowLeft: !!(bitmask & 0b0100),
+				ArrowRight: !!(bitmask & 0b1000),
+				Shift: !!(bitmask & 0b10000),
+			};
+			player.updateVelocity(); // Met à jour la vitesse en fonction des touches
+			//TODO gérer les entrées
+		}
+	}
+	// Met à jour les bots et les taches
+	bots.updateBots();
+	stains.updateStains();
+
+	// Envoie les données mises à jour aux clients
+	io.emit('updatePlayers', players);
+	io.emit('updateBots', bots);
+	io.emit('updateStains', stains);
+}, TICK_RATE);

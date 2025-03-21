@@ -1,42 +1,46 @@
 import { socket } from './main.js';
 
+const pressedKeys = {}; // État local des touches
+let lastBitmask = 0; // Dernier bitmask envoyé
+
+// Mappage des touches vers des bits
+const keyMap = {
+	ArrowUp: 0b0001,
+	ArrowDown: 0b0010,
+	ArrowLeft: 0b0100,
+	ArrowRight: 0b1000,
+	Shift: 0b10000,
+};
+
+// Fonction pour calculer le bitmask actuel
+function computeBitmask() {
+	return Object.keys(pressedKeys).reduce(
+		(bitmask, key) => bitmask | (keyMap[key] || 0),
+		0
+	);
+}
+
+// Gestion des événements clavier
 export function handleKeyDown(event) {
-	// Émet les événements correspondants
-	switch (event.key) {
-		case 'Shift':
-			handleSocketEvent('accelerate');
-			break;
-		case 'ArrowUp':
-		case 'w':
-			handleSocketEvent('up');
-			break;
-		case 'ArrowDown':
-		case 's':
-			handleSocketEvent('down');
-			break;
-		case 'ArrowLeft':
-		case 'a':
-			handleSocketEvent('left');
-			break;
-		case 'ArrowRight':
-		case 'd':
-			handleSocketEvent('right');
-			break;
-		case 't':
-			handleSocketEvent('debug');
-			break;
+	if (keyMap[event.key]) {
+		pressedKeys[event.key] = true;
 	}
 }
 
 export function handleKeyUp(event) {
-	// Rien de spécifique à gérer ici pour le moment
+	if (keyMap[event.key]) {
+		delete pressedKeys[event.key];
+	}
 }
 
-export function handleSocketEvent(eventName) {
-	// Gestionnaire d'événements socket.io
-	console.log(`Événement reçu : ${eventName}`);
-	socket.emit(eventName);
+// Envoi des entrées au serveur à 60Hz
+function sendInputs() {
+	const currentBitmask = computeBitmask();
+	if (currentBitmask !== lastBitmask) {
+		socket.emit('input', currentBitmask); // Envoi uniquement si le bitmask a changé
+		lastBitmask = currentBitmask;
+	}
+	requestAnimationFrame(sendInputs); // Limite à 60Hz
 }
 
-///////////////////ÉVÉNEMENTS///////////////////
-// Les événements liés à la souris ont été retirés.
+sendInputs(); // Démarre la boucle d'envoi

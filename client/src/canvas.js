@@ -73,8 +73,10 @@ export function drawGame(context, player, otherPlayers, stains, camera) {
 	// Dessine le joueur local
 	drawPlayer(context, player);
 
-	// Dessine les autres joueurs
+	// Interpolation des autres joueurs
+	const deltaTime = 1 / 60; // Temps entre deux frames (60Hz)
 	for (const id in otherPlayers) {
+		interpolatePlayerPosition(otherPlayers[id], deltaTime);
 		drawPlayer(context, otherPlayers[id]);
 	}
 
@@ -88,6 +90,11 @@ export function drawGame(context, player, otherPlayers, stains, camera) {
 	});
 
 	context.restore();
+}
+
+export function interpolatePlayerPosition(player, deltaTime) {
+	player.x += player.vx * deltaTime;
+	player.y += player.vy * deltaTime;
 }
 
 export const BonusType = {
