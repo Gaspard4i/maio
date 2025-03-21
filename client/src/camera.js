@@ -8,7 +8,7 @@ export class Camera {
 	}
 
 	adjustZoomForPlayerSize(playerRadius) {
-		const basePlayerSize = 30;
+		const basePlayerSize = 100;
 		const zoomFactor = basePlayerSize / playerRadius;
 
 		this.zoom = Math.max(this.minZoom, Math.min(this.maxZoom, zoomFactor));
