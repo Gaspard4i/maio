@@ -3,7 +3,7 @@ import { Server as IOServer } from 'socket.io';
 import { Player } from './player.js';
 import { Bots } from './bots.js';
 import { Stains } from './stains.js';
-import { maxWidth, maxHeight } from './constants.js';
+import { maxWidth, maxHeight, TICK_RATE } from './constants.js';
 
 export let player;
 const httpServer = http.createServer((req, res) => {
@@ -19,10 +19,9 @@ httpServer.listen(port, () => {
 
 const io = new IOServer(httpServer, { cors: true });
 const players = {}; // Utilisation d'un objet pour stocker les joueurs
-const bots = new Bots(10); // Create 10 bots
-export const stains = new Stains(2000); // Create 1000 stains
+const bots = new Bots(10); // bots
+export const stains = new Stains(1500); // stains
 const inputQueue = {}; // File d'attente des entrées par joueur
-const TICK_RATE = 1000 / 60; // 60Hz
 
 export const initializePlayer = socketId => {
 	const player = new Player(30, maxWidth / 2, maxHeight / 2, 0, 0, false);
@@ -50,7 +49,6 @@ export const processGameTick = () => {
 				Shift: !!(bitmask & 0b10000),
 			};
 			player.updateVelocity(); // Met à jour la vitesse en fonction des touches
-			//TODO version clavier
 			player.movePlayer(stains); // Déplace le joueur
 		}
 	}
