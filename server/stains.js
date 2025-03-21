@@ -5,11 +5,12 @@ import { maxWidth, maxHeight } from './constants.js';
 export class Stains {
 	constructor(count) {
 		this.stains = [];
-		this.createStains(count);
+		this.count = count;
+		this.createStains();
 	}
 
-	createStains(count) {
-		for (let i = 0; i < count; i++) {
+	createStains() {
+		for (let i = 0; i < this.count; i++) {
 			const x = Math.floor(Math.random() * maxWidth - 10);
 			const y = Math.floor(Math.random() * maxHeight - 10);
 			const entity =
@@ -19,7 +20,7 @@ export class Stains {
 	}
 
 	updateStains() {
-		while (this.stains.length < 1000) {
+		while (this.stains.length < this.count) {
 			const x = Math.floor(Math.random() * maxWidth - 10);
 			const y = Math.floor(Math.random() * maxHeight - 10);
 			const entity =
