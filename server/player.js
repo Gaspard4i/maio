@@ -113,8 +113,8 @@ export class Player extends Entity {
 	updateVelocity() {
 		this.applyAcceleration();
 		let dx =
-			(this.keys['ArrowRight'] ? 5 : 0) - (this.keys['ArrowLeft'] ? 5 : 0);
-		let dy = (this.keys['ArrowDown'] ? 5 : 0) - (this.keys['ArrowUp'] ? 5 : 0);
+			(this.keys['ArrowRight'] ? 1 : 0) - (this.keys['ArrowLeft'] ? 1 : 0);
+		let dy = (this.keys['ArrowDown'] ? 1 : 0) - (this.keys['ArrowUp'] ? 1 : 0);
 		const magnitude = Math.sqrt(dx * dx + dy * dy);
 		if (magnitude > 0) {
 			dx /= magnitude;
