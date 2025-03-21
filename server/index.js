@@ -20,40 +20,28 @@ httpServer.listen(port, () => {
 const io = new IOServer(httpServer, { cors: true });
 const players = {}; // Utilisation d'un objet pour stocker les joueurs
 const bots = new Bots(10); // Create 10 bots
-export const stains = new Stains(100); // Create 1000 stains
+export const stains = new Stains(1000); // Create 1000 stains
 const inputQueue = {}; // File d'attente des entrées par joueur
 const TICK_RATE = 1000 / 60; // 60Hz
 
-io.on('connection', socket => {
-	console.log(`Nouvelle connexion du client ${socket.id}`);
-
+export const initializePlayer = socketId => {
 	const player = new Player(30, maxWidth / 2, maxHeight / 2, 0, 0, false);
-	players[socket.id] = player; // Ajout du joueur dans l'objet
+	players[socketId] = player;
+};
 
-	// Écoute et affiche tous les événements reçus
-	socket.onAny((eventName, ...args) => {
-		console.log(`Input reçu : ${eventName}`, args);
-	});
+export const handleInput = (socketId, bitmask) => {
+	inputQueue[socketId] = bitmask;
+};
 
-	socket.on('input', bitmask => {
-		inputQueue[socket.id] = bitmask; // Stocke les entrées dans la file d'attente
-	});
+export const removePlayer = socketId => {
+	delete players[socketId];
+	delete inputQueue[socketId];
+};
 
-	socket.on('disconnect', () => {
-		console.log(`Déconnexion du client ${socket.id}`);
-		delete players[socket.id]; // Suppression du joueur de l'objet
-		delete inputQueue[socket.id]; // Supprime les entrées du joueur déconnecté
-	});
-
-	handleMouseMovement();
-});
-
-// Traitement des entrées à un tick rate fixe
-setInterval(() => {
+export const processGameTick = () => {
 	for (const [id, bitmask] of Object.entries(inputQueue)) {
 		const player = players[id];
 		if (player) {
-			// Applique les entrées au joueur
 			player.keys = {
 				ArrowUp: !!(bitmask & 0b0001),
 				ArrowDown: !!(bitmask & 0b0010),
@@ -62,32 +50,34 @@ setInterval(() => {
 				Shift: !!(bitmask & 0b10000),
 			};
 			player.updateVelocity(); // Met à jour la vitesse en fonction des touches
+			//TODO version clavier
+			player.movePlayer(stains); // Déplace le joueur
 		}
 	}
-
-	// Déplace tous les joueurs
-	for (const player of Object.values(players)) {
-		player.movePlayer(stains); // Déplace le joueur
-	}
-
 	// Met à jour les bots et les taches
 	bots.updateBots();
 	stains.updateStains();
 
-	// Envoie les données mises à jour aux clients
+	// mises à jour des clients
 	io.emit('updatePlayers', players);
 	io.emit('updateBots', bots);
 	io.emit('updateStains', stains);
-}, TICK_RATE);
+};
 
-function handleMouseMovement() {
-	socket.on('mousemove', ({ x, y, canvaWidth, canvaHeight }) => {
-		const dx = x - (player.x % canvaWidth);
-		const dy = y - (player.y % canvaHeight);
-		player.updateMouseMovement(dx, dy, canvaWidth, canvaHeight);
+io.on('connection', socket => {
+	console.log(`Nouvelle connexion du client ${socket.id}`);
+
+	initializePlayer(socket.id);
+
+	socket.on('input', bitmask => {
+		handleInput(socket.id, bitmask);
 	});
 
-	socket.on('mousedown', ({ bool }) => {
-		player.isAccelerating = bool;
+	socket.on('disconnect', () => {
+		console.log(`Déconnexion du client ${socket.id}`);
+		removePlayer(socket.id);
 	});
-}
+});
+
+// Traitement des entrées à un tick rate fixe
+setInterval(processGameTick, TICK_RATE);
