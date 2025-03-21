@@ -69,7 +69,7 @@ export class Player extends Entity {
 
 	grow() {
 		this.score += 15;
-		this.radius += Math.sqrt(1000 / 100);
+		this.radius += Math.sqrt(15 / 100);
 		// console.log('Score = ' + this.score);
 		this.updateSpeed();
 	}
