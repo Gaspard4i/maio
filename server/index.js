@@ -59,7 +59,6 @@ export const processGameTick = () => {
 		player.movePlayer(stains); // Déplace le joueur
 	}
 
-
 	// Met à jour les bots et les taches
 	bots.updateBots();
 	stains.updateStains();
@@ -72,17 +71,15 @@ export const processGameTick = () => {
 
 function handleMouseMovement(socketId, x, y, canvaWidth, canvaHeight) {
 	const player = players[socketId];
-	const dx = x - (player.x % canvaWidth);
-	const dy = y - (player.y % canvaHeight);
+	const dx = x - canvaWidth / 2;
+	const dy = y - canvaHeight / 2;
 	player.updateMouseMovement(dx, dy, canvaWidth, canvaHeight);
 }
 
 function handleMouseMovementAcceleration(socketId, bool) {
 	const player = players[socketId];
 	player.isAccelerating = bool;
-
 }
-
 
 io.on('connection', socket => {
 	console.log(`Nouvelle connexion du client ${socket.id}`);
