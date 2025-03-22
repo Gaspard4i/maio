@@ -19,7 +19,7 @@ httpServer.listen(port, () => {
 
 const io = new IOServer(httpServer, { cors: true });
 const players = {}; // Utilisation d'un objet pour stocker les joueurs
-const bots = new Bots(100); // bots
+const bots = new Bots(50); // bots
 export const stains = new Stains(1500); // stains
 const inputQueue = {}; // File d'attente des entrées par joueur
 
@@ -49,7 +49,6 @@ export const processGameTick = () => {
 				Shift: !!(bitmask & 0b10000),
 			};
 			player.updateVelocity(); // Met à jour la vitesse en fonction des touches
-			//TODO version clavier
 		}
 	}
 
@@ -62,7 +61,7 @@ export const processGameTick = () => {
 	bots.updateBots();
 	stains.updateStains();
 
-	// mises à jour des clients
+	// Met à jour les clients
 	io.emit('updatePlayers', players);
 	io.emit('updateBots', bots);
 	io.emit('updateStains', stains);
@@ -103,5 +102,5 @@ io.on('connection', socket => {
 	});
 });
 
-// Traitement des entrées à un tick rate fixe
+// Traite les entrées à un tick rate fixe
 setInterval(processGameTick, TICK_RATE);

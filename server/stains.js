@@ -44,4 +44,8 @@ export class Stains {
 	push(stain) {
 		this.stains.push(stain);
 	}
+
+	getAll() {
+		return this.stains;
+	}
 }
