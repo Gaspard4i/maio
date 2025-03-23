@@ -125,6 +125,10 @@ export const processGameTick = () => {
 /////////////////// GESTION DES ÉVÉNEMENTS SOCKET ///////////////////
 function handleMouseMovement(socketId, x, y, canvaWidth, canvaHeight) {
 	const player = players[socketId];
+	if (!player) {
+		console.warn(`Player with socket ID ${socketId} not found.`);
+		return; // Évite l'erreur si le joueur n'existe pas
+	}
 	const dx = x - canvaWidth / 2;
 	const dy = y - canvaHeight / 2;
 	player.updateMouseMovement(dx, dy, canvaWidth, canvaHeight);
