@@ -30,11 +30,10 @@ export class Stains {
 			let isValidPosition = false;
 
 			while (!isValidPosition) {
-				const x = Math.floor(Math.random() * MAX_WIDTH - 10);
-				const y = Math.floor(Math.random() * MAX_HEIGHT - 10);
+				const x = Math.random() * MAX_WIDTH;
+				const y = Math.random() * MAX_HEIGHT;
 				stain = Math.random() < 0.1 ? new Bonus(20, x, y) : new Stain(20, x, y);
 
-				// Vérifie si la tâche est en dehors du rayon de tous les joueurs
 				isValidPosition = !Object.values(players).some(player => {
 					const dx = player.x - stain.x;
 					const dy = player.y - stain.y;

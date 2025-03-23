@@ -1,7 +1,6 @@
 import http from 'http';
 import { Server as IOServer } from 'socket.io';
-import { Player } from './player.js';
-import { Bots } from './bots.js';
+import { Player, BotPlayer } from './player.js';
 import { Stains } from './stains.js';
 import { Grid } from './Grid.js';
 import {
@@ -15,26 +14,31 @@ import {
 	DEFAULT_PLAYER,
 } from './constants.js';
 
+/////////////////// SERVEUR HTTP ///////////////////
 const httpServer = http.createServer((req, res) => {
-	res.statusCode = 200;
-	res.setHeader('Content-Type', 'text/plain');
-	res.end('Connected');
+	// redirection vers la page 8000
+	res.writeHead(302, { Location: 'http://localhost:8000' });
+	res.end();
 });
 
-const port = process.env.PORT !== undefined ? process.env.PORT : PORT;
+const port = process.env.PORT || PORT;
 httpServer.listen(port, () => {
 	console.log(`Server running at http://localhost:${port}/`);
 });
 
+/////////////////// SOCKET.IO ///////////////////
 const io = new IOServer(httpServer, { cors: true });
-export const players = {}; //stocke les joueurs
-const bots = new Bots(NUM_BOTS); // stock les bots
-export const stains = new Stains(NUM_STAINS); // stock les stains (tâches)
-const inputQueue = {}; // File des entrées par joueur
+
+/////////////////// VARIABLES GLOBALES ///////////////////
+export const players = {}; // stocke les players (humains et bots)
+export const stains = new Stains(NUM_STAINS); // stocke les taches
+const inputQueue = {}; // entrées clavier par joueur
 const grid = new Grid(CHUNK_SIZE, MAX_WIDTH, MAX_HEIGHT);
 
+/////////////////// INITIALISATION ///////////////////
 export const initializePlayer = socketId => {
 	const player = new Player(
+		socketId,
 		DEFAULT_PLAYER.radius,
 		DEFAULT_PLAYER.x,
 		DEFAULT_PLAYER.y,
@@ -42,9 +46,26 @@ export const initializePlayer = socketId => {
 		DEFAULT_PLAYER.velocityY,
 		DEFAULT_PLAYER.isAccelerating
 	);
-	players[socketId] = player;
+	console.log(`Nouveau joueur ${player.id} :`, player);
+	players[player.id] = player;
 };
 
+export const createBots = count => {
+	for (let i = 0; i < count; i++) {
+		const bot = new BotPlayer(
+			30,
+			Math.random() * MAX_WIDTH,
+			Math.random() * MAX_HEIGHT,
+			0,
+			0
+		);
+		players[bot.id] = bot;
+	}
+};
+
+createBots(NUM_BOTS);
+
+/////////////////// GESTION DES ENTRÉES ///////////////////
 export const handleInput = (socketId, bitmask) => {
 	inputQueue[socketId] = bitmask;
 };
@@ -54,13 +75,13 @@ export const removePlayer = socketId => {
 	delete inputQueue[socketId];
 };
 
+/////////////////// TRAITEMENT DU JEU ///////////////////
 export const processGameTick = () => {
 	// réinitialisation de grid
 	grid.clear();
 
 	// ajoute les joueurs, bots et stains à la grille
 	Object.values(players).forEach(player => grid.addEntity(player));
-	bots.bots.forEach(bot => grid.addEntity(bot));
 	stains.getAll().forEach(stain => grid.addEntity(stain));
 
 	for (const [id, bitmask] of Object.entries(inputQueue)) {
@@ -79,17 +100,29 @@ export const processGameTick = () => {
 
 	// maj les entités
 	for (const player of Object.values(players)) {
-		player.movePlayer(stains, grid); // grid pour les collisions
+		if (player.isBot) {
+			player.updateBotMovement(grid, stains, players, io);
+		} else {
+			player.movePlayer(stains, grid, players, io); // redirect
+		}
 	}
-	bots.updateBots(grid);
-	stains.updateStains(players); // Passe players ici
 
-	// maj les clients
+	// maj des taches
+	stains.updateStains(players);
+
+	// verification des joueurs mangés
+	for (const id in players) {
+		if (players[id].isEaten) {
+			removePlayer(id);
+		}
+	}
+
+	// sync tout
 	io.emit('updatePlayers', players);
-	io.emit('updateBots', bots);
 	io.emit('updateStains', stains);
 };
 
+/////////////////// GESTION DES ÉVÉNEMENTS SOCKET ///////////////////
 function handleMouseMovement(socketId, x, y, canvaWidth, canvaHeight) {
 	const player = players[socketId];
 	const dx = x - canvaWidth / 2;
@@ -125,5 +158,5 @@ io.on('connection', socket => {
 	});
 });
 
-// traitement du jeu
+/////////////////// BOUCLE DE JEU ///////////////////
 setInterval(processGameTick, TICK_RATE);

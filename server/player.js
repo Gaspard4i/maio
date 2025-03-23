@@ -1,17 +1,27 @@
 import { Entity } from './entity.js';
 import { BonusType } from './bonus.js';
+import { v4 as uuidv4 } from 'uuid';
 import {
 	BASE_PLAYER_SPEED,
 	ACCELERATED_SPEED,
-	FRICTION,
 	MAX_WIDTH,
 	MAX_HEIGHT,
 } from './constants.js';
 
 ///////////////////CLASSE PLAYER///////////////////
 export class Player extends Entity {
-	constructor(radius, x, y, vx, vy, useKeyboard = true, pseudo = undefined) {
+	constructor(
+		id,
+		radius,
+		x,
+		y,
+		vx,
+		vy,
+		useKeyboard = true,
+		pseudo = undefined
+	) {
 		super(radius, x, y);
+		this.id = id;
 		this.vx = vx;
 		this.vy = vy;
 		this.speed = BASE_PLAYER_SPEED;
@@ -21,9 +31,13 @@ export class Player extends Entity {
 		this.isSliding = false;
 		this.score = 0;
 		this.pseudo = pseudo;
+		this.isInvincible = true;
+		setTimeout(() => {
+			this.isInvincible = false;
+		}, 3000);
 	}
 
-	movePlayer(stains, grid) {
+	movePlayer(stains, grid, players, io) {
 		this.x += this.vx;
 		this.y += this.vy;
 
@@ -40,6 +54,70 @@ export class Player extends Entity {
 			this.y = MAX_HEIGHT - radius;
 		}
 		this.checkStainCollisionFromCenter(stains, grid);
+		this.checkPlayerCollision(grid, players, io);
+	}
+
+	canEat(otherPlayer) {
+		if (this.radius < otherPlayer.radius * 1.05) return false;
+
+		const dx = this.x - otherPlayer.x;
+		const dy = this.y - otherPlayer.y;
+		const distanceSquared = dx * dx + dy * dy;
+		const distance = Math.sqrt(distanceSquared);
+
+		if (distance >= this.radius + otherPlayer.radius) return false;
+
+		const r1 = this.radius;
+		const r2 = otherPlayer.radius;
+
+		const intersectionArea =
+			r1 *
+				r1 *
+				Math.acos((distanceSquared + r1 * r1 - r2 * r2) / (2 * distance * r1)) +
+			r2 *
+				r2 *
+				Math.acos((distanceSquared + r2 * r2 - r1 * r1) / (2 * distance * r2)) -
+			0.5 *
+				Math.sqrt(
+					(-distance + r1 + r2) *
+						(distance + r1 - r2) *
+						(distance - r1 + r2) *
+						(distance + r1 + r2)
+				);
+
+		const otherPlayerArea = Math.PI * r2 * r2;
+		return intersectionArea >= 0.55 * otherPlayerArea;
+	}
+
+	absorb(otherPlayer) {
+		this.radius += otherPlayer.radius /*/ 2*/;
+		this.score += otherPlayer.score + 1000;
+		this.updateSpeed();
+	}
+
+	checkPlayerCollision(grid, players, io) {
+		const nearbyPlayers = grid.getNearbyEntities(this);
+		for (const otherPlayer of nearbyPlayers) {
+			if (
+				otherPlayer !== this &&
+				players[otherPlayer.id] &&
+				this.canEat(otherPlayer) &&
+				!this.isInvincible &&
+				!otherPlayer.isInvincible
+			) {
+				console.log(
+					`${this.id} a mangé ${otherPlayer.id} (${otherPlayer.pseudo})`
+				);
+				this.absorb(otherPlayer); // miam miam
+
+				// looser go back to moodle
+				if (!otherPlayer.isBot) {
+					io.to(otherPlayer.id).emit('redirect', '/'); // Redirige vers la page principale
+				}
+
+				delete players[otherPlayer.id];
+			}
+		}
 	}
 
 	updateMouseMovement(dx, dy, canvaWidth, canvasHeight) {
@@ -75,7 +153,7 @@ export class Player extends Entity {
 
 	bonus(bt) {
 		if (bt === BonusType.VITESSE) {
-			this.speed += 10;
+			this.speed *= 2;
 		} else if (bt === BonusType.TAILLE) {
 			this.radius *= 1.5;
 		}
@@ -92,7 +170,7 @@ export class Player extends Entity {
 
 			// verifie si la distance au carré est inférieure au carré de la somme des rayons
 			if (distanceSquared <= radiusSum * radiusSum) {
-				// Supprime le stain et applique les effets
+				// mange et grossit
 				const index = stains.getAll().indexOf(stain);
 				if (index !== -1) {
 					stains.splice(index, 1);
@@ -124,5 +202,30 @@ export class Player extends Entity {
 		this.vx = dx * speed;
 		this.vy = dy * speed;
 		this.isSliding = false;
+	}
+}
+
+export class BotPlayer extends Player {
+	constructor(radius, x, y, vx, vy) {
+		const id = uuidv4(); // uuid pour les bots
+		super(`bot_${id}`, radius, x, y, vx, vy, false, 'Bot');
+		this.isBot = true;
+	}
+
+	updateBotMovement(grid, stains, players, io) {
+		// direction aléatoire
+		if (Math.random() < 0.02) {
+			this.vx = Math.random() * 4 - 2;
+			this.vy = Math.random() * 4 - 2;
+		}
+
+		// mouvement
+		this.x += this.vx;
+		this.y += this.vy;
+
+		// collisions
+		// console.log('Bot collision');
+		this.movePlayer(stains, grid, players, io); // Passe io ici
+		this.checkPlayerCollision(grid, players, io); // Ajout pour permettre aux bots de manger
 	}
 }
