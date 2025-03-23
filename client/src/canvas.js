@@ -1,8 +1,9 @@
 export const canvas = document.querySelector('.gameCanvas');
 export const context = canvas.getContext('2d');
 
-let debugCameraEnabled = false; // Mode de débogage désactivé par défaut
+let debugCameraEnabled = false;
 let debugPlayerEnabled = false;
+let debugEntityMode = false;
 
 export const BonusType = {
 	VITESSE: 'VITESSE',
@@ -16,6 +17,9 @@ export function setDebugCameraMode(enabled) {
 }
 export function setDebugPlayerMode(enabled) {
 	debugPlayerEnabled = enabled;
+}
+export function setDebugEntityMode(enabled) {
+	debugEntityMode = enabled;
 }
 
 export function resampleCanvas(draw, render) {
@@ -80,13 +84,20 @@ function drawDebugPlayer(context, player) {
 	context.beginPath();
 	context.arc(player.x, player.y, maxDistance, 0, 2 * Math.PI);
 	context.stroke();
+
+	// hitbox (bordure rouge)
+	context.strokeStyle = 'red';
+	context.lineWidth = 1;
+	context.beginPath();
+	context.arc(player.x, player.y, player.radius, 0, 2 * Math.PI);
+	context.stroke();
 }
 
 export function drawPlayer(context, player) {
 	context.save();
-	context.fillStyle = 'white';
+	context.fillStyle = debugPlayerEnabled ? 'rgba(255, 255, 255, 0.2)' : 'white';
 	context.beginPath();
-	context.arc(player.x, player.y, player.radius, 0, 2 * Math.PI); // Utilisation correcte du rayon
+	context.arc(player.x, player.y, player.radius, 0, 2 * Math.PI);
 	context.fill();
 	context.restore();
 
@@ -106,6 +117,27 @@ export function drawPlayer(context, player) {
 	); // au dessus
 	context.restore();
 }
+function drawDebugEntity(context, entity) {
+	// transparent avec bordure
+	context.save();
+	context.strokeStyle =
+		entity.type === 'VITESSE' || entity.type === 'TAILLE' ? 'yellow' : 'red';
+	context.fillStyle =
+		entity.type === 'VITESSE' || entity.type === 'TAILLE'
+			? 'rgba(255, 255, 0, 0.2)'
+			: 'rgba(255, 0, 0, 0.2)';
+	context.lineWidth = 1;
+	context.beginPath();
+	context.arc(entity.x, entity.y, 20, 0, 2 * Math.PI);
+	context.fill();
+	context.stroke();
+	context.restore();
+}
+
+function adjustSplatterPosition(context, stain) {
+	const svgOffset = stain.radius;
+	context.translate(stain.x - svgOffset, stain.y - svgOffset);
+}
 
 function drawStain(context, stain) {
 	const svgPathBase = new Path2D(
@@ -115,23 +147,32 @@ function drawStain(context, stain) {
 		'M413.697 249.29c46.691-32.516 4.368-86.194-28.664-69.677-8.793 4.396-16 18.581-33.032 23.226-2.934.8-5.941.97-8.913.829-5.863 10.823-12.988 21.972-28.592 32.375-22.71 15.14-58.494 3.441-58.494-37.849s-42.667-45.419-52.989-18.581c-3.368 8.757-4.483 16.293-13.447 21.214.12.154.255.311.371.464 20.635 27.084-22.03 71.467-55.054 29.935-7.533-9.474-15.188-17.029-22.685-22.808-29.103 7.452-41.363 34.509-33.656 58.101 17.89 8.918 38.274 16.6 46.123 32.32 14.346 28.731-45.974 50.698-32.449 109.935 3.969 17.384 12.105 30.212 22.51 39.195 48.366 25.895 86.276-36.287 108.243-84.614 20.645-45.419 81.169-37.214 103.914-2.753 22.71 34.409 69.029 27.898 71.57-8.946.518-7.51 3.111-15.582 7.028-23.901-25.281-30.732-17.519-60.543 8.216-78.465'
 	);
 
-	// Couleurs pour les taches de base
+	// couleurs
+	// TODO: Ajouter les couleurs de plein de sauces diférente
 	const baseColor = '#E5C985 ';
 	const shadowColor = '#B99850 ';
 
 	context.save();
-	context.translate(stain.x, stain.y);
-	context.scale(stain.radius / 256, stain.radius / 256); // Adapter la taille du SVG
 
-	// Dessiner la couleur de base
+	// ajuste la position pour centrer le SVG sur la hitbox
+	adjustSplatterPosition(context, stain);
+
+	// adapte la taille du SVG
+	context.scale(stain.radius / 256, stain.radius / 256);
+
+	// base
 	context.fillStyle = baseColor;
 	context.fill(svgPathBase);
 
-	// Dessiner l'ombre
+	// ombre
 	context.fillStyle = shadowColor;
 	context.fill(svgPathShadow);
 
 	context.restore();
+
+	if (debugEntityMode) {
+		drawDebugEntity(context, stain); // debug
+	}
 }
 
 export function drawBonus(context, bonus) {
@@ -142,30 +183,35 @@ export function drawBonus(context, bonus) {
 		'M413.697 249.29c46.691-32.516 4.368-86.194-28.664-69.677-8.793 4.396-16 18.581-33.032 23.226-2.934.8-5.941.97-8.913.829-5.863 10.823-12.988 21.972-28.592 32.375-22.71 15.14-58.494 3.441-58.494-37.849s-42.667-45.419-52.989-18.581c-3.368 8.757-4.483 16.293-13.447 21.214.12.154.255.311.371.464 20.635 27.084-22.03 71.467-55.054 29.935-7.533-9.474-15.188-17.029-22.685-22.808-29.103 7.452-41.363 34.509-33.656 58.101 17.89 8.918 38.274 16.6 46.123 32.32 14.346 28.731-45.974 50.698-32.449 109.935 3.969 17.384 12.105 30.212 22.51 39.195 48.366 25.895 86.276-36.287 108.243-84.614 20.645-45.419 81.169-37.214 103.914-2.753 22.71 34.409 69.029 27.898 71.57-8.946.518-7.51 3.111-15.582 7.028-23.901-25.281-30.732-17.519-60.543 8.216-78.465'
 	);
 
-	// Couleurs pour les bonus
-	const baseColor = bonus.type === 'VITESSE' ? '#ff5733' : '#33c1ff';
-	const shadowColor = bonus.type === 'VITESSE' ? '#cc4629' : '#2a99cc';
+	// couleurs ( piménté, sauce barbecue)
+	const baseColor = bonus.type === 'VITESSE' ? '#ff4500' : '#8b4513';
+	const shadowColor = bonus.type === 'VITESSE' ? '#cc3700' : '#6b3a10';
 
 	context.save();
-	context.translate(bonus.x, bonus.y);
-	context.scale(bonus.radius / 256, bonus.radius / 256); // Adapter la taille du SVG
+	adjustSplatterPosition(context, bonus);
 
-	// Dessiner l'ombre
-	context.fillStyle = shadowColor;
-	context.fill(svgPathShadow);
+	context.scale(bonus.radius / 256, bonus.radius / 256);
 
-	// Dessiner la couleur de base
+	// base
 	context.fillStyle = baseColor;
 	context.fill(svgPathBase);
 
+	// ombre
+	context.fillStyle = shadowColor;
+	context.fill(svgPathShadow);
+
 	context.restore();
+
+	if (debugEntityMode) {
+		drawDebugEntity(context, bonus); // debug
+	}
 }
 
 function drawCamera(context, camera, canvasWidth, canvasHeight) {
 	if (!debugCameraEnabled) return;
 
-	const halfWidth = canvasWidth / 4 / camera.zoom; // Réduit la largeur à la moitié
-	const halfHeight = canvasHeight / 4 / camera.zoom; // Réduit la hauteur à la moitié
+	const halfWidth = canvasWidth / 4 / camera.zoom;
+	const halfHeight = canvasHeight / 4 / camera.zoom;
 
 	context.save();
 	context.strokeStyle = 'yellow';
@@ -189,20 +235,10 @@ export function drawGame(context, player, otherPlayers, stains, bots, camera) {
 	context.scale(camera.zoom, camera.zoom);
 	context.translate(-camera.x, -camera.y);
 
-	// Dessine le débogage de la caméra
+	// debug de la caméra
 	drawCamera(context, camera, canvas.width, canvas.height);
 
-	// Dessine le joueur local
-	drawPlayer(context, player);
-
-	// Interpolation des autres joueurs
-	const deltaTime = 1 / 60; // Temps entre deux frames (60Hz)
-	for (const id in otherPlayers) {
-		interpolatePlayerPosition(otherPlayers[id], deltaTime);
-		drawPlayer(context, otherPlayers[id]);
-	}
-
-	// Dessine uniquement les entités visibles
+	// uniquement les entités visibles
 	stains.forEach(entity => {
 		const isVisible = debugCameraEnabled
 			? isEntityVisibleInDebug(entity, camera, canvas.width, canvas.height)
@@ -217,7 +253,17 @@ export function drawGame(context, player, otherPlayers, stains, bots, camera) {
 		}
 	});
 
-	// Dessine uniquement les entités visibles
+	// dessine le joueur local
+	drawPlayer(context, player);
+
+	// interpolation des autres joueurs (oui)
+	const deltaTime = 1 / 60; // 60 FPS
+	for (const id in otherPlayers) {
+		interpolatePlayerPosition(otherPlayers[id], deltaTime);
+		drawPlayer(context, otherPlayers[id]);
+	}
+
+	// uniquement les joueurs visibles
 	bots.forEach(entity => {
 		const isVisible = debugCameraEnabled
 			? isEntityVisibleInDebug(entity, camera, canvas.width, canvas.height)

@@ -5,13 +5,11 @@ import {
 	drawGame,
 	setDebugCameraMode,
 	setDebugPlayerMode,
+	setDebugEntityMode,
 } from './canvas.js';
 import { io } from 'socket.io-client';
-import { Camera } from './camera.js'; // Import de la caméra
+import { Camera } from './camera.js';
 import { handleKeyDown, handleKeyUp } from './input.js';
-//camera
-//player
-//stains, createNewStains
 
 export const socket = io(window.location.hostname + ':8080');
 
@@ -125,8 +123,9 @@ window.addEventListener('keydown', event => {
 	}
 });
 
-// Activer le mode de débogage de la caméra
+// debug
 setDebugCameraMode(false);
 setDebugPlayerMode(false);
+setDebugEntityMode(false);
 
 observeCanvas(() => {}, render);
