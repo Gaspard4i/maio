@@ -6,6 +6,7 @@ import {
 	setDebugCameraMode,
 	setDebugPlayerMode,
 	setDebugEntityMode,
+	setDebugGridMode,
 } from './canvas.js';
 import { io } from 'socket.io-client';
 import { Camera } from './camera.js';
@@ -89,5 +90,6 @@ preventZoom();
 setDebugCameraMode(false);
 setDebugPlayerMode(false);
 setDebugEntityMode(false);
+setDebugGridMode(false);
 
 observeCanvas(() => {}, render);

@@ -3,7 +3,8 @@ export const context = canvas.getContext('2d');
 
 let debugCameraEnabled = false;
 let debugPlayerEnabled = false;
-let debugEntityMode = false;
+let debugEntityEnable = false;
+let debugGridEnabled = false; // Nouveau drapeau pour afficher la grille
 
 export const BonusType = {
 	VITESSE: 'VITESSE',
@@ -19,7 +20,10 @@ export function setDebugPlayerMode(enabled) {
 	debugPlayerEnabled = enabled;
 }
 export function setDebugEntityMode(enabled) {
-	debugEntityMode = enabled;
+	debugEntityEnable = enabled;
+}
+export function setDebugGridMode(enabled) {
+	debugGridEnabled = enabled;
 }
 
 export function resampleCanvas(draw, render) {
@@ -84,18 +88,11 @@ function drawDebugPlayer(context, player) {
 	context.beginPath();
 	context.arc(player.x, player.y, maxDistance, 0, 2 * Math.PI);
 	context.stroke();
-
-	// hitbox (bordure rouge)
-	context.strokeStyle = 'red';
-	context.lineWidth = 1;
-	context.beginPath();
-	context.arc(player.x, player.y, player.radius, 0, 2 * Math.PI);
-	context.stroke();
 }
 
 export function drawPlayer(context, player) {
 	context.save();
-	context.fillStyle = debugPlayerEnabled ? 'rgba(255, 255, 255, 0.2)' : 'white';
+	context.fillStyle = debugEntityEnable ? 'rgba(255, 255, 255, 0.2)' : 'white';
 	context.beginPath();
 	context.arc(player.x, player.y, player.radius, 0, 2 * Math.PI);
 	context.fill();
@@ -103,6 +100,15 @@ export function drawPlayer(context, player) {
 
 	if (debugPlayerEnabled) {
 		drawDebugPlayer(context, player); // méthode de débogage
+	}
+
+	if (debugEntityEnable) {
+		// hitbox (bordure blanche)
+		context.strokeStyle = 'white';
+		context.lineWidth = 1;
+		context.beginPath();
+		context.arc(player.x, player.y, player.radius, 0, 2 * Math.PI);
+		context.stroke();
 	}
 
 	// score du joueur
@@ -128,7 +134,7 @@ function drawDebugEntity(context, entity) {
 			: 'rgba(255, 0, 0, 0.2)';
 	context.lineWidth = 1;
 	context.beginPath();
-	context.arc(entity.x, entity.y, 20, 0, 2 * Math.PI);
+	context.arc(entity.x, entity.y, entity.radius, 0, 2 * Math.PI);
 	context.fill();
 	context.stroke();
 	context.restore();
@@ -170,7 +176,7 @@ function drawStain(context, stain) {
 
 	context.restore();
 
-	if (debugEntityMode) {
+	if (debugEntityEnable) {
 		drawDebugEntity(context, stain); // debug
 	}
 }
@@ -202,7 +208,7 @@ export function drawBonus(context, bonus) {
 
 	context.restore();
 
-	if (debugEntityMode) {
+	if (debugEntityEnable) {
 		drawDebugEntity(context, bonus); // debug
 	}
 }
@@ -210,8 +216,8 @@ export function drawBonus(context, bonus) {
 function drawCamera(context, camera, canvasWidth, canvasHeight) {
 	if (!debugCameraEnabled) return;
 
-	const halfWidth = canvasWidth / 4 / camera.zoom;
-	const halfHeight = canvasHeight / 4 / camera.zoom;
+	const halfWidth = canvasWidth / 3 / camera.zoom;
+	const halfHeight = canvasHeight / 3 / camera.zoom;
 
 	context.save();
 	context.strokeStyle = 'yellow';
@@ -225,6 +231,76 @@ function drawCamera(context, camera, canvasWidth, canvasHeight) {
 	context.restore();
 }
 
+// Fonction pour dessiner la grid
+function drawGrid(context, camera, canvasWidth, canvasHeight, chunkSize) {
+	const halfWidth = canvasWidth / 2 / camera.zoom;
+	const halfHeight = canvasHeight / 2 / camera.zoom;
+
+	const cameraLeft = camera.x - halfWidth;
+	const cameraRight = camera.x + halfWidth;
+	const cameraTop = camera.y - halfHeight;
+	const cameraBottom = camera.y + halfHeight;
+
+	context.save();
+
+	if (debugGridEnabled) {
+		// Affiche la grille avec des lignes
+		context.strokeStyle = 'rgba(255, 255, 255, 0.5)'; // Couleur blanche pour les lignes
+		context.lineWidth = 1;
+
+		// Dessine les lignes verticales
+		for (
+			let x = Math.floor(cameraLeft / chunkSize) * chunkSize;
+			x <= cameraRight;
+			x += chunkSize
+		) {
+			context.beginPath();
+			context.moveTo(x, cameraTop);
+			context.lineTo(x, cameraBottom);
+			context.stroke();
+		}
+
+		// Dessine les lignes horizontales
+		for (
+			let y = Math.floor(cameraTop / chunkSize) * chunkSize;
+			y <= cameraBottom;
+			y += chunkSize
+		) {
+			context.beginPath();
+			context.moveTo(cameraLeft, y);
+			context.lineTo(cameraRight, y);
+			context.stroke();
+		}
+	} else {
+		// Affiche la grille avec des croix
+		context.strokeStyle = 'rgba(255, 255, 255, 0.5)'; // Couleur blanche pour les croix
+		context.lineWidth = 1;
+
+		// Dessine les points en forme de croix
+		for (
+			let x = Math.floor(cameraLeft / chunkSize) * chunkSize;
+			x <= cameraRight;
+			x += chunkSize
+		) {
+			for (
+				let y = Math.floor(cameraTop / chunkSize) * chunkSize;
+				y <= cameraBottom;
+				y += chunkSize
+			) {
+				context.beginPath();
+				// Petite croix
+				const crossSize = 5; // Taille de la croix
+				context.moveTo(x - crossSize, y);
+				context.lineTo(x + crossSize, y);
+				context.moveTo(x, y - crossSize);
+				context.lineTo(x, y + crossSize);
+				context.stroke();
+			}
+		}
+	}
+
+	context.restore();
+}
 // ==================== RENDU PRINCIPAL ====================
 
 export function drawGame(context, player, otherPlayers, stains, bots, camera) {
@@ -234,6 +310,9 @@ export function drawGame(context, player, otherPlayers, stains, bots, camera) {
 	context.translate(centerX, centerY);
 	context.scale(camera.zoom, camera.zoom);
 	context.translate(-camera.x, -camera.y);
+
+	// Dessine la grid si le mode debug est activé
+	drawGrid(context, camera, canvas.width, canvas.height, 200); // Taille des chunkules = 200
 
 	// debug de la caméra
 	drawCamera(context, camera, canvas.width, canvas.height);

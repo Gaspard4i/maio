@@ -1,12 +1,12 @@
 import { Entity } from './entity.js';
+import { BonusType } from './bonus.js';
 import {
-	maxWidth,
-	maxHeight,
 	BASE_PLAYER_SPEED,
 	ACCELERATED_SPEED,
 	FRICTION,
+	MAX_WIDTH,
+	MAX_HEIGHT,
 } from './constants.js';
-import { BonusType } from './bonus.js';
 
 ///////////////////CLASSE PLAYER///////////////////
 export class Player extends Entity {
@@ -22,25 +22,23 @@ export class Player extends Entity {
 		this.score = 0;
 	}
 
-	movePlayer(stains) {
+	movePlayer(stains, grid) {
 		this.x += this.vx;
 		this.y += this.vy;
-
-		this.applyFriction();
 
 		const radius = this.radius;
 
 		if (this.x - radius < 0) {
 			this.x = radius;
-		} else if (this.x + radius > maxWidth) {
-			this.x = maxWidth - radius;
+		} else if (this.x + radius > MAX_WIDTH) {
+			this.x = MAX_WIDTH - radius;
 		}
 		if (this.y - radius < 0) {
 			this.y = radius;
-		} else if (this.y + radius > maxHeight) {
-			this.y = maxHeight - radius;
+		} else if (this.y + radius > MAX_HEIGHT) {
+			this.y = MAX_HEIGHT - radius;
 		}
-		this.checkStainCollisionFromCenter(stains);
+		this.checkStainCollisionFromCenter(stains, grid);
 	}
 
 	updateMouseMovement(dx, dy, canvaWidth, canvasHeight) {
@@ -82,23 +80,23 @@ export class Player extends Entity {
 		}
 	}
 
-	checkStainCollisionFromCenter(stains) {
-		// console.log(stains.get(0));
-		for (let i = stains.size() - 1; i >= 0; i--) {
-			// console.log('check col');
-			const stain = stains.get(i);
-			const stainCenterX = stain.x + 20 / 2;
-			const stainCenterY = stain.y + 20 / 2;
-			const dx = stainCenterX - this.x;
-			const dy = stainCenterY - this.y;
-			const distance = Math.sqrt(dx * dx + dy * dy);
+	checkStainCollisionFromCenter(stains, grid) {
+		const nearbyStains = grid.getNearbyEntities(this);
+		for (let i = nearbyStains.length - 1; i >= 0; i--) {
+			const stain = nearbyStains[i];
+			const dx = stain.x - this.x;
+			const dy = stain.y - this.y;
+			const distanceSquared = dx * dx + dy * dy;
+			const radiusSum = this.radius + stain.radius;
 
-			const stainRadius = 20 / 2;
-			const overlap = this.radius - distance + stainRadius;
-			if (overlap >= stainRadius * 0.75) {
-				stains.splice(i, 1);
-				this.grow();
-				// if (stain instanceof Bonus) this.bonus(stain.bonus);
+			// verifie si la distance au carré est inférieure au carré de la somme des rayons
+			if (distanceSquared <= radiusSum * radiusSum) {
+				// Supprime le stain et applique les effets
+				const index = stains.getAll().indexOf(stain);
+				if (index !== -1) {
+					stains.splice(index, 1);
+					this.grow();
+				}
 			}
 		}
 	}
@@ -125,27 +123,5 @@ export class Player extends Entity {
 		this.vx = dx * speed;
 		this.vy = dy * speed;
 		this.isSliding = false;
-	}
-
-	applyFriction() {
-		if (this.isSliding) {
-			this.vx *= FRICTION;
-			this.vy *= FRICTION;
-
-			if (Math.abs(this.vx) < 0.1) this.vx = 0;
-			if (Math.abs(this.vy) < 0.1) this.vy = 0;
-
-			if (this.vx === 0 && this.vy === 0) {
-				this.isSliding = false;
-			}
-		}
-		if (
-			!this.keys['ArrowRight'] &&
-			!this.keys['ArrowLeft'] &&
-			!this.keys['ArrowUp'] &&
-			!this.keys['ArrowDown']
-		) {
-			this.isSliding = true;
-		}
 	}
 }
