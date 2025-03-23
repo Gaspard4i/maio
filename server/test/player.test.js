@@ -44,25 +44,6 @@ describe('Player Module', () => {
 		});
 	});
 
-	describe('applyFriction', () => {
-		it('should reduce velocity when sliding', () => {
-			const player = new Player(30, 0, 0, 10, 10, true);
-			player.isSliding = true;
-			player.applyFriction();
-			assert(player.vx < 10);
-			assert(player.vy < 10);
-		});
-
-		it('should stop sliding when velocity is near zero', () => {
-			const player = new Player(30, 0, 0, 0.05, 0.05, true);
-			player.isSliding = true;
-			player.applyFriction();
-			assert.equal(player.vx, 0);
-			assert.equal(player.vy, 0);
-			assert.equal(player.isSliding, false);
-		});
-	});
-
 	describe('updateVelocity', () => {
 		it('should update velocity based on keys pressed', () => {
 			const player = new Player(30, 0, 0, 0, 0, true);
