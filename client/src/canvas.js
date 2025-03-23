@@ -54,7 +54,7 @@ function isEntityVisible(entity, camera, canvasWidth, canvasHeight) {
 }
 
 function isEntityVisibleInDebug(entity, camera, canvasWidth, canvasHeight) {
-	const halfWidth = canvasWidth / 4 / camera.zoom; // Taille réduite pour la caméra de débogage
+	const halfWidth = canvasWidth / 4 / camera.zoom;
 	const halfHeight = canvasHeight / 4 / camera.zoom;
 
 	const cameraLeft = camera.x - halfWidth;
@@ -75,7 +75,7 @@ export function interpolatePlayerPosition(player, deltaTime) {
 	player.y += player.vy * deltaTime;
 }
 
-// ==================== DESSIN ====================
+// ==================== FONCTIONS DE DESSIN ====================
 
 function drawDebugPlayer(context, player) {
 	const maxDistance = Math.min(canvas.width, canvas.height) / 4;
