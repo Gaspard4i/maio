@@ -80,49 +80,230 @@ export function interpolatePlayerPosition(player, deltaTime) {
 }
 
 // ==================== FONCTIONS DE DESSIN ====================
-
 function drawDebugPlayer(context, player) {
-	const maxDistance = Math.min(canvas.width, canvas.height) / 4;
-	context.strokeStyle = 'rgba(255, 255, 255, 0.5)';
-	context.lineWidth = 2;
+	context.save();
+	context.strokeStyle = 'white'; // Bordure blanche
+	context.fillStyle = 'rgba(255, 255, 255, 0.2)'; // Remplissage blanc transparent
+	context.lineWidth = 3;
 	context.beginPath();
-	context.arc(player.x, player.y, maxDistance, 0, 2 * Math.PI);
+	context.arc(player.x, player.y, player.radius, 0, 2 * Math.PI);
+	context.fill();
 	context.stroke();
+	context.restore();
 }
 
 export function drawPlayer(context, player) {
 	context.save();
-	context.fillStyle = debugEntityEnable ? 'rgba(255, 255, 255, 0.2)' : 'white';
+	context.translate(player.x, player.y);
+	context.scale(player.radius / 224, player.radius / 224);
+	context.translate(-224, -224);
+
+	// Bordure du halo lumineux
 	context.beginPath();
-	context.arc(player.x, player.y, player.radius, 0, 2 * Math.PI);
+	context.ellipse(224.001, 391.986, 192, 48, 0, 0, 2 * Math.PI);
+	context.strokeStyle = '#c7e4c7';
+	context.lineWidth = 1.5;
+	context.stroke();
+
+	// Halo lumineux autour du vaisseau
+	context.beginPath();
+	context.moveTo(224, 344.014);
+	context.bezierCurveTo(315.806, 344.014, 392.451, 360.133, 411.402, 381.661);
+	context.lineTo(338.626, 275.842);
+	context.lineTo(333.376, 277.139);
+	context.bezierCurveTo(266.751, 293.545, 181.235, 293.545, 114.61, 277.139);
+	context.lineTo(109.36, 275.842);
+	context.lineTo(35.411, 382.97);
+	context.lineTo(35.516, 382.97);
+	context.bezierCurveTo(52.45, 360.789, 130.341, 344.014, 224, 344.014);
+	context.closePath();
+	context.fillStyle = '#deefdd';
 	context.fill();
-	context.restore();
 
+	// Base du vaisseau
+	context.beginPath();
+	context.ellipse(224.001, 199.986, 224, 96, 0, 0, 2 * Math.PI);
+	context.fillStyle = '#7f8fa0';
+	context.fill();
+
+	// Ombre sous le vaisseau
+	context.beginPath();
+	context.moveTo(224, 267.761);
+	context.bezierCurveTo(111.294, 267.761, 18.296, 232.051, 2.594, 185.612);
+	context.bezierCurveTo(0.92, 190.31, 0, 195.113, 0, 200.014);
+	context.bezierCurveTo(0, 253.033, 100.288, 296.014, 224, 296.014);
+	context.bezierCurveTo(347.712, 296.014, 448, 253.033, 448, 200.014);
+	context.bezierCurveTo(448, 195.112, 447.08, 190.31, 445.406, 185.612);
+	context.bezierCurveTo(429.705, 232.051, 336.707, 267.761, 224, 267.761);
+	context.closePath();
+	context.fillStyle = '#738394';
+	context.fill();
+
+	// Lumière et ombre sur la vitre du vaisseau
+	context.beginPath();
+	context.moveTo(96.972, 120.983);
+	context.bezierCurveTo(96.414, 126.039, 96.063, 131.143, 96.143, 136.329);
+	context.bezierCurveTo(96.217, 141.142, 98.683, 145.693, 102.545, 148.567);
+	context.bezierCurveTo(130.088, 169.066, 160.979, 184.015, 224.001, 184.015);
+	context.bezierCurveTo(287.914, 184.015, 319.457, 169.066, 346.901, 148.567);
+	context.bezierCurveTo(350.761, 145.694, 353.227, 141.143, 353.3, 136.331);
+	context.bezierCurveTo(353.379, 131.146, 353.026, 126.041, 352.465, 120.981);
+	context.bezierCurveTo(316.357, 110.301, 272.634, 104.014, 224.443, 104.014);
+	context.bezierCurveTo(177.25, 104.013, 133.524, 110.301, 96.972, 120.983);
+	context.closePath();
+	context.fillStyle = '#a6b5c8';
+	context.fill();
+
+	// Bordure entre la vitre et le vaisseau
+	context.beginPath();
+	context.moveTo(346.355, 147.518);
+	context.bezierCurveTo(330.775, 135.694, 282.152, 127.014, 224.001, 127.014);
+	context.bezierCurveTo(165.851, 127.014, 117.228, 135.694, 101.648, 147.519);
+	context.bezierCurveTo(101.996, 147.829, 102.17, 148.286, 102.546, 148.567);
+	context.bezierCurveTo(130.089, 169.066, 160.98, 184.015, 224.001, 184.015);
+	context.bezierCurveTo(287.914, 184.015, 319.457, 169.066, 346.901, 148.567);
+	context.bezierCurveTo(347.276, 148.288, 347.45, 147.829, 347.798, 147.518);
+	context.closePath();
+	context.fillStyle = '#7f8fa0';
+	context.fill();
+
+	// Zone lumineuse dans le vaisseau
+	context.beginPath();
+	context.moveTo(346.355, 147.518);
+	context.bezierCurveTo(330.775, 135.694, 282.152, 127.014, 224.001, 127.014);
+	context.bezierCurveTo(165.851, 127.014, 117.228, 135.694, 101.648, 147.519);
+	context.bezierCurveTo(101.996, 147.829, 102.17, 148.286, 102.546, 148.567);
+	context.bezierCurveTo(130.089, 169.066, 160.98, 184.015, 224.001, 184.015);
+	context.bezierCurveTo(287.914, 184.015, 319.457, 169.066, 346.901, 148.567);
+	context.bezierCurveTo(347.276, 148.288, 347.45, 147.829, 347.798, 147.518);
+	context.closePath();
+	context.fillStyle = '#8d9dae';
+	context.fill();
+
+	// Haut de la vitre
+	context.beginPath();
+	context.moveTo(224, 104.014);
+	context.bezierCurveTo(271.19, 104.014, 314.913, 110.301, 351.022, 121.981);
+	context.bezierCurveTo(344.159, 59.014, 290.779, 8.014, 224, 8.014);
+	context.bezierCurveTo(157.47, 8.014, 103.835, 58.812, 96.972, 120.983);
+	context.bezierCurveTo(133.081, 110.302, 176.807, 104.014, 224, 104.014);
+	context.closePath();
+	context.fillStyle = '#cddcf0';
+	context.fill();
+
+	// Alien à l'intérieur du vaisseau
+	context.beginPath();
+	context.moveTo(224, 184.014);
+	context.bezierCurveTo(242.03, 184.014, 257.206, 182.674, 270.65, 180.447);
+	context.bezierCurveTo(276.401, 166.791, 280, 151.125, 280, 135.014);
+	context.bezierCurveTo(280, 104.139, 254.875, 79.014, 224, 79.014);
+	context.bezierCurveTo(193.125, 79.014, 168, 104.139, 168, 135.014);
+	context.bezierCurveTo(168, 151.125, 171.598, 166.791, 177.35, 180.447);
+	context.bezierCurveTo(190.794, 182.674, 205.97, 184.014, 224, 184.014);
+	context.closePath();
+	context.fillStyle = '#acc6b9';
+	context.fill();
+
+	// Cornes de l'alien
+	// Corne gauche
+	context.beginPath();
+	context.moveTo(200, 100);
+	context.bezierCurveTo(190, 80, 180, 70, 185, 50);
+	context.bezierCurveTo(190, 70, 200, 80, 210, 90);
+	context.closePath();
+	context.fillStyle = '#acc6b9';
+	context.fill();
+
+	// Corne droite
+	context.beginPath();
+	context.moveTo(248, 100);
+	context.bezierCurveTo(258, 80, 268, 70, 263, 50);
+	context.bezierCurveTo(258, 70, 248, 80, 238, 90);
+	context.closePath();
+	context.fillStyle = '#acc6b9';
+	context.fill();
+
+	// Ronds autour des phares du vaisseau (descendus légèrement plus)
+	context.beginPath();
+	context.arc(224, 216.014, 32, 0, 2 * Math.PI); // Descendu de 3 pixels
+	context.moveTo(80, 192.014);
+	context.arc(80, 192.014, 32, 0, 2 * Math.PI); // Descendu de 3 pixels
+	context.moveTo(368, 192.014);
+	context.arc(368, 192.014, 32, 0, 2 * Math.PI); // Descendu de 3 pixels
+	context.fillStyle = '#a6b5c8';
+	context.fill();
+
+	// Oeil gauche de l'alien
+	context.beginPath();
+	context.ellipse(
+		197.909,
+		147.403,
+		20.257,
+		10.128,
+		(-148.54 * Math.PI) / 180,
+		0,
+		2 * Math.PI
+	);
+	context.fillStyle = '#000000';
+	context.fill();
+
+	// Oeil droit de l'alien
+	context.beginPath();
+	context.ellipse(
+		250.008,
+		147.414,
+		10.128,
+		20.256,
+		(-121.46 * Math.PI) / 180,
+		0,
+		2 * Math.PI
+	);
+	context.fillStyle = '#000000';
+	context.fill();
+
+	// Lumière sur la vitre du vaisseau (rendue transparente)
+	context.beginPath();
+	context.moveTo(219.53, 79.466);
+	context.arc(188.521, 87.014, 32, 0, 2 * Math.PI); // Centre (188.521, 87.014) et rayon 32
+	context.fillStyle = 'rgba(220, 231, 246, 0.5)'; // Couleur avec transparence
+	context.fill();
+
+	// Halo lumineux sous le vaisseau
+	context.beginPath();
+	context.ellipse(224.001, 391.986, 192, 48, 0, 0, 2 * Math.PI);
+	context.fillStyle = '#c7e4c7';
+	context.fill();
+
+	// Phare central du vaisseau
+	context.beginPath();
+	context.arc(224, 216.014, 16, 0, 2 * Math.PI);
+	context.fillStyle = '#5886c5';
+	context.fill();
+
+	// Phare gauche du vaisseau
+	context.beginPath();
+	context.arc(80, 192.014, 16, 0, 2 * Math.PI);
+	context.fillStyle = '#ee6058';
+	context.fill();
+
+	// Phare droit du vaisseau
+	context.beginPath();
+	context.arc(368, 192.014, 16, 0, 2 * Math.PI);
+	context.fillStyle = '#eb7a25';
+	context.fill();
+
+	// Contour du phare droit
+	context.beginPath();
+	context.arc(368, 192.014, 16, 0, 2 * Math.PI);
+	context.fillStyle = '#ff9c52';
+	context.fill();
+
+	context.restore();
 	if (debugPlayerEnabled) {
-		drawDebugPlayer(context, player); // méthode de débogage
+		drawDebugPlayer(context, player); // debug
 	}
-
-	if (debugEntityEnable) {
-		// hitbox (bordure blanche)
-		context.strokeStyle = 'white';
-		context.lineWidth = 1;
-		context.beginPath();
-		context.arc(player.x, player.y, player.radius, 0, 2 * Math.PI);
-		context.stroke();
-	}
-
-	// score du joueur
-	context.save();
-	context.fillStyle = 'black';
-	context.font = '16px Arial';
-	context.textAlign = 'center';
-	context.fillText(
-		`Score: ${player.score}`,
-		player.x,
-		player.y - player.radius - 10
-	); // au dessus
-	context.restore();
 }
+
 function drawDebugEntity(context, entity) {
 	// transparent avec bordure
 	context.save();

@@ -13,7 +13,7 @@ import {
 	STAIN_SCORE,
 	BONUS_SPEED_MULTIPLIER,
 	BONUS_SIZE_MULTIPLIER,
-} from './constants.js';
+} from './config.js';
 
 ///////////////////CLASSE PLAYER///////////////////
 export class Player extends Entity {
@@ -146,7 +146,7 @@ export class Player extends Entity {
 
 	///////////////////MISE À JOUR///////////////////
 	updateSpeed() {
-		this.speed = (BASE_PLAYER_SPEED / this.radius) * 30;
+		this.speed = (BASE_PLAYER_SPEED / this.radius) * 40;
 		// console.log(this.speed);
 	}
 

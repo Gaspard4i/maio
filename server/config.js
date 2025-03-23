@@ -12,14 +12,14 @@ export const CHUNK_SIZE = 200; // taille des chunks
 ///////////////////CONFIGURATION DES JOUEURS///////////////////
 
 export const DEFAULT_PLAYER = {
-	radius: 30, // rayon de base
+	radius: 30, // rayon de base (30)
 	x: 6000, // pos x
 	y: 3000, // pos y
 	velocityX: 0, // vit initiale en X
 	velocityY: 0, // vit initiale en Y
 	isAccelerating: false,
 };
-export const BASE_PLAYER_SPEED = 7; // vit de base
+export const BASE_PLAYER_SPEED = 14; // vit de base
 export const ACCELERATED_SPEED = 2; // Vitesse en accélération
 // export const FRICTION = 0.98; // TODO : friction
 export const INVINCIBILITY_TIME = 3000; // tps invincibilité au spawn (ms)

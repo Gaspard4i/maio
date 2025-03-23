@@ -6,7 +6,7 @@ import {
 	BONUS_STAIN_CHANCE,
 	STAIN_SIZE,
 	BONUS_SIZE,
-} from './constants.js';
+} from './config.js';
 
 export class Stains {
 	constructor(count) {

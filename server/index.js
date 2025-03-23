@@ -12,7 +12,7 @@ import {
 	MAX_HEIGHT,
 	TICK_RATE,
 	DEFAULT_PLAYER,
-} from './constants.js';
+} from './config.js';
 
 /////////////////// SERVEUR HTTP ///////////////////
 const httpServer = http.createServer((req, res) => {
