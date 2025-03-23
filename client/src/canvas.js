@@ -253,9 +253,6 @@ export function drawGame(context, player, otherPlayers, stains, bots, camera) {
 		}
 	});
 
-	// dessine le joueur local
-	drawPlayer(context, player);
-
 	// interpolation des autres joueurs (oui)
 	const deltaTime = 1 / 60; // 60 FPS
 	for (const id in otherPlayers) {
@@ -273,6 +270,9 @@ export function drawGame(context, player, otherPlayers, stains, bots, camera) {
 			drawPlayer(context, entity);
 		}
 	});
+
+	// dessine le joueur local
+	drawPlayer(context, player);
 
 	context.restore();
 }
