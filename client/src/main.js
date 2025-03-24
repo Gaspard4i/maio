@@ -106,9 +106,24 @@ function render() {
 
 // Initialisation des événements globaux
 function setupGlobalEvents() {
-	window.addEventListener('keydown', event => handleKeyDown(event));
-	window.addEventListener('keyup', event => handleKeyUp(event));
-	preventZoom();
+    // Empêcher le comportement par défaut des touches, qu'on soit dans le jeu ou non
+    document.addEventListener('keydown', event => {
+		event.preventDefault();
+        if (!canvas.classList.contains('background')) {
+			// Uniquement pendant le jeu, passer l'événement à handleKeyUp
+            handleKeyDown(event);
+        }
+    });
+    
+    document.addEventListener('keyup', event => {
+		event.preventDefault();
+        if (!canvas.classList.contains('background')) {
+            // Uniquement pendant le jeu, passer l'événement à handleKeyUp
+            handleKeyUp(event);
+        }
+    });
+    
+    preventZoom();
 }
 
 setDebugCameraMode(DEBUG);
@@ -176,14 +191,16 @@ function setupStartButton() {
 	});
 
 	// Back buttons
-	document.querySelector('#credits-back').addEventListener('click', () => {
+	document.querySelector('#credits-back').addEventListener('click', event => {
+		event.preventDefault();
 		const startScreen = document.querySelector('.start-screen');
 		const creditsScreen = document.querySelector('.credits-screen');
 		startScreen.classList.remove('hidden'); // Montre l'écran de démarrage
 		creditsScreen.classList.add('hidden');
 	});
 
-	document.querySelector('#score-back').addEventListener('click', () => {
+	document.querySelector('#score-back').addEventListener('click', event => {
+		event.preventDefault();
 		const startScreen = document.querySelector('.start-screen');
 		const scoreScreen = document.querySelector('.score-screen');
 		startScreen.classList.remove('hidden'); // Montre l'écran de démarrage
@@ -191,29 +208,33 @@ function setupStartButton() {
 	});
 
 	// Nouveaux boutons de retour
-	document.querySelector('#about-back').addEventListener('click', () => {
+	document.querySelector('#about-back').addEventListener('click', event => {
+		event.preventDefault();
 		const startScreen = document.querySelector('.start-screen');
 		const aboutScreen = document.querySelector('.about-screen');
 		startScreen.classList.remove('hidden'); // Montre l'écran de démarrage
 		aboutScreen.classList.add('hidden');
 	});
 
-	document.querySelector('#contact-back').addEventListener('click', () => {
+	document.querySelector('#contact-back').addEventListener('click', event => {
+		event.preventDefault();
 		const startScreen = document.querySelector('.start-screen');
 		const contactScreen = document.querySelector('.contact-screen');
 		startScreen.classList.remove('hidden'); // Montre l'écran de démarrage
 		contactScreen.classList.add('hidden');
 	});
 
-	document.getElementById('back-to-home').addEventListener('click', () => {
-		const startScreen = document.getElementById('start-screen');
-		const gameOverScreen = document.getElementById('game-over-screen');
+	document.querySelector('#back-to-home').addEventListener('click', event => {
+		event.preventDefault();
+		const startScreen = document.querySelector('.start-screen');
+		const gameOverScreen = document.querySelector('.game-over-screen');
 		startScreen.classList.remove('hidden');; // Montre l'écran de démarrage
 		gameOverScreen.classList.add('hidden');
 	});
 
-	document.getElementById('restart-game').addEventListener('click', () => {
-		const gameOverScreen = document.getElementById('game-over-screen');
+	document.querySelector('#restart-game').addEventListener('click', event => {
+		event.preventDefault();
+		const gameOverScreen = document.querySelector('.game-over-screen');
 		gameOverScreen.classList.add('hidden');
 		startGame();
 	});
