@@ -74,8 +74,8 @@ socket.on('playerDisconnected', id => {
 });
 
 socket.on('lost', () => {
-	const lostMessage = document.getElementById('lost-message');
-	const startScreen = document.getElementById('start-screen');
+	const lostMessage = document.querySelector('.lost-message');
+	const startScreen = document.querySelector('.start-screen');
 	const canvas = document.querySelector('.gameCanvas');
 	const score = document.querySelector('.score');
 
@@ -118,8 +118,8 @@ setDebugGridMode(DEBUG);
 
 // Gestion du bouton pour démarrer le jeu
 function setupStartButton() {
-	document.getElementById('start-game').addEventListener('click', () => {
-		const startScreen = document.getElementById('start-screen');
+	document.querySelector('#start-game').addEventListener('click', () => {
+		const startScreen = document.querySelector('.start-screen');
 		const canvas = document.querySelector('.gameCanvas');
 		const score = document.querySelector('.score');
 
@@ -131,65 +131,65 @@ function setupStartButton() {
 	});
 
 	// autres boutons
-	document.getElementById('credits-button').addEventListener('click', event => {
+	document.querySelector('#credits-button').addEventListener('click', event => {
 		event.preventDefault();
-		const startScreen = document.getElementById('start-screen');
-		const creditsScreen = document.getElementById('credits-screen');
+		const startScreen = document.querySelector('.start-screen');
+		const creditsScreen = document.querySelector('.credits-screen');
 		startScreen.classList.add('hidden');
 		creditsScreen.classList.remove('hidden');
 	});
 
-	document.getElementById('score-button').addEventListener('click', event => {
+	document.querySelector('#score-button').addEventListener('click', event => {
 		event.preventDefault();
-		const startScreen = document.getElementById('start-screen');
-		const scoreScreen = document.getElementById('score-screen');
+		const startScreen = document.querySelector('.start-screen');
+		const scoreScreen = document.querySelector('.score-screen');
 		startScreen.classList.add('hidden'); // Cache l'écran de démarrage
 		scoreScreen.classList.remove('hidden');
 	});
 
 	// Nouveaux boutons pour About et Contact
-	document.getElementById('about-button').addEventListener('click', event => {
+	document.querySelector('#about-button').addEventListener('click', event => {
 		event.preventDefault();
-		const startScreen = document.getElementById('start-screen');
-		const aboutScreen = document.getElementById('about-screen');
+		const startScreen = document.querySelector('.start-screen');
+		const aboutScreen = document.querySelector('.about-screen');
 		startScreen.classList.add('hidden');
 		aboutScreen.classList.remove('hidden');
 	});
 
-	document.getElementById('contact-button').addEventListener('click', event => {
+	document.querySelector('#contact-button').addEventListener('click', event => {
 		event.preventDefault();
-		const startScreen = document.getElementById('start-screen');
-		const contactScreen = document.getElementById('contact-screen');
+		const startScreen = document.querySelector('.start-screen');
+		const contactScreen = document.querySelector('.contact-screen');
 		startScreen.classList.add('hidden');
 		contactScreen.classList.remove('hidden');
 	});
 
 	// Back buttons
-	document.getElementById('credits-back').addEventListener('click', () => {
-		const startScreen = document.getElementById('start-screen');
-		const creditsScreen = document.getElementById('credits-screen');
+	document.querySelector('#credits-back').addEventListener('click', () => {
+		const startScreen = document.querySelector('.start-screen');
+		const creditsScreen = document.querySelector('.credits-screen');
 		startScreen.style.display = ''; // Montre l'écran de démarrage
 		creditsScreen.classList.add('hidden');
 	});
 
-	document.getElementById('score-back').addEventListener('click', () => {
-		const startScreen = document.getElementById('start-screen');
-		const scoreScreen = document.getElementById('score-screen');
+	document.querySelector('#score-back').addEventListener('click', () => {
+		const startScreen = document.querySelector('.start-screen');
+		const scoreScreen = document.querySelector('.score-screen');
 		startScreen.style.display = ''; // Montre l'écran de démarrage
 		scoreScreen.classList.add('hidden');
 	});
 
 	// Nouveaux boutons de retour
-	document.getElementById('about-back').addEventListener('click', () => {
-		const startScreen = document.getElementById('start-screen');
-		const aboutScreen = document.getElementById('about-screen');
+	document.querySelector('#about-back').addEventListener('click', () => {
+		const startScreen = document.querySelector('.start-screen');
+		const aboutScreen = document.querySelector('.about-screen');
 		startScreen.style.display = ''; // Montre l'écran de démarrage
 		aboutScreen.classList.add('hidden');
 	});
 
-	document.getElementById('contact-back').addEventListener('click', () => {
-		const startScreen = document.getElementById('start-screen');
-		const contactScreen = document.getElementById('contact-screen');
+	document.querySelector('#contact-back').addEventListener('click', () => {
+		const startScreen = document.querySelector('.start-screen');
+		const contactScreen = document.querySelector('.contact-screen');
 		startScreen.style.display = ''; // Montre l'écran de démarrage
 		contactScreen.classList.add('hidden');
 	});
