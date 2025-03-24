@@ -18,6 +18,7 @@ body {
 
 /* ===== HEADER ===== */
 header {
+    background-color: rgba(52, 73, 94, 0.5); 
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -402,4 +403,123 @@ a {
     font-size: 1rem;
     z-index: 100;
     pointer-events: none;
+}
+
+
+/* Credits table styling */
+.credits-screen table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+
+.credits-screen th, 
+.credits-screen td {
+    padding: 8px 12px;
+    text-align: center;
+}
+
+.credits-screen th {
+    background-color: rgba(52, 73, 94, 0.8);
+    color: #ecf0f1;
+}
+
+/* Participation rate hover effect */
+.credits-screen td:last-child {
+    position: relative;
+    transition: background-color 0.3s ease;
+}
+
+.credits-screen td:last-child:hover {
+    background-color: rgba(46, 204, 113, 0.3);
+}
+
+/* AI Contributors styling */
+.ai-contributor {
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background-color: rgba(142, 68, 173, 0.2);
+}
+
+.ai-contributor td {
+    padding: 0;
+}
+
+/* Show AI contributors on hover */
+tr.ai-contributor:hover{
+    height: 40px;
+    opacity: 1;
+}
+
+tr.ai-contributor:hover {
+    height: 40px;
+    opacity: 1;
+}
+
+/* AI contributor special styling */
+.ai-contributor td:first-child::before {
+    content: "🤖 ";
+}
+
+.ai-contributor td:last-child {
+    font-weight: bold;
+    color: #8e44ad;
+}
+
+/* Custom tooltip style - browsers will use the title attribute */
+.credits-screen td:last-child:hover::after {
+    content: attr(data-percentage);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(44, 62, 80, 0.9);
+    color: #ecf0f1;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    animation: extendThrees 5s forwards;
+}
+
+/* Add arrow to the tooltip */
+.credits-screen td:last-child:hover::before {
+    content: "";
+    position: absolute;
+    bottom: calc(100% - 5px);
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(44, 62, 80, 0.9) transparent transparent transparent;
+    z-index: 10;
+}
+
+/* Animation to extend the 3s */
+@keyframes extendThrees {
+    0% { content: "33.3%" }
+    10% { content: "33.33%" }
+    20% { content: "33.333%" }
+    30% { content: "33.3333%" }
+    40% { content: "33.33333%" }
+    50% { content: "33.333333%" }
+    60% { content: "33.3333333%" }
+    70% { content: "33.33333333%" }
+    80% { content: "33.333333333%" }
+    90% { content: "33.3333333333%" }
+    100% { content: "33.33333333333...%" }
+}
+
+/* Special 3s animation for AI contributor hover */
+.ai-contributor td:last-child:hover::after {
+    animation: extendNines 5s forwards;
+}
+
+@keyframes extendNines {
+    0% { content: "98.7%" }
+    10% { content: "98.75%" }
 }
