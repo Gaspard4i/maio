@@ -64,9 +64,24 @@ function updateStains(serverStains) {
 			serverStains
 		);
 	}
-}
+};
 
-// Gestion du rendu
+socket.on('playerDisconnected', id => {
+	delete otherPlayers[id];
+});
+
+socket.on('lost', () => {
+	const lostMessage = document.getElementById('lost-message');
+	const startScreen = document.getElementById('start-screen');
+	const canvas = document.querySelector('.gameCanvas');
+	const score = document.querySelector('.score');
+
+	startScreen.style.display = ''; // Cache l'écran de démarrage
+	canvas.classList.add('background'); // Retire la classe d'arrière-plan
+	score.classList.add('hidden'); // Affiche la zone de score
+	lostMessage.classList.remove('hidden'); // Show the message
+});
+
 function render() {
 	context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -111,6 +126,23 @@ function setupStartButton() {
 
 		socket.emit('joinGame');
 	});
+
+// autres boutons
+document.getElementById('credits-button').addEventListener('click', event => {
+	event.preventDefault();
+	const startScreen = document.getElementById('start-screen');
+	const creditsScreen = document.getElementById('credits-screen');
+	startScreen.style.display = 'none'; // Cache l'écran de démarrage
+	creditsScreen.classList.remove('hidden');
+});
+
+document.getElementById('score-button').addEventListener('click', event => {
+	event.preventDefault();
+	const startScreen = document.getElementById('start-screen');
+	const scoreScreen = document.getElementById('score-screen');
+	startScreen.style.display = 'none'; // Cache l'écran de démarrage
+	scoreScreen.classList.remove('hidden');
+});
 }
 
 // Initialisation principale

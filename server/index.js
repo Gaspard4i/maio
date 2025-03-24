@@ -122,7 +122,7 @@ export const processGameTick = () => {
 const handlePlayerAction = (socketId, action, ...args) => {
 	const player = players[socketId];
 	if (!player) {
-		console.warn(`Player with socket ID ${socketId} not found.`);
+		// console.warn(`Player with socket ID ${socketId} not found.`);
 		io.to(socketId).emit('reload');
 		return null;
 	}
