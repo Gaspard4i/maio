@@ -29,6 +29,7 @@ export class Player extends Entity {
 		this.score = 0;
 		this.pseudo = pseudo;
 		this.isInvincible = true;
+		this.baseSpeed = BASE_PLAYER_SPEED;
 		setTimeout(() => {
 			this.isInvincible = false;
 		}, INVINCIBILITY_TIME);
@@ -134,7 +135,7 @@ export class Player extends Entity {
 
 	///////////////////MISE À JOUR///////////////////
 	updateSpeed() {
-		this.speed = (BASE_PLAYER_SPEED / this.radius) * 40;
+		this.speed = (this.baseSpeed / this.radius) * 40;
 		// console.log(this.speed);
 	}
 
@@ -147,9 +148,9 @@ export class Player extends Entity {
 
 	bonus(bt) {
 		if (bt === BonusType.VITESSE) {
-			this.speed *= BONUS_SPEED_MULTIPLIER;
+			this.baseSpeed *= BONUS_SPEED_MULTIPLIER;
 			setTimeout(() => {
-				this.speed /= BONUS_SPEED_MULTIPLIER;
+				this.baseSpeed /= BONUS_SPEED_MULTIPLIER;
 			}, INVINCIBILITY_TIME);
 		} else if (bt === BonusType.TAILLE) {
 			this.radius *= BONUS_SIZE_MULTIPLIER;
