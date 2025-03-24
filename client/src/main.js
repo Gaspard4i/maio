@@ -64,7 +64,7 @@ function updateStains(serverStains) {
 			serverStains
 		);
 	}
-};
+}
 
 socket.on('playerDisconnected', id => {
 	delete otherPlayers[id];
@@ -120,29 +120,76 @@ function setupStartButton() {
 		const canvas = document.querySelector('.gameCanvas');
 		const score = document.querySelector('.score');
 
-		startScreen.style.display = 'none';
+		startScreen.classList.add('hidden');
 		canvas.classList.remove('background');
 		score.classList.remove('hidden');
 
 		socket.emit('joinGame');
 	});
 
-// autres boutons
-document.getElementById('credits-button').addEventListener('click', event => {
-	event.preventDefault();
-	const startScreen = document.getElementById('start-screen');
-	const creditsScreen = document.getElementById('credits-screen');
-	startScreen.style.display = 'none'; // Cache l'écran de démarrage
-	creditsScreen.classList.remove('hidden');
-});
+	// autres boutons
+	document.getElementById('credits-button').addEventListener('click', event => {
+		event.preventDefault();
+		const startScreen = document.getElementById('start-screen');
+		const creditsScreen = document.getElementById('credits-screen');
+		startScreen.classList.add('hidden');
+		creditsScreen.classList.remove('hidden');
+	});
 
-document.getElementById('score-button').addEventListener('click', event => {
-	event.preventDefault();
-	const startScreen = document.getElementById('start-screen');
-	const scoreScreen = document.getElementById('score-screen');
-	startScreen.style.display = 'none'; // Cache l'écran de démarrage
-	scoreScreen.classList.remove('hidden');
-});
+	document.getElementById('score-button').addEventListener('click', event => {
+		event.preventDefault();
+		const startScreen = document.getElementById('start-screen');
+		const scoreScreen = document.getElementById('score-screen');
+		startScreen.classList.add('hidden'); // Cache l'écran de démarrage
+		scoreScreen.classList.remove('hidden');
+	});
+
+	// Nouveaux boutons pour About et Contact
+	document.getElementById('about-button').addEventListener('click', event => {
+		event.preventDefault();
+		const startScreen = document.getElementById('start-screen');
+		const aboutScreen = document.getElementById('about-screen');
+		startScreen.classList.add('hidden');
+		aboutScreen.classList.remove('hidden');
+	});
+
+	document.getElementById('contact-button').addEventListener('click', event => {
+		event.preventDefault();
+		const startScreen = document.getElementById('start-screen');
+		const contactScreen = document.getElementById('contact-screen');
+		startScreen.classList.add('hidden');
+		contactScreen.classList.remove('hidden');
+	});
+
+	// Back buttons
+	document.getElementById('credits-back').addEventListener('click', () => {
+		const startScreen = document.getElementById('start-screen');
+		const creditsScreen = document.getElementById('credits-screen');
+		startScreen.style.display = ''; // Montre l'écran de démarrage
+		creditsScreen.classList.add('hidden');
+	});
+
+	document.getElementById('score-back').addEventListener('click', () => {
+		const startScreen = document.getElementById('start-screen');
+		const scoreScreen = document.getElementById('score-screen');
+		startScreen.style.display = ''; // Montre l'écran de démarrage
+		scoreScreen.classList.add('hidden');
+	});
+
+	// Nouveaux boutons de retour
+	document.getElementById('about-back').addEventListener('click', () => {
+		const startScreen = document.getElementById('start-screen');
+		const aboutScreen = document.getElementById('about-screen');
+		startScreen.style.display = ''; // Montre l'écran de démarrage
+		aboutScreen.classList.add('hidden');
+	});
+
+	document.getElementById('contact-back').addEventListener('click', () => {
+		const startScreen = document.getElementById('start-screen');
+		const contactScreen = document.getElementById('contact-screen');
+		startScreen.style.display = ''; // Montre l'écran de démarrage
+		contactScreen.classList.add('hidden');
+	});
 }
 
 // Initialisation principale

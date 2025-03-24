@@ -65,13 +65,14 @@
         <footer id="home-footer">
             <nav>
                 <a id="credits-button" href="">Crédits</a>
-                <a href="#">À propos</a>
-                <a href="#">Contact</a>
+                <a id="about-button" href="">À propos</a>
+                <a id="contact-button" href="">Contact</a>
             </nav>
         </footer>
     </div>
     <!-- credit screen -->
-    <div class="hidden" id="credits-screen">
+    <div class="hidden credits-screen" id="credits-screen">
+        <h1 class="screen-title">Crédits</h1>
         <table>
             <tr>
                 <th>Prénom</th>
@@ -106,9 +107,11 @@
                 <td>100*(sin(pi/2)) %</td>
             </tr>
         </table>
+        <button class="back-button" id="credits-back">Retour</button>
     </div>
     <!-- score screen -->
-    <div class="hidden" id="score-screen">
+    <div class="hidden score-screen" id="score-screen">
+        <h1 class="screen-title">Meilleurs Scores</h1>
         <table>
             <tr>
                 <th>Pseudo</th>
@@ -141,6 +144,87 @@
                 <td>Placeholder</td>
             </tr>
         </table>
+        <button class="back-button" id="score-back">Retour</button>
+    </div>
+
+    <!-- about screen -->
+    <div class="hidden about-screen" id="about-screen">
+        <h1 class="screen-title">À propos</h1>
+        <div class="about-content">
+            <div class="about-section">
+                <h2>Qu'est-ce que MA.IO?</h2>
+                <p>MA.IO est un jeu multijoueur en ligne où vous incarnez un alien qui, après avoir goûté à la mayonnaise, en est devenu complètement accro. Votre mission : dévorer toutes les taches de mayo dans l'arène tout en affrontant d'autres joueurs pour devenir le maître de la sauce !</p>
+            </div>
+            
+            <div class="about-section">
+                <h2>Comment jouer</h2>
+                <ul>
+                    <li>Utilisez les <strong>flèches directionnelles</strong> ou la <strong>souris</strong> pour vous déplacer</li>
+                    <li>Appuyez sur <strong>Shift</strong> pour accélérer mais perdre de la masse</li>
+                    <li>Mangez les petites taches pour grandir</li>
+                    <li>Mangez les joueurs plus petits que vous</li>
+                    <li>Évitez les joueurs plus grands !</li>
+                </ul>
+            </div>
+            
+            <div class="about-section">
+                <h2>Types de bonus</h2>
+                <ul>
+                    <li><span class="bonus-vitesse">Sauce épicée</span> - Augmente temporairement votre vitesse</li>
+                    <li><span class="bonus-taille">Sauce barbecue</span> - Augmente votre taille</li>
+                </ul>
+            </div>
+            
+            <div class="about-section">
+                <h2>Développé dans le cadre de la SAE4 JSAE</h2>
+                <p>Université de Lille - 2024</p>
+            </div>
+        </div>
+        <button class="back-button" id="about-back">Retour</button>
+    </div>
+    
+    <!-- contact screen -->
+    <div class="hidden contact-screen" id="contact-screen">
+        <h1 class="screen-title">Contact</h1>
+        <div class="contact-content">
+            <div class="contact-section">
+                <h2>Équipe de développement</h2>
+                <table>
+                    <tr>
+                        <th>Nom</th>
+                        <th>GitLab</th>
+                        <th>Email</th>
+                    </tr>
+                    <tr class="Florian">
+                        <td>Florian GAMBIRASIO</td>
+                        <td><a href="https://gitlab.univ-lille.fr/florian.gambirasio.etu" target="_blank">@florian.gambirasio.etu</a></td>
+                        <td>florian.gambirasio.etu@univ-lille.fr</td>
+                    </tr>
+                    <tr class="Gaspard">
+                        <td>Gaspard CATRY</td>
+                        <td><a href="https://gitlab.univ-lille.fr/gaspard.catry.etu" target="_blank">@gaspard.catry.etu</a></td>
+                        <td>gaspard.catry.etu@univ-lille.fr</td>
+                    </tr>
+                    <tr class="Gabriel">
+                        <td>Gabriel MILLE</td>
+                        <td><a href="https://gitlab.univ-lille.fr/gabriel.mille.etu" target="_blank">@gabriel.mille.etu</a></td>
+                        <td>gabriel.mille.etu@univ-lille.fr</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="contact-section">
+                <h2>Contribuer au projet</h2>
+                <p>Le code source du projet est disponible sur GitLab :</p>
+                <p><a href="https://gitlab.univ-lille.fr/jsae/equipe-5" target="_blank">https://gitlab.univ-lille.fr/jsae/equipe-5</a></p>
+            </div>
+            
+            <div class="contact-section">
+                <h2>Signaler un bug</h2>
+                <p>Si vous rencontrez un problème ou un bug, n'hésitez pas à ouvrir une issue sur notre GitLab.</p>
+            </div>
+        </div>
+        <button class="back-button" id="contact-back">Retour</button>
     </div>
 
     <canvas class="gameCanvas background" width="600" height="400"></canvas>

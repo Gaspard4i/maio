@@ -78,6 +78,172 @@ canvas.background {
     pointer-events: none; /* Empêche l'interaction avec cet élément */
 }
 
+/* Credits & Score Screens */
+.credits-screen, .score-screen, .about-screen, .contact-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(52, 73, 94, 0.9);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    color: #ecf0f1;
+    font-family: 'Luckiest Guy', cursive;
+    overflow-y: auto;
+}
+
+#credits-screen table, #score-screen table, #contact-screen table {
+    width: 80%;
+    max-width: 900px;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    background-color: rgba(45, 52, 75, 0.8);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+#credits-screen th, #score-screen th, #contact-screen th {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    text-align: center;
+    padding: 1rem;
+    font-size: 1.2rem;
+}
+
+#credits-screen td, #score-screen td, #contact-screen td {
+    padding: 0.8rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 1rem;
+}
+
+/* Credits specific styling */
+#credits-screen tr:hover td {
+    background-color: rgba(46, 204, 113, 0.2);
+}
+
+#credits-screen tr.Florian td {
+    background-color: rgba(52, 152, 219, 0.2);
+}
+
+#credits-screen tr.Gaspard td {
+    background-color: rgba(155, 89, 182, 0.2);
+}
+
+#credits-screen tr.Gabriel td {
+    background-color: rgba(231, 76, 60, 0.2);
+}
+
+/* Score specific styling */
+#score-screen tr.first td {
+    background-color: rgba(241, 196, 15, 0.3);
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+#score-screen tr.second td {
+    background-color: rgba(189, 195, 199, 0.3);
+}
+
+#score-screen tr.third td {
+    background-color: rgba(211, 84, 0, 0.3);
+}
+
+/* About screen specific styling */
+.about-content, .contact-content {
+    width: 80%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.about-section, .contact-section {
+    background-color: rgba(45, 52, 75, 0.8);
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.about-section h2, .contact-section h2 {
+    color: #3498db;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.about-section p, .contact-section p {
+    line-height: 1.6;
+    font-family: 'Chewy', cursive;
+    font-size: 1.1rem;
+}
+
+.about-section ul {
+    list-style-type: none; /* Changed from disc to none to remove bullet points */
+    padding-left: 0.5rem; /* Reduced padding since we don't have bullets */
+    font-family: 'Chewy', cursive;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.bonus-vitesse {
+    color: #ff4500; /* Changed from #2ecc71 (green) to #ff4500 (sauce épicée) */
+    font-weight: bold;
+}
+
+.bonus-taille {
+    color: #8b4513; /* Changed from #3498db (blue) to #8b4513 (sauce barbecue) */
+    font-weight: bold;
+}
+
+/* Contact screen specific styling */
+#contact-screen a {
+    color: #3498db;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+#contact-screen a:hover {
+    color: #2ecc71;
+    text-decoration: underline;
+}
+
+#contact-screen table {
+    margin-left: auto; /* Center the table */
+    margin-right: auto; /* Center the table */
+    text-align: center; /* Center the text within cells */
+}
+
+/* Back button for screens */
+.back-button {
+    padding: 0.8rem 1.5rem;
+    background-color: #e74c3c;
+    color: #ecf0f1;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+}
+
+/* Screen title */
+.screen-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
 @media (max-width: 768px) {
     #start-screen h1 {
         font-size: 2rem;
@@ -88,6 +254,24 @@ canvas.background {
         padding: 0.8rem 1.5rem;
         font-size: 1.2rem;
     }
+    
+    #credits-screen table, #score-screen table {
+        width: 95%;
+    }
+    
+    #credits-screen th, #score-screen th {
+        padding: 0.7rem;
+        font-size: 1rem;
+    }
+    
+    #credits-screen td, #score-screen td {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+    
+    .screen-title {
+        font-size: 2rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -97,6 +281,24 @@ canvas.background {
     }
 
     #start-screen button {
+        padding: 0.6rem 1rem;
+        font-size: 1rem;
+    }
+    
+    #credits-screen table, #score-screen table {
+        font-size: 0.8rem;
+    }
+    
+    #credits-screen th, #score-screen th,
+    #credits-screen td, #score-screen td {
+        padding: 0.5rem;
+    }
+    
+    .screen-title {
+        font-size: 1.5rem;
+    }
+    
+    .back-button {
         padding: 0.6rem 1rem;
         font-size: 1rem;
     }
