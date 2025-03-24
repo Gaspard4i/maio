@@ -12,6 +12,7 @@ import {
 	MAX_HEIGHT,
 	TICK_RATE,
 	DEFAULT_PLAYER,
+	MAX_PLAYERS,
 } from './config.js';
 
 /////////////////// SERVEUR HTTP ///////////////////
@@ -36,6 +37,13 @@ const grid = new Grid(CHUNK_SIZE, MAX_WIDTH, MAX_HEIGHT);
 
 /////////////////// INITIALISATION ///////////////////
 export const initializePlayer = socketId => {
+	if (Object.keys(players).length >= MAX_PLAYERS) {
+		io.to(socketId).emit('gameFull'); // Notifie le client que le jeu est plein
+		console.log(
+			`Connexion refusée : le jeu est plein (${MAX_PLAYERS} joueurs).`
+		);
+		return;
+	}
 	players[socketId] = new Player(
 		socketId,
 		DEFAULT_PLAYER.radius,

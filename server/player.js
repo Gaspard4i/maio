@@ -8,14 +8,13 @@ import {
 	MAX_HEIGHT,
 	EAT_THRESHOLD,
 	ABSORB_AREA_THRESHOLD,
-	INVINCIBILITY_TIME,
+	BONUS_TIME,
 	PLAYER_EAT_BONUS,
 	STAIN_SCORE,
 	BONUS_SPEED_MULTIPLIER,
 	BONUS_SIZE_MULTIPLIER,
 	BONUS_SIZE_MULTIPLIER_NERFED,
 } from './config.js';
-// import { removePlayer } from './index.js';
 
 ///////////////////CLASSE PLAYER///////////////////
 export class Player extends Entity {
@@ -32,9 +31,12 @@ export class Player extends Entity {
 		this.pseudo = pseudo;
 		this.isInvincible = true;
 		this.baseSpeed = BASE_PLAYER_SPEED;
+		this.justEatSomeone = false;
+		this.justGotBigger = false;
+		this.isBoosted = false;
 		setTimeout(() => {
 			this.isInvincible = false;
-		}, INVINCIBILITY_TIME);
+		}, BONUS_TIME);
 	}
 
 	movePlayer(stains, grid, players, io) {
@@ -92,6 +94,10 @@ export class Player extends Entity {
 		this.radius += otherPlayer.radius * 0.5;
 		this.score += otherPlayer.score + PLAYER_EAT_BONUS;
 		this.updateSpeed();
+		this.justEatSomeone = true;
+		setTimeout(() => {
+			this.justEatSomeone = false;
+		}, 2000);
 	}
 
 	checkPlayerCollision(grid, players, io) {
@@ -152,13 +158,23 @@ export class Player extends Entity {
 	bonus(bt) {
 		if (bt === BonusType.VITESSE) {
 			this.baseSpeed = BASE_PLAYER_SPEED * BONUS_SPEED_MULTIPLIER;
+			this.isBoosted = true;
 			setTimeout(() => {
+				this.isBoosted = false;
 				this.baseSpeed = BASE_PLAYER_SPEED;
-			}, INVINCIBILITY_TIME);
+			}, BONUS_TIME);
 		} else if (bt === BonusType.TAILLE) {
-			if (this.radius < 100) this.radius *= BONUS_SIZE_MULTIPLIER;
-			else if (this.radius < 300) this.radius *= BONUS_SIZE_MULTIPLIER_NERFED;
-			else this.grow();
+			if (this.radius < 100) {
+				this.radius *= BONUS_SIZE_MULTIPLIER;
+				this.justGotBigger = true;
+				setTimeout(() => {
+					this.justGotBigger = false;
+				}, 2000);
+			} else if (this.radius < 300) {
+				this.radius *= BONUS_SIZE_MULTIPLIER_NERFED;
+			} else {
+				this.grow();
+			}
 		}
 	}
 
