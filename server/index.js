@@ -2,7 +2,7 @@ import http from 'http';
 import { Server as IOServer } from 'socket.io';
 import { Player, BotPlayer } from './player.js';
 import { Stains } from './stains.js';
-import { Grid } from './Grid.js';
+import { Grid } from './grid.js';
 import {
 	PORT,
 	NUM_BOTS,
