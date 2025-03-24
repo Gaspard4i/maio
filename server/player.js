@@ -167,6 +167,7 @@ export class Player extends Entity {
 					}
 					io.to(otherPlayer.id).emit('lost', killedPlayer.score); // Envoie un message de perte
 				}
+				delete players[otherPlayer.id];
 			}
 		}
 	}
