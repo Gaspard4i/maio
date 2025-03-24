@@ -1,5 +1,5 @@
 import { Entity } from './entity.js';
-import { BonusType } from './bonus.js';
+import { Bonus, BonusType } from './bonus.js';
 import { v4 as uuidv4 } from 'uuid';
 import {
 	BASE_PLAYER_SPEED,
@@ -17,23 +17,13 @@ import {
 
 ///////////////////CLASSE PLAYER///////////////////
 export class Player extends Entity {
-	constructor(
-		id,
-		radius,
-		x,
-		y,
-		vx,
-		vy,
-		useKeyboard = true,
-		pseudo = undefined
-	) {
+	constructor(id, radius, x, y, vx, vy, pseudo = undefined) {
 		super(radius, x, y);
 		this.id = id;
 		this.vx = vx;
 		this.vy = vy;
 		this.speed = BASE_PLAYER_SPEED;
 		this.keys = {};
-		this.useKeyboard = useKeyboard;
 		this.isAccelerating = false;
 		this.isSliding = false;
 		this.score = 0;
@@ -127,8 +117,6 @@ export class Player extends Entity {
 	}
 
 	updateMouseMovement(dx, dy, canvaWidth, canvasHeight) {
-		if (this.useKeyboard) return;
-
 		const maxDistance = Math.min(canvaWidth, canvasHeight) / 4;
 		const distance = Math.sqrt(dx * dx + dy * dy);
 		const speedFactor = Math.min(distance / maxDistance, 1);
@@ -183,6 +171,7 @@ export class Player extends Entity {
 				const index = stains.getAll().indexOf(stain);
 				if (index !== -1) {
 					stains.splice(index, 1);
+					if (stain instanceof Bonus) this.bonus(stain.type);
 					this.grow();
 				}
 			}

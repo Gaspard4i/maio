@@ -35,9 +35,9 @@ export const STAIN_SCORE = 15; // bonus pour chaque tache mangée
 ///////////////////CONFIGURATION DES BONUS///////////////////
 
 export const BONUS_STAIN_CHANCE = 0.05; // taux de tache bonus
-export const BONUS_SIZE = 20; // taille des bonus
-export const BONUS_SPEED_MULTIPLIER = 1.4; // multiplicateur de vitesse pour le bonus de vitesse
-export const BONUS_SIZE_MULTIPLIER = 1.5; // multiplicateur de taille pour le bonus de taille
+export const BONUS_SIZE = 200; // taille des bonus
+export const BONUS_SPEED_MULTIPLIER = 2; // multiplicateur de vitesse pour le bonus de vitesse
+export const BONUS_SIZE_MULTIPLIER = 1.1; // multiplicateur de taille pour le bonus de taille
 
 ///////////////////CONFIGURATION DES BOTS///////////////////
 
