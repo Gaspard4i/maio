@@ -90,15 +90,15 @@
                 <td>G</td>
                 <td>HydroFlo</td>
                 <td>Persona 5 Royal</td>
-                <td>100*ln(e(1)) %</td>
+                <td>100*ln(e^0.99)%</td>
             </tr>
             <tr class="Gaspard">
                 <td>Gaspard</td>
                 <td>CATRY</td>
                 <td>G</td>
-                <td></td>
+                <td>Gazai</td>
                 <td>Minecraft</td>
-                <td>100000/1000 %</td>
+                <td>(10*10)/(10*10) * 100 %</td>
             </tr>
             <tr class="Gabriel">
                 <td>Gabriel</td>
@@ -106,7 +106,7 @@
                 <td>G</td>
                 <td>SENSA</td>
                 <td>Rocket League</td>
-                <td>100*(sin(pi/2)) %</td>
+                <td>ln(e^(99/100)) * 100 %</td>
             </tr>
         </table>
         <button class="back-button" id="credits-back">Retour</button>
@@ -218,7 +218,7 @@
             <div class="contact-section">
                 <h2>Contribuer au projet</h2>
                 <p>Le code source du projet est disponible sur GitLab :</p>
-                <p><a href="https://gitlab.univ-lille.fr/jsae/equipe-5" target="_blank">https://gitlab.univ-lille.fr/jsae/equipe-5</a></p>
+                <p><a href="https://gitlab.univ-lille.fr/jsae/projets-2024-2025/groupe-g/equipe-5" target="_blank">https://gitlab.univ-lille.fr/jsae/projets-2024-2025/groupe-g/equipe-5</a></p>
             </div>
             
             <div class="contact-section">
@@ -227,6 +227,47 @@
             </div>
         </div>
         <button class="back-button" id="contact-back">Retour</button>
+    </div>
+
+    <!-- settings panel -->
+    <div class="hidden settings-panel" id="settings-panel">
+        <div class="settings-header">
+            <h1 class="settings-title">Paramètres</h1>
+            <img src="images/UI/close.png" alt="Fermer" id="close-settings" class="close-icon">
+        </div>
+        <div class="settings-content">
+            <div class="settings-section">
+                <h2>Options de jeu</h2>
+                <div class="setting-option">
+                    <label for="fps-toggle">Afficher FPS</label>
+                    <input type="checkbox" id="fps-toggle">
+                </div>
+            </div>
+            <div class="settings-section">
+                <h2>Contrôles</h2>
+                <div class="control-toggle-container">
+                    <!-- SVG du clavier -->
+                    <svg class="control-icon keyboard-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor" d="M20,5H4C2.9,5,2,5.9,2,7v10c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V7C22,5.9,21.1,5,20,5z M9,7h2v2H9V7z M13,7h2v2h-2V7z M17,7h2v2h-2V7z M9,11h2v2H9V11z M13,11h2v2h-2V11z M17,11h2v2h-2V11z M5,7h2v2H5V7z M5,11h2v2H5V11z M5,17h14v2H5V17z"/>
+                    </svg>
+                    
+                    <!-- Bouton toggle -->
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="control-toggle" class="toggle-input">
+                        <label for="control-toggle" class="toggle-label"></label>
+                    </div>
+                    
+                    <!-- SVG de la souris -->
+                    <svg class="control-icon mouse-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor" d="M12,4C9.24,4,7,6.24,7,9v6c0,2.76,2.24,5,5,5s5-2.24,5-5V9C17,6.24,14.76,4,12,4z M12,18c-1.66,0-3-1.34-3-3V9c0-1.66,1.34-3,3-3s3,1.34,3,3v6C15,16.66,13.66,18,12,18z M11,6.5V11h2V6.5C13,6.22,12.78,6,12.5,6S12,6.22,12,6.5v0C12,6.78,11.78,7,11.5,7S11,6.78,11,6.5z"/>
+                    </svg>
+                </div>
+                <div class="controls-info">
+                    <p class="keyboard-info">Flèches directionnelles pour vous déplacer, Shift pour accélérer</p>
+                    <p class="mouse-info hidden">Déplacez la souris pour diriger, clic gauche pour accélérer</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- game over screen -->
@@ -242,5 +283,6 @@
 
     <canvas class="gameCanvas background" width="600" height="400"></canvas>
     <div class="score hidden"><h2>Score: 0</h2></div>
+    <div id="fps-counter" class="fps-counter hidden">0 FPS</div>
 </body>
 </html>

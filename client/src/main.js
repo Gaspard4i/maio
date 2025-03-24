@@ -74,6 +74,12 @@ socket.on('lost', () => {
 	gameOverScreen.classList.remove('hidden'); // Show the message
 });
 
+// Variables pour le calcul des FPS
+let fpsCounter = 0;
+let lastFpsUpdate = 0;
+let currentFps = 0;
+let fpsDisplayEnabled = false;
+
 function render() {
 	context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -90,15 +96,29 @@ function render() {
 		drawGame(context, currentPlayer, otherPlayers, stains, [], camera);
 	}
 
+	// FPS
+	fpsCounter++;
+	const now = performance.now();
+	if (now - lastFpsUpdate >= 1000) {
+		currentFps = Math.round((fpsCounter * 1000) / (now - lastFpsUpdate));
+		fpsCounter = 0;
+		lastFpsUpdate = now;
+
+		if (fpsDisplayEnabled) {
+			const fpsDisplay = document.getElementById('fps-counter');
+			fpsDisplay.textContent = `${currentFps} FPS`;
+		}
+	}
+
 	requestAnimationFrame(render);
 }
 
-// Initialisation des événements globaux
+// event globaux
 function setupGlobalEvents() {
-	// Empêcher le comportement par défaut des touches, sauf pour la zone de texte
+	// empeche d'utiliser le clavier sauf si on est dans une zone de texte
 	document.addEventListener('keydown', event => {
 		const activeElement = document.activeElement;
-		if (activeElement && activeElement.tagName === 'INPUT') return; // Ignore si dans une zone de texte
+		if (activeElement && activeElement.tagName === 'INPUT') return;
 		event.preventDefault();
 		if (!canvas.classList.contains('background')) {
 			handleKeyDown(event);
@@ -107,7 +127,7 @@ function setupGlobalEvents() {
 
 	document.addEventListener('keyup', event => {
 		const activeElement = document.activeElement;
-		if (activeElement && activeElement.tagName === 'INPUT') return; // Ignore si dans une zone de texte
+		if (activeElement && activeElement.tagName === 'INPUT') return;
 		event.preventDefault();
 		if (!canvas.classList.contains('background')) {
 			handleKeyUp(event);
@@ -117,8 +137,112 @@ function setupGlobalEvents() {
 	preventZoom();
 }
 
+// menu option
+function setupSettingsButton() {
+	// ouvre le menu
+	const settingsIcon = document.querySelector(
+		'.menu-options img[alt="Réglages"]'
+	);
+	const settingsPanel = document.getElementById('settings-panel');
+	const closeSettingsButton = document.getElementById('close-settings');
+
+	settingsIcon.addEventListener('click', () => {
+		settingsPanel.classList.remove('hidden');
+	});
+
+	closeSettingsButton.addEventListener('click', () => {
+		settingsPanel.classList.add('hidden');
+	});
+
+	// femeture du menu si on clique à coté
+	document.addEventListener('mousedown', event => {
+		if (
+			!settingsPanel.classList.contains('hidden') &&
+			!settingsPanel.contains(event.target) &&
+			event.target !== settingsIcon
+		) {
+			settingsPanel.classList.add('hidden');
+		}
+	});
+
+	// toggle clavier/souris
+	const controlToggle = document.getElementById('control-toggle');
+	const keyboardInfo = document.querySelector('.keyboard-info');
+	const mouseInfo = document.querySelector('.mouse-info');
+
+	controlToggle.addEventListener('change', () => {
+		if (controlToggle.checked) {
+			// souris
+			keyboardInfo.classList.add('hidden');
+			mouseInfo.classList.remove('hidden');
+			setControlMode('mouse');
+		} else {
+			// clavier
+			mouseInfo.classList.add('hidden');
+			keyboardInfo.classList.remove('hidden');
+			setControlMode('keyboard');
+		}
+	});
+
+	// affichage FPS
+	const fpsToggle = document.getElementById('fps-toggle');
+	const fpsCounter = document.getElementById('fps-counter');
+
+	fpsToggle.addEventListener('change', () => {
+		if (fpsToggle.checked) {
+			// active l'affichage
+			fpsCounter.classList.remove('hidden');
+			fpsDisplayEnabled = true;
+		} else {
+			// désactive
+			fpsCounter.classList.add('hidden');
+			fpsDisplayEnabled = false;
+		}
+
+		// save la pref
+		localStorage.setItem('fpsDisplay', fpsToggle.checked);
+	});
+
+	// init les fps en fonction de la pref save
+	const savedFpsDisplay = localStorage.getItem('fpsDisplay') === 'true';
+	fpsToggle.checked = savedFpsDisplay;
+	fpsDisplayEnabled = savedFpsDisplay;
+	if (savedFpsDisplay) {
+		fpsCounter.classList.remove('hidden');
+	} else {
+		fpsCounter.classList.add('hidden');
+	}
+}
+
+function setControlMode(mode) {
+	localStorage.setItem('controlMode', mode);
+
+	if (mode === 'mouse') {
+		// console.log('Mode souris activé');
+	} else {
+		// console.log('Mode clavier activé');
+	}
+}
+
+function initControlMode() {
+	const savedMode = localStorage.getItem('controlMode') || 'keyboard';
+	const controlToggle = document.getElementById('control-toggle');
+
+	if (savedMode === 'mouse') {
+		controlToggle.checked = true;
+		document.querySelector('.keyboard-info').classList.add('hidden');
+		document.querySelector('.mouse-info').classList.remove('hidden');
+	} else {
+		controlToggle.checked = false;
+		document.querySelector('.mouse-info').classList.add('hidden');
+		document.querySelector('.keyboard-info').classList.remove('hidden');
+	}
+
+	setControlMode(savedMode);
+}
+
 setDebugCameraMode(DEBUG);
-setDebugPlayerMode(false);
+setDebugPlayerMode(DEBUG);
 setDebugEntityMode(DEBUG);
 setDebugGridMode(DEBUG);
 
@@ -132,17 +256,16 @@ function startGame() {
 	startScreen.classList.add('hidden');
 	canvas.classList.remove('background');
 	score.classList.remove('hidden');
-	socket.emit('joinGame', { pseudo }); // Envoi du pseudo au serveur
+	socket.emit('joinGame', { pseudo }); // envoie le pseudo au serv
 }
 
-// Gestion du bouton pour démarrer le jeu
+// demmare le jeu
 function setupStartButton() {
 	document.querySelector('#start-game').addEventListener('click', event => {
 		event.preventDefault();
 		startGame();
 	});
 
-	// autres boutons
 	document.querySelector('#credits-button').addEventListener('click', event => {
 		event.preventDefault();
 		const startScreen = document.querySelector('.start-screen');
@@ -155,11 +278,10 @@ function setupStartButton() {
 		event.preventDefault();
 		const startScreen = document.querySelector('.start-screen');
 		const scoreScreen = document.querySelector('.score-screen');
-		startScreen.classList.add('hidden'); // Cache l'écran de démarrage
+		startScreen.classList.add('hidden');
 		scoreScreen.classList.remove('hidden');
 	});
 
-	// Nouveaux boutons pour About et Contact
 	document.querySelector('#about-button').addEventListener('click', event => {
 		event.preventDefault();
 		const startScreen = document.querySelector('.start-screen');
@@ -176,12 +298,11 @@ function setupStartButton() {
 		contactScreen.classList.remove('hidden');
 	});
 
-	// Back buttons
 	document.querySelector('#credits-back').addEventListener('click', event => {
 		event.preventDefault();
 		const startScreen = document.querySelector('.start-screen');
 		const creditsScreen = document.querySelector('.credits-screen');
-		startScreen.classList.remove('hidden'); // Montre l'écran de démarrage
+		startScreen.classList.remove('hidden');
 		creditsScreen.classList.add('hidden');
 	});
 
@@ -189,16 +310,15 @@ function setupStartButton() {
 		event.preventDefault();
 		const startScreen = document.querySelector('.start-screen');
 		const scoreScreen = document.querySelector('.score-screen');
-		startScreen.classList.remove('hidden'); // Montre l'écran de démarrage
+		startScreen.classList.remove('hidden');
 		scoreScreen.classList.add('hidden');
 	});
 
-	// Nouveaux boutons de retour
 	document.querySelector('#about-back').addEventListener('click', event => {
 		event.preventDefault();
 		const startScreen = document.querySelector('.start-screen');
 		const aboutScreen = document.querySelector('.about-screen');
-		startScreen.classList.remove('hidden'); // Montre l'écran de démarrage
+		startScreen.classList.remove('hidden');
 		aboutScreen.classList.add('hidden');
 	});
 
@@ -206,7 +326,7 @@ function setupStartButton() {
 		event.preventDefault();
 		const startScreen = document.querySelector('.start-screen');
 		const contactScreen = document.querySelector('.contact-screen');
-		startScreen.classList.remove('hidden'); // Montre l'écran de démarrage
+		startScreen.classList.remove('hidden');
 		contactScreen.classList.add('hidden');
 	});
 
@@ -214,7 +334,7 @@ function setupStartButton() {
 		event.preventDefault();
 		const startScreen = document.querySelector('.start-screen');
 		const gameOverScreen = document.querySelector('.game-over-screen');
-		startScreen.classList.remove('hidden'); // Montre l'écran de démarrage
+		startScreen.classList.remove('hidden');
 		gameOverScreen.classList.add('hidden');
 	});
 
@@ -226,11 +346,18 @@ function setupStartButton() {
 	});
 }
 
-// Initialisation principale
+// init principale
 function init() {
 	setupSocketEvents();
 	setupGlobalEvents();
 	setupStartButton();
+	setupSettingsButton();
+
+	// init le mode de contrôle
+	document.addEventListener('DOMContentLoaded', () => {
+		initControlMode();
+	});
+
 	observeCanvas(() => {}, render);
 }
 
