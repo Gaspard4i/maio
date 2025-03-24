@@ -168,14 +168,14 @@ function setupStartButton() {
 	document.querySelector('#credits-back').addEventListener('click', () => {
 		const startScreen = document.querySelector('.start-screen');
 		const creditsScreen = document.querySelector('.credits-screen');
-		startScreen.style.display = ''; // Montre l'écran de démarrage
+		startScreen.classList.remove('hidden'); // Montre l'écran de démarrage
 		creditsScreen.classList.add('hidden');
 	});
 
 	document.querySelector('#score-back').addEventListener('click', () => {
 		const startScreen = document.querySelector('.start-screen');
 		const scoreScreen = document.querySelector('.score-screen');
-		startScreen.style.display = ''; // Montre l'écran de démarrage
+		startScreen.classList.remove('hidden'); // Montre l'écran de démarrage
 		scoreScreen.classList.add('hidden');
 	});
 
@@ -183,14 +183,14 @@ function setupStartButton() {
 	document.querySelector('#about-back').addEventListener('click', () => {
 		const startScreen = document.querySelector('.start-screen');
 		const aboutScreen = document.querySelector('.about-screen');
-		startScreen.style.display = ''; // Montre l'écran de démarrage
+		startScreen.classList.remove('hidden'); // Montre l'écran de démarrage
 		aboutScreen.classList.add('hidden');
 	});
 
 	document.querySelector('#contact-back').addEventListener('click', () => {
 		const startScreen = document.querySelector('.start-screen');
 		const contactScreen = document.querySelector('.contact-screen');
-		startScreen.style.display = ''; // Montre l'écran de démarrage
+		startScreen.classList.remove('hidden'); // Montre l'écran de démarrage
 		contactScreen.classList.add('hidden');
 	});
 }
