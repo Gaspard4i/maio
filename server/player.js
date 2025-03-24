@@ -230,7 +230,7 @@ export class Player extends Entity {
 export class BotPlayer extends Player {
 	constructor(radius, x, y, vx, vy) {
 		const id = uuidv4(); // uuid pour les bots
-		super(`bot_${id}`, radius, x, y, vx, vy, false, 'Bot');
+		super(`bot_${id}`, radius, x, y, vx, vy, 'Bot');
 		this.isBot = true;
 	}
 
