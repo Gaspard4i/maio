@@ -28,7 +28,11 @@ describe('Player Module', () => {
 			const player = new Player('test', 10, 0, 0, 0, 0, false);
 			assert.equal(player.speed, BASE_PLAYER_SPEED);
 			player.bonus(BonusType.VITESSE);
-			assert.equal(player.speed, BASE_PLAYER_SPEED * BONUS_SPEED_MULTIPLIER);
+			player.updateSpeed();
+			assert.equal(
+				player.speed,
+				(BASE_PLAYER_SPEED / player.radius) * 40 * BONUS_SPEED_MULTIPLIER
+			);
 		});
 
 		it('should grow and then shrink after getting size bonus', done => {
