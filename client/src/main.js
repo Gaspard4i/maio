@@ -23,6 +23,7 @@ const currentPlayer = {};
 export const camera = new Camera();
 const otherPlayers = {};
 let isPlayerDead = false;
+let globalLeaderboard = [];
 
 // Gestion des événements socket
 function setupSocketEvents() {
@@ -47,7 +48,7 @@ function updatePlayers(players) {
 		if (id === socket.id) {
 			Object.assign(currentPlayer, players[id]);
 			// Update progress bar with current player score
-			updateProgressBar(currentPlayer.score || 0);
+			updateProgressBar(currentPlayer.score || 0, globalLeaderboard);
 		} else {
 			otherPlayers[id] = players[id];
 		}
@@ -73,6 +74,9 @@ function updateLeaderboard(newLeaderboard) {
 
 	// Trier par score décroissant
 	scores.sort((a, b) => b.score - a.score);
+
+	// Stocker dans la variable globale
+	globalLeaderboard = [...scores];
 
 	// Mettre à jour le tableau principal des scores
 	updateMainLeaderboard(scores);
@@ -159,7 +163,7 @@ socket.on('playerDisconnected', id => {
 
 socket.on('lost', score => {
 	const gameOverScreen = document.querySelector('.game-over-screen');
-	updateProgressBar(score || 0);
+	updateProgressBar(score || 0, globalLeaderboard);
 	gameOverScreen.classList.remove('hidden');
 	isPlayerDead = true;
 });
