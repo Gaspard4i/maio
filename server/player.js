@@ -147,8 +147,10 @@ export class Player extends Entity {
 		const maxDistance = Math.min(canvaWidth, canvasHeight) / 4;
 		const distance = Math.sqrt(dx * dx + dy * dy);
 		const speedFactor = Math.min(distance / maxDistance, 1);
+
 		const speed =
-			speedFactor * (this.isAccelerating ? ACCELERATED_SPEED : this.speed);
+			speedFactor *
+			(this.isAccelerating ? this.speed * ACCELERATED_SPEED : this.speed);
 
 		if (distance > this.radius) {
 			this.vx = (dx / distance) * speed;

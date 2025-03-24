@@ -1,6 +1,22 @@
 import { socket } from './main.js';
 import { canvas } from './canvas.js';
 
+/////////////////// CONTRÔLE DU MODE ///////////////////
+let currentControlMode = 'keyboard'; // 'keyboard' ou 'mouse'
+
+export function setCurrentControlMode(mode) {
+	currentControlMode = mode;
+	// si on passe en mode 'mouse', on réinitialise les touches pressées
+	if (mode === 'mouse') {
+		for (const key in pressedKeys) {
+			delete pressedKeys[key]; // vide les touches
+		}
+		// env un bitmask vide pour arreter les mvnt
+		socket.emit('input', 0);
+		lastBitmask = 0;
+	}
+}
+
 /////////////////// CLAVIER ///////////////////
 
 const pressedKeys = {}; // État local des touches
@@ -25,12 +41,16 @@ function computeBitmask() {
 
 // événements clavier
 export function handleKeyDown(event) {
+	if (currentControlMode === 'mouse') return;
+
 	if (keyMap[event.key]) {
 		pressedKeys[event.key] = true;
 	}
 }
 
 export function handleKeyUp(event) {
+	if (currentControlMode === 'mouse') return;
+
 	if (keyMap[event.key]) {
 		delete pressedKeys[event.key];
 	}
@@ -38,21 +58,24 @@ export function handleKeyUp(event) {
 
 // envoi des entrées au serv
 function sendInputs() {
-	const currentBitmask = computeBitmask();
-	if (currentBitmask !== lastBitmask) {
-		socket.emit('input', currentBitmask); // Envoi uniquement si le bitmask a changé
-		lastBitmask = currentBitmask;
+	if (currentControlMode === 'keyboard') {
+		const currentBitmask = computeBitmask();
+		if (currentBitmask !== lastBitmask) {
+			socket.emit('input', currentBitmask); // env uniquement le bitmask si il a changé
+			lastBitmask = currentBitmask;
+		}
 	}
 	requestAnimationFrame(sendInputs); // limité à 60Hz
 }
 
-sendInputs(); // Démarre la boucle d'envoi
+sendInputs(); // démarre la boucle d'envoi
 
 /////////////////// SOURIS  ///////////////////
 
 let lastMousePosition = { x: 0, y: 0 };
 let lastDirection = { dx: 0, dy: 0 };
 let isMouseMoving = false;
+let mouseAccelerating = false;
 
 // limite les apl fréquent à emitMouseMove
 function throttle(func, limit) {
@@ -83,7 +106,17 @@ const emitMouseMove = throttle((x, y, canvaWidth, canvaHeight) => {
 	socket.emit('mousemove', { x, y, canvaWidth, canvaHeight });
 }, 33);
 
+// activer/désactiver l'accel
+function toggleMouseAcceleration(isAccelerating) {
+	if (currentControlMode !== 'mouse') return;
+
+	mouseAccelerating = isAccelerating;
+	socket.emit('mousedown', isAccelerating);
+}
+
 canvas.addEventListener('mousemove', event => {
+	if (currentControlMode !== 'mouse') return;
+
 	const x = event.offsetX;
 	const y = event.offsetY;
 
@@ -105,6 +138,9 @@ canvas.addEventListener('mousemove', event => {
 
 // optimise le mouvement continu
 setInterval(() => {
+	// N'exécuter que si on est en mode souris
+	if (currentControlMode !== 'mouse') return;
+
 	if (!isMouseMoving && (lastDirection.dx !== 0 || lastDirection.dy !== 0)) {
 		const simulatedX = lastMousePosition.x + lastDirection.dx * 10;
 		const simulatedY = lastMousePosition.y + lastDirection.dy * 10;
@@ -127,8 +163,34 @@ setInterval(() => {
 	isMouseMoving = false;
 }, 100); // 100ms
 
-canvas.addEventListener('mousedown', () => {
-	socket.emit('mousedown', true);
+// Gestion du clic gauche pour activer Shift
+canvas.addEventListener('mousedown', event => {
+	if (currentControlMode === 'mouse') {
+		// Activer l'accélération pour n'importe quel bouton de souris (gauche ou droit)
+		toggleMouseAcceleration(true);
+		event.preventDefault(); // Empêche le menu contextuel du clic droit
+	}
+});
+
+// Gestion du relâchement de clic pour désactiver Shift
+canvas.addEventListener('mouseup', event => {
+	if (currentControlMode === 'mouse') {
+		toggleMouseAcceleration(false);
+	}
+});
+
+// Empêche le menu contextuel du clic droit
+canvas.addEventListener('contextmenu', event => {
+	if (currentControlMode === 'mouse') {
+		event.preventDefault();
+	}
+});
+
+// Capture les clics en dehors du canvas pour désactiver l'accélération
+document.addEventListener('mouseup', event => {
+	if (currentControlMode === 'mouse' && mouseAccelerating) {
+		toggleMouseAcceleration(false);
+	}
 });
 
 /////////////////// PRÉVENTION DU ZOOM ///////////////////

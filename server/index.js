@@ -153,8 +153,11 @@ io.on('connection', socket => {
 		)
 	);
 
-	socket.on('mousedown', ({ bool }) =>
-		handlePlayerAction(socket.id, player => (player.isAccelerating = bool))
+	socket.on('mousedown', isAccelerating =>
+		handlePlayerAction(socket.id, player => {
+			// active ou désactive l'accel
+			player.isAccelerating = isAccelerating;
+		})
 	);
 
 	socket.on('disconnect', () => {

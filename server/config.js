@@ -19,7 +19,7 @@ export const DEFAULT_PLAYER = {
 	velocityY: 0, // vit initiale en Y
 	isAccelerating: false,
 };
-export const BASE_PLAYER_SPEED = 14; // vit de base
+export const BASE_PLAYER_SPEED = 7; // vit de base
 export const ACCELERATED_SPEED = 2; // Vitesse en accélération
 export const BONUS_TIME = 3000; // tps invincibilité au spawn (ms)
 export const EAT_THRESHOLD = 1.05; // pourcentage de graille ( il faut être X% plus large pour manger un joueur)
