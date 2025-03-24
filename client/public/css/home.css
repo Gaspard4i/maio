@@ -289,6 +289,22 @@ main {
     width: 13vw;
 }
 
+.main-menu .title {
+	position: relative;
+	display: inline-block;
+}
+
+.main-menu .menu-options {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.main-menu .menu-options img {
+	width: 32px; /* Ajustez la taille si nécessaire */
+	height: 32px;
+	cursor: pointer;
+}
 
 /* ===== CUSTOMIZATION ===== */
 .customization {

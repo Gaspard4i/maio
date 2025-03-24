@@ -22,6 +22,7 @@ const stains = [];
 const currentPlayer = {};
 export const camera = new Camera();
 const otherPlayers = {};
+let isPlayerDead = false;
 
 // Gestion des événements socket
 function setupSocketEvents() {
@@ -159,7 +160,8 @@ socket.on('playerDisconnected', id => {
 socket.on('lost', score => {
 	const gameOverScreen = document.querySelector('.game-over-screen');
 	updateProgressBar(score || 0);
-	gameOverScreen.classList.remove('hidden'); // Show the message
+	gameOverScreen.classList.remove('hidden');
+	isPlayerDead = true;
 });
 
 // Variables pour le calcul des FPS
@@ -177,11 +179,12 @@ function render() {
 		camera.y = 2500;
 		camera.zoom = Math.min(canvas.width / 12000, canvas.height / 5000) * 5; // Zoom un peu plus
 		drawGame(context, {}, otherPlayers, stains, [], camera);
-	} else {
-		// Mode normal : afficher le joueur local
+	} else if (!isPlayerDead) {
 		camera.adjustCameraPosition(currentPlayer, canvas.width, canvas.height);
 		camera.zoom *= 1.1; // Zoom un peu plus
 		drawGame(context, currentPlayer, otherPlayers, stains, [], camera);
+	} else {
+		drawGame(context, {}, otherPlayers, stains, [], camera);
 	}
 
 	// FPS

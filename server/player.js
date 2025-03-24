@@ -173,6 +173,7 @@ export class Player extends Entity {
 	}
 
 	updateMouseMovement(dx, dy, canvaWidth, canvasHeight) {
+		this.applyAcceleration();
 		const maxDistance = Math.min(canvaWidth, canvasHeight) / 4;
 		const distance = Math.sqrt(dx * dx + dy * dy);
 		const speedFactor = Math.min(distance / maxDistance, 1);
@@ -249,7 +250,6 @@ export class Player extends Entity {
 	}
 
 	applyAcceleration() {
-		this.isAccelerating = this.keys['Shift'];
 		if (this.isAccelerating) {
 			this.radius = Math.max(10, this.radius - 0.1);
 		}
@@ -257,6 +257,7 @@ export class Player extends Entity {
 
 	///////////////////DÉPLACEMENT///////////////////
 	updateVelocity() {
+		this.isAccelerating = this.keys['Shift'];
 		this.applyAcceleration();
 		let dx =
 			(this.keys['ArrowRight'] ? 1 : 0) - (this.keys['ArrowLeft'] ? 1 : 0);
