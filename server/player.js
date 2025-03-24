@@ -13,6 +13,7 @@ import {
 	STAIN_SCORE,
 	BONUS_SPEED_MULTIPLIER,
 	BONUS_SIZE_MULTIPLIER,
+	BONUS_SIZE_MULTIPLIER_NERFED,
 } from './config.js';
 // import { removePlayer } from './index.js';
 
@@ -155,7 +156,9 @@ export class Player extends Entity {
 				this.baseSpeed = BASE_PLAYER_SPEED;
 			}, INVINCIBILITY_TIME);
 		} else if (bt === BonusType.TAILLE) {
-			this.radius *= BONUS_SIZE_MULTIPLIER;
+			if (this.radius < 100) this.radius *= BONUS_SIZE_MULTIPLIER;
+			else if (this.radius < 300) this.radius *= BONUS_SIZE_MULTIPLIER_NERFED;
+			else this.grow();
 		}
 	}
 
