@@ -318,3 +318,33 @@ export function drawFireLayer(
 	context.fillStyle = gradient;
 	context.fill();
 }
+
+export function drawPlayerAbsorptionEffect(context, player) {
+	const time = Date.now();
+	const duration = 1000;
+	const progress = (time % duration) / duration;
+
+	context.save();
+	context.translate(player.x, player.y);
+
+	const baseSize = player.radius;
+	const pulseScale = 1 + Math.sin(progress * Math.PI * 2) * 0.3;
+	const size = baseSize * pulseScale;
+
+	context.beginPath();
+	context.arc(0, 0, size * 1.2, 0, Math.PI * 2);
+	context.strokeStyle = `rgba(255, 255, 0, ${0.5 - progress * 0.5})`;
+	context.lineWidth = 3;
+	context.stroke();
+
+	context.beginPath();
+	context.arc(0, 0, size, 0, Math.PI * 2);
+	const gradient = context.createRadialGradient(0, 0, 0, 0, 0, size);
+	gradient.addColorStop(0, 'rgba(255, 255, 0, 0.4)');
+	gradient.addColorStop(0.6, 'rgba(255, 255, 0, 0.2)');
+	gradient.addColorStop(1, 'rgba(255, 255, 0, 0)');
+	context.fillStyle = gradient;
+	context.fill();
+
+	context.restore();
+}

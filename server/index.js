@@ -37,7 +37,7 @@ const inputQueue = {};
 const grid = new Grid(CHUNK_SIZE, MAX_WIDTH, MAX_HEIGHT);
 
 /////////////////// INITIALISATION ///////////////////
-export const initializePlayer = (socketId, pseudo = 'Joueur') => {
+export const initializePlayer = (socketId, pseudo = 'Joueur', startTime) => {
 	if (Object.keys(players).length >= MAX_PLAYERS) {
 		io.to(socketId).emit('gameFull'); // Notifie le client que le jeu est plein
 		console.log(
@@ -52,7 +52,8 @@ export const initializePlayer = (socketId, pseudo = 'Joueur') => {
 		DEFAULT_PLAYER.y,
 		DEFAULT_PLAYER.velocityX,
 		DEFAULT_PLAYER.velocityY,
-		pseudo // Utilisation du pseudo fourni
+		pseudo, // Utilisation du pseudo fourni
+		startTime
 	);
 	console.log(
 		`Nouveau joueur ${socketId} initialisé avec le pseudo "${pseudo}".`
@@ -117,13 +118,6 @@ export const processGameTick = () => {
 
 	stains.updateStains(players);
 
-	// verification des joueurs mangés
-	for (const id in players) {
-		if (players[id].isEaten) {
-			removePlayer(id);
-		}
-	}
-
 	// sync tout
 	io.emit('updatePlayers', players);
 	io.emit('updateStains', stains);
@@ -141,7 +135,9 @@ const handlePlayerAction = (socketId, action, ...args) => {
 io.on('connection', socket => {
 	console.log(`Nouvelle connexion du client ${socket.id}`);
 
-	socket.on('joinGame', ({ pseudo }) => initializePlayer(socket.id, pseudo));
+	socket.on('joinGame', ({ pseudo, startTime }) =>
+		initializePlayer(socket.id, pseudo, startTime)
+	);
 
 	socket.on('input', bitmask =>
 		handlePlayerAction(socket.id, () => handleInput(socket.id, bitmask))
@@ -162,8 +158,6 @@ io.on('connection', socket => {
 		handlePlayerAction(socket.id, player => {
 			// active ou désactive l'accel
 			player.isAccelerating = isAccelerating;
-			// Debug pour vérifier la valeur reçue
-			console.log(`Joueur ${socket.id} - Accélération: ${isAccelerating}`);
 		})
 	);
 

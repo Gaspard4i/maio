@@ -19,7 +19,16 @@ import { leaderboard } from './index.js';
 
 ///////////////////CLASSE PLAYER///////////////////
 export class Player extends Entity {
-	constructor(id, radius, x, y, vx, vy, pseudo = undefined) {
+	constructor(
+		id,
+		radius,
+		x,
+		y,
+		vx,
+		vy,
+		pseudo = undefined,
+		startTime = Date.now()
+	) {
 		super(radius, x, y);
 		this.id = id;
 		this.vx = vx;
@@ -35,6 +44,8 @@ export class Player extends Entity {
 		this.justEatSomeone = false;
 		this.justGotBigger = false;
 		this.isBoosted = false;
+		this.startTime = startTime;
+		this.endTime = Date.now();
 		setTimeout(() => {
 			this.isInvincible = false;
 		}, BONUS_TIME);
@@ -141,19 +152,19 @@ export class Player extends Entity {
 
 				// looser go back to moodle
 				if (!otherPlayer.isBot) {
+					const killedPlayer = players[otherPlayer.id]; // Joueur qui se fait tuer (généralement soit même)
+					killedPlayer.endTime = Date.now(); // On met le temps où le joueur est mort pour calculer combien de temps il a vécu
+					const aliveTime = Math.floor(
+						(killedPlayer.endTime - killedPlayer.startTime) / 1000 //calcul du temps de vie en secondes
+					);
+
+					killedPlayer.score *= 1 + aliveTime / 1000; // 1 millième du temps de vie augmente le score
 					// Vérifier si le joueur a battu son record
 					if (otherPlayer.checkNewPB()) {
 						// Envoyer le leaderboard mis à jour à tous les clients
 						io.emit('updateLeaderboard', leaderboard);
 					}
-
-					// Marquer le joueur comme mangé pour le supprimer au prochain tick
-					otherPlayer.isEaten = true;
-
-					io.to(otherPlayer.id).emit('lost'); // Envoie un message de perte
-				} else {
-					// Supprimer directement les bots
-					delete players[otherPlayer.id];
+					io.to(otherPlayer.id).emit('lost', killedPlayer.score); // Envoie un message de perte
 				}
 			}
 		}

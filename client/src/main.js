@@ -156,8 +156,9 @@ socket.on('playerDisconnected', id => {
 	delete otherPlayers[id];
 });
 
-socket.on('lost', () => {
+socket.on('lost', score => {
 	const gameOverScreen = document.querySelector('.game-over-screen');
+	updateProgressBar(score || 0);
 	gameOverScreen.classList.remove('hidden'); // Show the message
 });
 
@@ -342,7 +343,7 @@ function startGame() {
 	startScreen.classList.add('hidden');
 	canvas.classList.remove('background');
 	score.classList.remove('hidden');
-	socket.emit('joinGame', { pseudo }); // envoie le pseudo au serv
+	socket.emit('joinGame', { pseudo: pseudo, startTime: Date.now() }); // Envoi du pseudo au serveur
 }
 
 // demmare le jeu

@@ -4,6 +4,7 @@ import {
 	drawFireBoostEffect,
 	drawGrowthEffect,
 	drawInvincibilityEffect,
+	drawPlayerAbsorptionEffect,
 } from './effects.js';
 import {
 	debugCameraEnabled,
@@ -288,9 +289,8 @@ export function drawPlayer(context, player) {
 	}
 
 	if (player.justEatSomeone) {
-		//TODO
+		drawPlayerAbsorptionEffect(context, player);
 	}
-	// console.log(player.pseudo);
 
 	const pseudo = player.pseudo || 'Joueur'; // Valeur par défaut si pseudo est falsy
 	context.save();
