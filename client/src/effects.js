@@ -1,33 +1,32 @@
 export function drawGrowthEffect(context, player) {
 	const time = Date.now() / 100;
 	const duration = 2000;
-	const progress = Math.min((Date.now() % duration) / duration, 1);
-	const expansionFactor = 1 + 0.5 * Math.max(0, 1 - progress * 2);
-	const pulseEffect = 0.1 * Math.sin(time * 2);
+	const progress = (Date.now() % duration) / duration;
+	const expansionFactor = 1 + 1.5 * (1 - progress * 2);
+	const pulseEffect = 0.2 * Math.sin(time * 2);
+	const baseRadius = player.radius;
 
 	context.save();
 	context.translate(player.x, player.y);
 
-	const ringCount = 3;
+	const ringCount = 5;
 	for (let i = 0; i < ringCount; i++) {
 		const ringProgress = progress + i / ringCount;
 		if (ringProgress > 1) continue;
 
 		const ringSize =
-			player.radius * (1 + ringProgress * expansionFactor + pulseEffect);
-		const ringOpacity =
-			0.7 * Math.max(0, 1 - ringProgress) * (1 - i / ringCount);
+			baseRadius * (1 + ringProgress * expansionFactor + pulseEffect);
+		const ringOpacity = Math.max(0, 1 - ringProgress) * (1 - i / ringCount);
 
 		context.beginPath();
 		context.arc(0, 0, ringSize, 0, Math.PI * 2);
-		const hue = 120 - ringProgress * 60;
-		context.strokeStyle = `hsla(${hue}, 100%, ${50 + ringProgress * 50}%, ${ringOpacity})`;
-		context.lineWidth = 2 + 3 * (1 - ringProgress);
+		context.strokeStyle = `hsla(${120 - ringProgress * 60}, 100%, ${50 + ringProgress * 50}%, ${ringOpacity})`;
+		context.lineWidth = 3 + 5 * (1 - ringProgress);
 		context.stroke();
 	}
 
-	const glowSize = player.radius * 1.2;
-	const glowOpacity = 0.4 * Math.max(0, 1 - progress * 2);
+	const glowSize = baseRadius * 2;
+	const glowOpacity = 0.6 * (1 - progress * 2);
 	const glowGradient = context.createRadialGradient(0, 0, 0, 0, 0, glowSize);
 	glowGradient.addColorStop(0, `rgba(255, 255, 150, ${glowOpacity * 1.5})`);
 	glowGradient.addColorStop(0.5, `rgba(150, 255, 150, ${glowOpacity})`);
@@ -38,20 +37,21 @@ export function drawGrowthEffect(context, player) {
 	context.arc(0, 0, glowSize, 0, Math.PI * 2);
 	context.fill();
 
-	const particleCount = 12;
+	const particleCount = 20;
 	for (let i = 0; i < particleCount; i++) {
 		const angle = (i / particleCount) * Math.PI * 2 + time / 10;
-		const distance = player.radius * (0.2 + progress * 2);
+		const distance = baseRadius * (0.5 + progress * 3);
 		const x = Math.cos(angle) * distance;
 		const y = Math.sin(angle) * distance;
-		const particleSize = 2 * (1 - progress) + Math.sin(time + i) * 1;
+		const particleSize = Math.max(
+			0.2,
+			3 * (1 - progress) + Math.sin(time + i) * 1.5
+		);
 
-		if (particleSize > 0.2) {
-			context.beginPath();
-			context.arc(x, y, particleSize, 0, Math.PI * 2);
-			context.fillStyle = `rgba(${200 + 55 * Math.sin(i)}, 255, ${100 + 155 * Math.cos(i)}, ${1 - progress})`;
-			context.fill();
-		}
+		context.beginPath();
+		context.arc(x, y, particleSize, 0, Math.PI * 2);
+		context.fillStyle = `rgba(${200 + 55 * Math.sin(i)}, 255, ${100 + 155 * Math.cos(i)}, ${1 - progress})`;
+		context.fill();
 	}
 
 	context.restore();
@@ -59,29 +59,27 @@ export function drawGrowthEffect(context, player) {
 
 export function drawAccelerationEffect(context, player) {
 	const time = Date.now() / 100;
+	const angle = Math.atan2(player.vy, player.vx);
+	const trailLength = player.radius * 4;
+	const maxLineWidth = player.radius * 0.8;
 
 	context.save();
 	context.translate(player.x, player.y);
-
-	const angle = Math.atan2(player.vy, player.vx);
 	context.rotate(angle + Math.PI);
 
-	const trailLength = player.radius * 4;
 	const linesCount = 15;
-	const maxLineWidth = player.radius * 0.8;
-
 	for (let i = 0; i < linesCount; i++) {
 		const lineOffset = (Math.random() * 2 - 1) * maxLineWidth;
 		const lineLength = trailLength * (0.3 + Math.random() * 0.7);
 		const lineWidth = 1 + Math.random() * 2;
 		const alpha = 0.2 + Math.random() * 0.6;
 		const colors = [
-			`rgba(255, 255, 255, ${alpha})`,
-			`rgba(135, 206, 250, ${alpha})`,
-			`rgba(30, 144, 255, ${alpha})`,
-			`rgba(0, 191, 255, ${alpha})`,
+			'255, 255, 255',
+			'135, 206, 250',
+			'30, 144, 255',
+			'0, 191, 255',
 		];
-		const color = colors[Math.floor(Math.random() * colors.length)];
+		const color = `rgba(${colors[Math.floor(Math.random() * colors.length)]}, ${alpha})`;
 
 		context.beginPath();
 		context.moveTo(0, lineOffset);

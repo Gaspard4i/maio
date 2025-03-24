@@ -13,8 +13,8 @@ export const CHUNK_SIZE = 200; // taille des chunks
 
 export const DEFAULT_PLAYER = {
 	radius: 30, // rayon de base (30)
-	x: 6000, // pos x
-	y: 3000, // pos y
+	x: 3500, // pos x
+	y: 3500, // pos y
 	velocityX: 0, // vit initiale en X
 	velocityY: 0, // vit initiale en Y
 	isAccelerating: false,
