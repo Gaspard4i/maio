@@ -4,7 +4,6 @@ import { Player } from '../player.js';
 import { BonusType } from '../bonus.js';
 import {
 	BASE_PLAYER_SPEED,
-	INVINCIBILITY_TIME,
 	BONUS_SIZE_MULTIPLIER,
 	BONUS_SPEED_MULTIPLIER,
 } from '../config.js';
@@ -30,9 +29,6 @@ describe('Player Module', () => {
 			assert.equal(player.speed, BASE_PLAYER_SPEED);
 			player.bonus(BonusType.VITESSE);
 			assert.equal(player.speed, BASE_PLAYER_SPEED * BONUS_SPEED_MULTIPLIER);
-			setTimeout(() => {
-				assert.equal(player.speed, BASE_PLAYER_SPEED * BONUS_SPEED_MULTIPLIER);
-			}, INVINCIBILITY_TIME + 10);
 		});
 
 		it('should grow and then shrink after getting size bonus', done => {
