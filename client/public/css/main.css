@@ -51,10 +51,20 @@ body {
     border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin: 10px;
 }
 
 #start-screen button:hover {
     background-color: #2ecc71;
+}
+
+#start-screen .home-button {
+    background-color: #7f8c8d;  /* Grayish color instead of green */
+    color: #ecf0f1;
+}
+
+#start-screen .home-button:hover {
+    background-color: #95a5a6;  /* Lighter gray on hover */
 }
 
 canvas.background {

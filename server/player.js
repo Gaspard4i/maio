@@ -118,7 +118,7 @@ export class Player extends Entity {
 
 				// looser go back to moodle
 				if (!otherPlayer.isBot) {
-					io.to(otherPlayer.id).emit('redirect', '/'); // Redirige vers la page principale
+					io.to(otherPlayer.id).emit('redirect', '/gameover.html'); // Redirige vers la page principale
 				}
 
 				delete players[otherPlayer.id];
