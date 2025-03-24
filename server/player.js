@@ -14,7 +14,7 @@ import {
 	BONUS_SPEED_MULTIPLIER,
 	BONUS_SIZE_MULTIPLIER,
 } from './config.js';
-import { removePlayer } from './index.js';
+// import { removePlayer } from './index.js';
 
 ///////////////////CLASSE PLAYER///////////////////
 export class Player extends Entity {
@@ -110,12 +110,11 @@ export class Player extends Entity {
 
 				// looser go back to moodle
 				if (!otherPlayer.isBot) {
-					removePlayer(this.id);				
+					// removePlayer(this.id);
 					io.to(otherPlayer.id).emit('lost'); // Envoie un message de perte
 				}
 
 				delete players[otherPlayer.id];
-				
 			}
 		}
 	}
