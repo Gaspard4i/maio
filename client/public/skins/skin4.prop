@@ -1,0 +1,22 @@
+halo.border.color = #d0e0ff
+halo.fill.color = #e6efff
+halo.under.color = #c0d4ff
+
+ship.base.color = #6a7b8d
+ship.shadow.color = lighten(#6a7b8d, -10%)
+ship.window.lightShadow.color = #9db0c5
+ship.window.border.color = #6a7b8d
+ship.window.light.color = rgba(200, 220, 250, 0.5)
+ship.window.top.color = #bcd4f5
+ship.interior.light.color = #7c8da5
+
+ship.lights.rings.color = #9db0c5
+ship.light.center.color = #4f7bc3
+ship.light.left.color = #d4534b
+ship.light.right.color = #e08030
+
+alien.body.color = rgb(120, 200, 160)
+alien.horn.left.color = rgb(120, 200, 160)
+alien.horn.right.color = rgb(120, 200, 160)
+alien.eye.left.color = rgb(0, 0, 0)
+alien.eye.right.color = rgb(0, 0, 0)
