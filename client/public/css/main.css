@@ -440,6 +440,16 @@ canvas.background {
     pointer-events: auto;
 }
 
+/* Style for quit button */
+.start-screen.overlay #start-game {
+    color: #ecf0f1;
+    transition: color 0.3s ease;
+}
+
+.start-screen.overlay #start-game:hover {
+    color: #e74c3c; /* Red color for quit button hover */
+}
+
 @media (max-width: 768px) {
     #start-screen h1 {
         font-size: 2rem;

@@ -336,37 +336,26 @@ setDebugPlayerMode(DEBUG);
 setDebugEntityMode(DEBUG);
 setDebugGridMode(DEBUG);
 
-function startGame() {
-	const startScreen = document.querySelector('#start-screen');
-	const canvas = document.querySelector('.gameCanvas');
-	const score = document.querySelector('.score');
-	const pseudoInput = document.querySelector('#player-pseudo');
-	const pseudo = pseudoInput.value.trim() || 'Joueur';
-	const toggleMenuBtn = document.querySelector('#toggle-menu-btn');
-
-	startScreen.classList.add('hidden');
-	canvas.classList.remove('background');
-	score.classList.remove('hidden');
-	toggleMenuBtn.classList.remove('hidden');
-	isPlayerDead = false;
-	socket.emit('joinGame', { pseudo: pseudo, startTime: Date.now() }); // Envoi du pseudo au serveur
-}
-
 // Setup toggle menu button
 function setupToggleMenuButton() {
 	const toggleMenuBtn = document.querySelector('#toggle-menu-btn');
 	const startScreen = document.querySelector('#start-screen');
+	const startGameButton = document.querySelector('#start-game');
 
 	toggleMenuBtn.addEventListener('click', event => {
 		event.preventDefault();
 		if (startScreen.classList.contains('hidden')) {
-			// Show menu
+			// Show menu and change button text
 			startScreen.classList.remove('hidden');
 			startScreen.classList.add('overlay');
+			startGameButton.textContent = 'Quitter';
 		} else {
-			// Hide menu
+			// Hide menu and change button text back if not in game-over state
 			startScreen.classList.add('hidden');
 			startScreen.classList.remove('overlay');
+			if (!isPlayerDead) {
+				startGameButton.textContent = 'Jouer';
+			}
 		}
 	});
 
@@ -379,9 +368,19 @@ function setupToggleMenuButton() {
 }
 
 function setupStartButton() {
-	document.querySelector('#start-game').addEventListener('click', event => {
+	const startGameButton = document.querySelector('#start-game');
+
+	startGameButton.addEventListener('click', event => {
 		event.preventDefault();
-		startGame();
+		const startScreen = document.querySelector('#start-screen');
+
+		// Si le bouton est "Quitter" (overlay actif), quitter le jeu
+		if (startScreen.classList.contains('overlay')) {
+			quitGame();
+		} else {
+			// Sinon, démarrer le jeu
+			startGame();
+		}
 	});
 
 	document.querySelector('#credits-button').addEventListener('click', event => {
@@ -462,6 +461,50 @@ function setupStartButton() {
 		gameOverScreen.classList.add('hidden');
 		startGame();
 	});
+}
+
+// Fonction pour quitter le jeu et retourner à l'écran d'accueil
+function quitGame() {
+	// Reset the game state
+	const startScreen = document.querySelector('#start-screen');
+	const canvas = document.querySelector('.gameCanvas');
+	const score = document.querySelector('.score');
+	const toggleMenuBtn = document.querySelector('#toggle-menu-btn');
+	const startGameButton = document.querySelector('#start-game');
+
+	// Restore the initial state
+	startScreen.classList.remove('overlay');
+	canvas.classList.add('background');
+	score.classList.add('hidden');
+	toggleMenuBtn.classList.add('hidden');
+	startGameButton.textContent = 'Jouer';
+
+	// Disconnect from the game
+	socket.emit('leaveGame');
+
+	// Clear player data
+	Object.keys(currentPlayer).forEach(key => delete currentPlayer[key]);
+	Object.keys(otherPlayers).forEach(id => delete otherPlayers[id]);
+
+	// Reset player status
+	isPlayerDead = false;
+}
+
+function startGame() {
+	const startScreen = document.querySelector('#start-screen');
+	const canvas = document.querySelector('.gameCanvas');
+	const score = document.querySelector('.score');
+	const pseudoInput = document.querySelector('#player-pseudo');
+	const pseudo = pseudoInput.value.trim() || 'Joueur';
+	const toggleMenuBtn = document.querySelector('#toggle-menu-btn');
+	const startGameButton = document.querySelector('#start-game');
+
+	startScreen.classList.add('hidden');
+	canvas.classList.remove('background');
+	score.classList.remove('hidden');
+	toggleMenuBtn.classList.remove('hidden');
+	isPlayerDead = false;
+	socket.emit('joinGame', { pseudo: pseudo, startTime: Date.now() });
 }
 
 // init principale
