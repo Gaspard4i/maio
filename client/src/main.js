@@ -12,6 +12,8 @@ import { io } from 'socket.io-client';
 import { Camera } from './camera.js';
 import { handleKeyDown, handleKeyUp, preventZoom } from './input.js';
 
+const DEBUG = true;
+
 export const socket = io(window.location.hostname + ':8080');
 
 const stains = [];
@@ -90,6 +92,11 @@ function setupGlobalEvents() {
 	window.addEventListener('keyup', event => handleKeyUp(event));
 	preventZoom();
 }
+
+setDebugCameraMode(DEBUG);
+setDebugPlayerMode(DEBUG);
+setDebugEntityMode(DEBUG);
+setDebugGridMode(DEBUG);
 
 // Gestion du bouton pour démarrer le jeu
 function setupStartButton() {
