@@ -74,8 +74,9 @@ socket.on('playerDisconnected', id => {
 	delete otherPlayers[id];
 });
 
-socket.on('lost', () => {
+socket.on('lost', score => {
 	const gameOverScreen = document.querySelector('.game-over-screen');
+	updateProgressBar(score || 0);
 	gameOverScreen.classList.remove('hidden'); // Show the message
 });
 

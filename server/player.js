@@ -135,7 +135,7 @@ export class Player extends Entity {
 					);
 
 					killedPlayer.score *= 1 + aliveTime / 1000; // 1 millième du temps de vie augmente le score
-					io.to(otherPlayer.id).emit('lost'); // Envoie un message de perte
+					io.to(otherPlayer.id).emit('lost', killedPlayer.score); // Envoie un message de perte
 				}
 
 				delete players[otherPlayer.id];
