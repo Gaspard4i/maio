@@ -16,28 +16,27 @@ import {
 
 /////////////////// SERVEUR HTTP ///////////////////
 const httpServer = http.createServer((req, res) => {
-	// redirection vers la page 8000
 	res.writeHead(302, { Location: 'http://localhost:8000' });
 	res.end();
 });
 
 const port = process.env.PORT || PORT;
-httpServer.listen(port, () => {
-	console.log(`Server running at http://localhost:${port}/`);
-});
+httpServer.listen(port, () =>
+	console.log(`Server running at http://localhost:${port}/`)
+);
 
 /////////////////// SOCKET.IO ///////////////////
 const io = new IOServer(httpServer, { cors: true });
 
 /////////////////// VARIABLES GLOBALES ///////////////////
-export const players = {}; // stocke les players (humains et bots)
-export const stains = new Stains(NUM_STAINS); // stocke les taches
-const inputQueue = {}; // entrées clavier par joueur
+export const players = {};
+export const stains = new Stains(NUM_STAINS);
+const inputQueue = {};
 const grid = new Grid(CHUNK_SIZE, MAX_WIDTH, MAX_HEIGHT);
 
 /////////////////// INITIALISATION ///////////////////
 export const initializePlayer = socketId => {
-	const player = new Player(
+	players[socketId] = new Player(
 		socketId,
 		DEFAULT_PLAYER.radius,
 		DEFAULT_PLAYER.x,
@@ -46,8 +45,7 @@ export const initializePlayer = socketId => {
 		DEFAULT_PLAYER.velocityY,
 		DEFAULT_PLAYER.isAccelerating
 	);
-	console.log(`Nouveau joueur ${player.id} :`, player);
-	players[player.id] = player;
+	console.log(`Nouveau joueur ${socketId} initialisé.`);
 };
 
 export const createBots = count => {
@@ -77,14 +75,15 @@ export const removePlayer = socketId => {
 
 /////////////////// TRAITEMENT DU JEU ///////////////////
 export const processGameTick = () => {
-	// réinitialisation de grid
 	grid.clear();
 
-	// ajoute les joueurs, bots et stains à la grille
-	Object.values(players).forEach(player => grid.addEntity(player));
-	stains.getAll().forEach(stain => grid.addEntity(stain));
+	// ajoute les entités à la grille
+	[...Object.values(players), ...stains.getAll()].forEach(entity =>
+		grid.addEntity(entity)
+	);
 
-	for (const [id, bitmask] of Object.entries(inputQueue)) {
+	// traite les entrées des joueurs
+	Object.entries(inputQueue).forEach(([id, bitmask]) => {
 		const player = players[id];
 		if (player) {
 			player.keys = {
@@ -94,20 +93,17 @@ export const processGameTick = () => {
 				ArrowRight: !!(bitmask & 0b1000),
 				Shift: !!(bitmask & 0b10000),
 			};
-			player.updateVelocity(); // maj la vitesse
+			player.updateVelocity();
 		}
-	}
+	});
 
 	// maj les entités
-	for (const player of Object.values(players)) {
-		if (player.isBot) {
-			player.updateBotMovement(grid, stains, players, io);
-		} else {
-			player.movePlayer(stains, grid, players, io); // redirect
-		}
-	}
+	Object.values(players).forEach(player => {
+		player.isBot
+			? player.updateBotMovement(grid, stains, players, io)
+			: player.movePlayer(stains, grid, players, io);
+	});
 
-	// maj des taches
 	stains.updateStains(players);
 
 	// verification des joueurs mangés
@@ -123,40 +119,39 @@ export const processGameTick = () => {
 };
 
 /////////////////// GESTION DES ÉVÉNEMENTS SOCKET ///////////////////
-function handleMouseMovement(socketId, x, y, canvaWidth, canvaHeight) {
+const handlePlayerAction = (socketId, action, ...args) => {
 	const player = players[socketId];
 	if (!player) {
 		console.warn(`Player with socket ID ${socketId} not found.`);
-		return; // Évite l'erreur si le joueur n'existe pas
+		io.to(socketId).emit('reload');
+		return null;
 	}
-	const dx = x - canvaWidth / 2;
-	const dy = y - canvaHeight / 2;
-	player.updateMouseMovement(dx, dy, canvaWidth, canvaHeight);
-}
-
-function handleMouseMovementAcceleration(socketId, bool) {
-	const player = players[socketId];
-	player.isAccelerating = bool;
-}
+	return action(player, ...args);
+};
 
 io.on('connection', socket => {
 	console.log(`Nouvelle connexion du client ${socket.id}`);
 
-	socket.on('joinGame', () => {
-		initializePlayer(socket.id);
-	});
+	socket.on('joinGame', () => initializePlayer(socket.id));
 
-	socket.on('input', bitmask => {
-		handleInput(socket.id, bitmask);
-	});
+	socket.on('input', bitmask =>
+		handlePlayerAction(socket.id, () => handleInput(socket.id, bitmask))
+	);
 
-	socket.on('mousemove', ({ x, y, canvaWidth, canvaHeight }) => {
-		handleMouseMovement(socket.id, x, y, canvaWidth, canvaHeight);
-	});
+	socket.on('mousemove', ({ x, y, canvaWidth, canvaHeight }) =>
+		handlePlayerAction(socket.id, player =>
+			player.updateMouseMovement(
+				x - canvaWidth / 2,
+				y - canvaHeight / 2,
+				canvaWidth,
+				canvaHeight
+			)
+		)
+	);
 
-	socket.on('mousedown', ({ bool }) => {
-		handleMouseMovementAcceleration(socket.id, bool);
-	});
+	socket.on('mousedown', ({ bool }) =>
+		handlePlayerAction(socket.id, player => (player.isAccelerating = bool))
+	);
 
 	socket.on('disconnect', () => {
 		console.log(`Déconnexion du client ${socket.id}`);
