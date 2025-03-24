@@ -6,13 +6,35 @@
     <title>MA.IO</title>
     <link rel="icon" href="./images/favicon.ico" />
     <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/home.css" />
     <script src="build/main.bundle.js" defer></script>
 </head>
 <body>
     <div id="start-screen">
-        <img src="./images/maio.png" alt="logo_maio" width="250px"  height="200px"/>
-        <button id="start-game">Play Again</button>
-        <button class="home-button" onclick="window.location.href='index.html'">Home</button>
+          <!-- User Profile & Progress Bar -->
+          <header id="home-header">
+            <div class="profile">
+                <img src="images/UI/user.png" alt="Profil">
+            </div>
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+        </header>
+        <main id="home-main">
+        <!-- Play Again Or Home Menu -->
+        <section class="main-menu">
+            <div class="title">
+                <img src="./images/maio.png" alt="logo_maio" width="250px"  height="200px"/>
+            </div>
+            <div class="play-text" id="play-button">
+                <a href="#" id="start-game">Play Again</a>
+            </div>
+            <div class="play-text" id="play-button">
+                <a href="index.html" class="home-button">Home</a>
+            </div>
+        </section>
+        <div class="lost-message">PERDU !!</div>
+        </main>
     </div>
     <canvas class="gameCanvas background" width="600" height="400"></canvas>
     <div class="score hidden"><h2></h2></div>

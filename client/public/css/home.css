@@ -93,8 +93,6 @@ main {
     border-radius: 20px;
 }
 
-
-
 .play-text {
     cursor: pointer;
 }
@@ -104,6 +102,19 @@ main {
     background: none;
     font-size: 4.6rem;
     font-family: 'Luckiest Guy', cursive;
+}
+
+.play-text a {
+    color: #ecf0f1;
+    font-size: 3.5rem;
+    transition: color 0.3s ease;
+    display: inline-block;
+    padding: 10px 30px;
+}
+
+.play-text a:hover {
+    color: #2ecc71;
+    transform: scale(1.05);
 }
 
 .menu-options {
@@ -148,7 +159,7 @@ footer {
     bottom: 0;
 }
 
-nav a {
+a {
     color: #ecf0f1;
     font-size: 1.3rem;
     margin: 0 0.7vw;
