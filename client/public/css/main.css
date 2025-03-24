@@ -244,6 +244,102 @@ canvas.background {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+/* Game Over Screen */
+.game-over-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(52, 73, 94, 0.9);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    color: #ecf0f1;
+    font-family: 'Luckiest Guy', cursive;
+}
+
+.game-over-title {
+    color: #e74c3c;
+    font-size: 5rem;
+    text-shadow: 3px 3px 5px black;
+    margin-bottom: 2rem;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.game-over-content {
+    width: 80%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.game-over-section {
+    background-color: rgba(45, 52, 75, 0.8);
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.game-over-section h2 {
+    color: #3498db;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+}
+
+#final-score {
+    font-size: 2.5rem;
+    color: #f1c40f;
+    font-family: 'Luckiest Guy', cursive;
+}
+
+.game-over-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.restart-button, .home-button {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.restart-button {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.restart-button:hover {
+    background-color: #27ae60;
+    transform: scale(1.05);
+}
+
+.home-button {
+    background-color: #3498db;
+    color: white;
+}
+
+.home-button:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+}
+
 @media (max-width: 768px) {
     #start-screen h1 {
         font-size: 2rem;

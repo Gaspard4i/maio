@@ -74,15 +74,8 @@ socket.on('playerDisconnected', id => {
 });
 
 socket.on('lost', () => {
-	const lostMessage = document.getElementById('lost-message');
-	const startScreen = document.getElementById('start-screen');
-	const canvas = document.querySelector('.gameCanvas');
-	const score = document.querySelector('.score');
-
-	startScreen.style.display = ''; // Cache l'écran de démarrage
-	canvas.classList.add('background'); // Retire la classe d'arrière-plan
-	score.classList.add('hidden'); // Affiche la zone de score
-	lostMessage.classList.remove('hidden'); // Show the message
+	const gameOverScreen = document.getElementById('game-over-screen');
+	gameOverScreen.classList.remove('hidden'); 
 });
 
 function render() {
@@ -116,18 +109,20 @@ setDebugPlayerMode(DEBUG);
 setDebugEntityMode(DEBUG);
 setDebugGridMode(DEBUG);
 
+function startGame() {
+	const startScreen = document.getElementById('start-screen');
+	const canvas = document.querySelector('.gameCanvas');
+	const score = document.querySelector('.score');
+	startScreen.classList.add('hidden');
+	canvas.classList.remove('background');
+	score.classList.remove('hidden');
+	socket.emit('joinGame');
+}
+
 // Gestion du bouton pour démarrer le jeu
 function setupStartButton() {
 	document.getElementById('start-game').addEventListener('click', () => {
-		const startScreen = document.getElementById('start-screen');
-		const canvas = document.querySelector('.gameCanvas');
-		const score = document.querySelector('.score');
-
-		startScreen.classList.add('hidden');
-		canvas.classList.remove('background');
-		score.classList.remove('hidden');
-
-		socket.emit('joinGame');
+		startGame();
 	});
 
 	// autres boutons
@@ -168,14 +163,14 @@ function setupStartButton() {
 	document.getElementById('credits-back').addEventListener('click', () => {
 		const startScreen = document.getElementById('start-screen');
 		const creditsScreen = document.getElementById('credits-screen');
-		startScreen.style.display = ''; // Montre l'écran de démarrage
+		startScreen.classList.remove('hidden');; // Montre l'écran de démarrage
 		creditsScreen.classList.add('hidden');
 	});
 
 	document.getElementById('score-back').addEventListener('click', () => {
 		const startScreen = document.getElementById('start-screen');
 		const scoreScreen = document.getElementById('score-screen');
-		startScreen.style.display = ''; // Montre l'écran de démarrage
+		startScreen.classList.remove('hidden');; // Montre l'écran de démarrage
 		scoreScreen.classList.add('hidden');
 	});
 
@@ -183,15 +178,28 @@ function setupStartButton() {
 	document.getElementById('about-back').addEventListener('click', () => {
 		const startScreen = document.getElementById('start-screen');
 		const aboutScreen = document.getElementById('about-screen');
-		startScreen.style.display = ''; // Montre l'écran de démarrage
+		startScreen.classList.remove('hidden');; // Montre l'écran de démarrage
 		aboutScreen.classList.add('hidden');
 	});
 
 	document.getElementById('contact-back').addEventListener('click', () => {
 		const startScreen = document.getElementById('start-screen');
 		const contactScreen = document.getElementById('contact-screen');
-		startScreen.style.display = ''; // Montre l'écran de démarrage
+		startScreen.classList.remove('hidden');; // Montre l'écran de démarrage
 		contactScreen.classList.add('hidden');
+	});
+
+	document.getElementById('back-to-home').addEventListener('click', () => {
+		const startScreen = document.getElementById('start-screen');
+		const gameOverScreen = document.getElementById('game-over-screen');
+		startScreen.classList.remove('hidden');; // Montre l'écran de démarrage
+		gameOverScreen.classList.add('hidden');
+	});
+
+	document.getElementById('restart-game').addEventListener('click', () => {
+		const gameOverScreen = document.getElementById('game-over-screen');
+		gameOverScreen.classList.add('hidden');
+		startGame();
 	});
 }
 
