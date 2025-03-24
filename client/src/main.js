@@ -12,7 +12,7 @@ import { io } from 'socket.io-client';
 import { Camera } from './camera.js';
 import { handleKeyDown, handleKeyUp, preventZoom } from './input.js';
 
-const DEBUG = true;
+const DEBUG = false;
 
 export const socket = io(window.location.hostname + ':8080');
 
