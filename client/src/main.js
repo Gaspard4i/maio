@@ -11,6 +11,7 @@ import {
 import { io } from 'socket.io-client';
 import { Camera } from './camera.js';
 import { handleKeyDown, handleKeyUp, preventZoom } from './input.js';
+import { updateProgressBar } from './progressBar.js';
 
 const DEBUG = false;
 
@@ -47,6 +48,8 @@ function updatePlayers(players) {
 	for (const id in players) {
 		if (id === socket.id) {
 			Object.assign(currentPlayer, players[id]);
+			// Update progress bar with current player score
+			updateProgressBar(currentPlayer.score || 0);
 		} else {
 			otherPlayers[id] = players[id];
 		}
