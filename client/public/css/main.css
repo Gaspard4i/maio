@@ -404,6 +404,42 @@ canvas.background {
     transform: scale(1.05);
 }
 
+/* Menu Toggle Button */
+.toggle-menu-btn {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(52, 73, 94, 0.8);
+    color: #ecf0f1;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 1rem;
+    cursor: pointer;
+    z-index: 5;
+    transition: all 0.3s ease;
+}
+
+.toggle-menu-btn:hover {
+    background-color: #2ecc71;
+    transform: scale(1.05);
+}
+
+/* Style for start screen when displayed as overlay */
+.start-screen.overlay {
+    z-index: 2;
+    background-color: rgba(52, 73, 94, 0.9);
+    pointer-events: auto;
+}
+
+/* When in overlay mode, make sure elements are still clickable */
+.start-screen.overlay a, 
+.start-screen.overlay button,
+.start-screen.overlay input {
+    pointer-events: auto;
+}
+
 @media (max-width: 768px) {
     #start-screen h1 {
         font-size: 2rem;

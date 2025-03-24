@@ -210,7 +210,7 @@ function setupGlobalEvents() {
 	document.addEventListener('keydown', event => {
 		const activeElement = document.activeElement;
 		if (activeElement && activeElement.tagName === 'INPUT') return;
-		if (!canvas.classList.contains('background')) {
+		if (!canvas.classList.contains('background') && event.key !== 'Escape') {
 			handleKeyDown(event);
 		}
 	});
@@ -342,14 +342,42 @@ function startGame() {
 	const score = document.querySelector('.score');
 	const pseudoInput = document.querySelector('#player-pseudo');
 	const pseudo = pseudoInput.value.trim() || 'Joueur';
+	const toggleMenuBtn = document.querySelector('#toggle-menu-btn');
 
 	startScreen.classList.add('hidden');
 	canvas.classList.remove('background');
 	score.classList.remove('hidden');
+	toggleMenuBtn.classList.remove('hidden');
+	isPlayerDead = false;
 	socket.emit('joinGame', { pseudo: pseudo, startTime: Date.now() }); // Envoi du pseudo au serveur
 }
 
-// demmare le jeu
+// Setup toggle menu button
+function setupToggleMenuButton() {
+	const toggleMenuBtn = document.querySelector('#toggle-menu-btn');
+	const startScreen = document.querySelector('#start-screen');
+
+	toggleMenuBtn.addEventListener('click', event => {
+		event.preventDefault();
+		if (startScreen.classList.contains('hidden')) {
+			// Show menu
+			startScreen.classList.remove('hidden');
+			startScreen.classList.add('overlay');
+		} else {
+			// Hide menu
+			startScreen.classList.add('hidden');
+			startScreen.classList.remove('overlay');
+		}
+	});
+
+	// Add keyboard shortcut (Escape key) to toggle menu
+	document.addEventListener('keydown', event => {
+		if (event.key === 'Escape' && !canvas.classList.contains('background')) {
+			toggleMenuBtn.click();
+		}
+	});
+}
+
 function setupStartButton() {
 	document.querySelector('#start-game').addEventListener('click', event => {
 		event.preventDefault();
@@ -442,6 +470,7 @@ function init() {
 	setupGlobalEvents();
 	setupStartButton();
 	setupSettingsButton();
+	setupToggleMenuButton();
 
 	// init le mode de contrôle
 	document.addEventListener('DOMContentLoaded', () => {
