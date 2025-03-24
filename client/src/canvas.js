@@ -1,4 +1,10 @@
 import { loadSkinConfig } from './skinConfig.js';
+import {
+	drawAccelerationEffect,
+	drawFireBoostEffect,
+	drawGrowthEffect,
+	drawInvincibilityEffect,
+} from './effects.js';
 
 export const canvas = document.querySelector('.gameCanvas');
 export const context = canvas.getContext('2d');
@@ -90,8 +96,8 @@ export function interpolatePlayerPosition(player, deltaTime) {
 // ==================== FONCTIONS DE DESSIN ====================
 function drawDebugPlayer(context, player) {
 	context.save();
-	context.strokeStyle = 'white'; // Bordure blanche
-	context.fillStyle = 'rgba(255, 255, 255, 0.2)'; // Remplissage blanc transparent
+	context.strokeStyle = 'white';
+	context.fillStyle = 'rgba(255, 255, 255, 0.2)';
 	context.lineWidth = 3;
 	context.beginPath();
 	context.arc(player.x, player.y, player.radius, 0, 2 * Math.PI);
@@ -101,8 +107,13 @@ function drawDebugPlayer(context, player) {
 }
 
 export function drawPlayer(context, player) {
-	if (!skinConfig) return; // Attendre que la configuration soit chargée
+	if (!skinConfig) return;
 
+	if (player.isBoosted) {
+		drawFireBoostEffect(context, player);
+	} else if (player.isAccelerating) {
+		drawAccelerationEffect(context, player);
+	}
 	context.save();
 	context.translate(player.x, player.y);
 	context.scale(player.radius / 224, player.radius / 224);
@@ -111,7 +122,7 @@ export function drawPlayer(context, player) {
 	// Bordure du halo lumineux
 	context.beginPath();
 	context.ellipse(224.001, 391.986, 192, 48, 0, 0, 2 * Math.PI);
-	context.strokeStyle = skinConfig.halo.border.color; // Utilisation de skinConfig
+	context.strokeStyle = skinConfig.halo.border.color;
 	context.lineWidth = 1.5;
 	context.stroke();
 
@@ -127,26 +138,19 @@ export function drawPlayer(context, player) {
 	context.lineTo(35.516, 382.97);
 	context.bezierCurveTo(52.45, 360.789, 130.341, 344.014, 224, 344.014);
 	context.closePath();
-	context.fillStyle = skinConfig.halo.fill.color; // Utilisation de skinConfig
+	context.fillStyle = skinConfig.halo.fill.color;
+	context.fill();
+
+	// Halo lumineux sous le vaisseau
+	context.beginPath();
+	context.ellipse(224.001, 391.986, 192, 48, 0, 0, 2 * Math.PI);
+	context.fillStyle = skinConfig.halo.under.color;
 	context.fill();
 
 	// Base du vaisseau
 	context.beginPath();
 	context.ellipse(224.001, 199.986, 224, 96, 0, 0, 2 * Math.PI);
-	context.fillStyle = skinConfig.ship.base.color; // Utilisation de skinConfig
-	context.fill();
-
-	// Ombre sous le vaisseau
-	context.beginPath();
-	context.moveTo(224, 267.761);
-	context.bezierCurveTo(111.294, 267.761, 18.296, 232.051, 2.594, 185.612);
-	context.bezierCurveTo(0.92, 190.31, 0, 195.113, 0, 200.014);
-	context.bezierCurveTo(0, 253.033, 100.288, 296.014, 224, 296.014);
-	context.bezierCurveTo(347.712, 296.014, 448, 253.033, 448, 200.014);
-	context.bezierCurveTo(448, 195.112, 447.08, 190.31, 445.406, 185.612);
-	context.bezierCurveTo(429.705, 232.051, 336.707, 267.761, 224, 267.761);
-	context.closePath();
-	context.fillStyle = skinConfig.ship.shadow.color; // Utilisation de skinConfig
+	context.fillStyle = skinConfig.ship.base.color;
 	context.fill();
 
 	// Lumière et ombre sur la vitre du vaisseau
@@ -161,7 +165,20 @@ export function drawPlayer(context, player) {
 	context.bezierCurveTo(316.357, 110.301, 272.634, 104.014, 224.443, 104.014);
 	context.bezierCurveTo(177.25, 104.013, 133.524, 110.301, 96.972, 120.983);
 	context.closePath();
-	context.fillStyle = skinConfig.ship.window.lightShadow.color; // Utilisation de skinConfig
+	context.fillStyle = skinConfig.ship.window.lightShadow.color;
+	context.fill();
+
+	// Ombre sous le vaisseau
+	context.beginPath();
+	context.moveTo(224, 267.761);
+	context.bezierCurveTo(111.294, 267.761, 18.296, 232.051, 2.594, 185.612);
+	context.bezierCurveTo(0.92, 190.31, 0, 195.113, 0, 200.014);
+	context.bezierCurveTo(0, 253.033, 100.288, 296.014, 224, 296.014);
+	context.bezierCurveTo(347.712, 296.014, 448, 253.033, 448, 200.014);
+	context.bezierCurveTo(448, 195.112, 447.08, 190.31, 445.406, 185.612);
+	context.bezierCurveTo(429.705, 232.051, 336.707, 267.761, 224, 267.761);
+	context.closePath();
+	context.fillStyle = skinConfig.ship.shadow.color;
 	context.fill();
 
 	// Bordure entre la vitre et le vaisseau
@@ -174,7 +191,7 @@ export function drawPlayer(context, player) {
 	context.bezierCurveTo(287.914, 184.015, 319.457, 169.066, 346.901, 148.567);
 	context.bezierCurveTo(347.276, 148.288, 347.45, 147.829, 347.798, 147.518);
 	context.closePath();
-	context.fillStyle = skinConfig.ship.window.border.color; // Utilisation de skinConfig
+	context.fillStyle = skinConfig.ship.window.border.color;
 	context.fill();
 
 	// Zone lumineuse dans le vaisseau
@@ -187,7 +204,7 @@ export function drawPlayer(context, player) {
 	context.bezierCurveTo(287.914, 184.015, 319.457, 169.066, 346.901, 148.567);
 	context.bezierCurveTo(347.276, 148.288, 347.45, 147.829, 347.798, 147.518);
 	context.closePath();
-	context.fillStyle = skinConfig.ship.interior.light.color; // Utilisation de skinConfig
+	context.fillStyle = skinConfig.ship.interior.light.color;
 	context.fill();
 
 	// Haut de la vitre
@@ -198,7 +215,7 @@ export function drawPlayer(context, player) {
 	context.bezierCurveTo(157.47, 8.014, 103.835, 58.812, 96.972, 120.983);
 	context.bezierCurveTo(133.081, 110.302, 176.807, 104.014, 224, 104.014);
 	context.closePath();
-	context.fillStyle = skinConfig.ship.window.top.color; // Utilisation de skinConfig
+	context.fillStyle = skinConfig.ship.window.top.color;
 	context.fill();
 
 	// Alien à l'intérieur du vaisseau
@@ -211,7 +228,7 @@ export function drawPlayer(context, player) {
 	context.bezierCurveTo(168, 151.125, 171.598, 166.791, 177.35, 180.447);
 	context.bezierCurveTo(190.794, 182.674, 205.97, 184.014, 224, 184.014);
 	context.closePath();
-	context.fillStyle = skinConfig.alien.body.color; // Utilisation de skinConfig
+	context.fillStyle = skinConfig.alien.body.color;
 	context.fill();
 
 	// Cornes de l'alien
@@ -220,7 +237,7 @@ export function drawPlayer(context, player) {
 	context.bezierCurveTo(190, 80, 180, 70, 185, 50);
 	context.bezierCurveTo(190, 70, 200, 80, 210, 90);
 	context.closePath();
-	context.fillStyle = skinConfig.alien.horn.left.color; // Utilisation de skinConfig
+	context.fillStyle = skinConfig.alien.horn.left.color;
 	context.fill();
 
 	context.beginPath();
@@ -228,7 +245,7 @@ export function drawPlayer(context, player) {
 	context.bezierCurveTo(258, 80, 268, 70, 263, 50);
 	context.bezierCurveTo(258, 70, 248, 80, 238, 90);
 	context.closePath();
-	context.fillStyle = skinConfig.alien.horn.right.color; // Utilisation de skinConfig
+	context.fillStyle = skinConfig.alien.horn.right.color;
 	context.fill();
 
 	// Ronds autour des phares du vaisseau
@@ -238,7 +255,7 @@ export function drawPlayer(context, player) {
 	context.arc(80, 192.014, 32, 0, 2 * Math.PI);
 	context.moveTo(368, 192.014);
 	context.arc(368, 192.014, 32, 0, 2 * Math.PI);
-	context.fillStyle = skinConfig.ship.lights.rings.color; // Utilisation de skinConfig
+	context.fillStyle = skinConfig.ship.lights.rings.color;
 	context.fill();
 
 	// Oeil gauche de l'alien
@@ -252,7 +269,7 @@ export function drawPlayer(context, player) {
 		0,
 		2 * Math.PI
 	);
-	context.fillStyle = skinConfig.alien.eye.left.color; // Utilisation de skinConfig
+	context.fillStyle = skinConfig.alien.eye.left.color;
 	context.fill();
 
 	// Oeil droit de l'alien
@@ -266,43 +283,49 @@ export function drawPlayer(context, player) {
 		0,
 		2 * Math.PI
 	);
-	context.fillStyle = skinConfig.alien.eye.right.color; // Utilisation de skinConfig
+	context.fillStyle = skinConfig.alien.eye.right.color;
 	context.fill();
 
 	// Lumière sur la vitre du vaisseau (rendue transparente)
 	context.beginPath();
 	context.moveTo(219.53, 79.466);
 	context.arc(188.521, 87.014, 32, 0, 2 * Math.PI);
-	context.fillStyle = skinConfig.ship.window.light.color; // Utilisation de skinConfig
-	context.fill();
-
-	// Halo lumineux sous le vaisseau
-	context.beginPath();
-	context.ellipse(224.001, 391.986, 192, 48, 0, 0, 2 * Math.PI);
-	context.fillStyle = skinConfig.halo.under.color; // Utilisation de skinConfig
+	context.fillStyle = skinConfig.ship.window.light.color;
 	context.fill();
 
 	// Phare central du vaisseau
 	context.beginPath();
 	context.arc(224, 216.014, 16, 0, 2 * Math.PI);
-	context.fillStyle = skinConfig.ship.light.center.color; // Utilisation de skinConfig
+	context.fillStyle = skinConfig.ship.light.center.color;
 	context.fill();
 
 	// Phare gauche du vaisseau
 	context.beginPath();
 	context.arc(80, 192.014, 16, 0, 2 * Math.PI);
-	context.fillStyle = skinConfig.ship.light.left.color; // Utilisation de skinConfig
+	context.fillStyle = skinConfig.ship.light.left.color;
 	context.fill();
 
 	// Phare droit du vaisseau
 	context.beginPath();
 	context.arc(368, 192.014, 16, 0, 2 * Math.PI);
-	context.fillStyle = skinConfig.ship.light.right.color; // Utilisation de skinConfig
+	context.fillStyle = skinConfig.ship.light.right.color;
 	context.fill();
 
 	context.restore();
 	if (debugPlayerEnabled) {
 		drawDebugPlayer(context, player); // debug
+	}
+
+	if (player.isInvincible) {
+		drawInvincibilityEffect(context, player);
+	}
+
+	if (player.justGotBigger) {
+		drawGrowthEffect(context, player);
+	}
+
+	if (player.justEatSomeone) {
+		// ... code pour le halo quand on mange quelqu'un ...
 	}
 }
 
