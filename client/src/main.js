@@ -1,4 +1,10 @@
-import { canvas, context, observeCanvas, drawGame } from './canvas.js';
+import {
+	canvas,
+	context,
+	observeCanvas,
+	drawGame,
+	drawPlayer,
+} from './canvas.js';
 import { io } from 'socket.io-client';
 import { Camera } from './camera.js';
 import {
@@ -25,6 +31,9 @@ const otherPlayers = {};
 let isPlayerDead = false;
 let globalLeaderboard = [];
 
+// Variable globale pour stocker le dessin personnalisé
+let playerCustomDrawing = null;
+
 // Gestion des événements socket
 function setupSocketEvents() {
 	socket.on('connect', () => {
@@ -46,11 +55,29 @@ function updatePlayers(players) {
 	}
 	for (const id in players) {
 		if (id === socket.id) {
+			// Conserver le customDrawing s'il existe déjà dans currentPlayer
+			const existingDrawing = currentPlayer.customDrawing;
+
+			// Mettre à jour les propriétés du joueur
 			Object.assign(currentPlayer, players[id]);
+
+			// Restaurer le customDrawing si nécessaire
+			if (existingDrawing && !currentPlayer.customDrawing) {
+				currentPlayer.customDrawing = existingDrawing;
+			}
+
 			// Update progress bar with current player score
 			updateProgressBar(currentPlayer.score || 0, globalLeaderboard);
 		} else {
+			// Pour les autres joueurs, conserver leur dessin personnalisé s'il existe
+			const existingDrawing =
+				otherPlayers[id] && otherPlayers[id].customDrawing;
 			otherPlayers[id] = players[id];
+
+			// Restaurer le dessin s'il existait précédemment mais n'est pas dans la mise à jour
+			if (existingDrawing && !otherPlayers[id].customDrawing) {
+				otherPlayers[id].customDrawing = existingDrawing;
+			}
 		}
 	}
 }
@@ -305,6 +332,162 @@ function setupSettingsButton() {
 	} else {
 		fpsCounter.classList.add('hidden');
 	}
+
+	// Écouteurs d'événements pour le bouton de personnalisation d'alien
+	const customAlienButton = document.getElementById('custom-alien-button');
+
+	// Gérer le click sur le bouton
+	customAlienButton.addEventListener('click', event => {
+		event.preventDefault();
+		settingsPanel.classList.add('hidden');
+		document.getElementById('custom-alien-screen').classList.remove('hidden');
+
+		// Initialiser le canvas de prévisualisation
+		initCustomAlienCanvas();
+	});
+
+	// Gérer le retour depuis l'écran de personnalisation
+	document.getElementById('custom-alien-back').addEventListener('click', () => {
+		document.getElementById('custom-alien-screen').classList.add('hidden');
+	});
+}
+
+// Fonction pour initialiser le canvas de prévisualisation de l'alien
+function initCustomAlienCanvas() {
+	const customCanvas = document.querySelector('.customAlien');
+	const ctx = customCanvas.getContext('2d');
+
+	// Redimensionner le canvas pour éviter les déformations
+	customCanvas.width = 300;
+	customCanvas.height = 300;
+
+	// Variables pour le dessin
+	let isDrawing = false;
+	let lastX = 0;
+	let lastY = 0;
+
+	// Éléments d'interface pour le dessin
+	const colorPicker = document.getElementById('drawing-color');
+	const brushSize = document.getElementById('brush-size');
+	const clearButton = document.getElementById('clear-drawing');
+	const saveButton = document.getElementById('save-drawing');
+
+	// Créer un canvas secondaire pour stocker les dessins
+	const drawingCanvas = document.createElement('canvas');
+	drawingCanvas.width = customCanvas.width;
+	drawingCanvas.height = customCanvas.height;
+	const drawingCtx = drawingCanvas.getContext('2d');
+
+	// Charger le dessin précédent si disponible
+	const savedDrawing = localStorage.getItem('playerCustomDrawing');
+	if (savedDrawing) {
+		const savedImage = new Image();
+		savedImage.onload = () => {
+			drawingCtx.drawImage(savedImage, 0, 0);
+		};
+		savedImage.src = savedDrawing;
+	}
+
+	// Créer un joueur factice pour la prévisualisation
+	const previewPlayer = {
+		x: customCanvas.width / 2,
+		y: customCanvas.height / 2,
+		radius: 80,
+		direction: 0,
+		color: currentPlayer.color || '#3498db',
+		eyes: currentPlayer.eyes || 'default',
+		mouth: currentPlayer.mouth || 'default',
+		pseudo: currentPlayer.pseudo || 'Aperçu',
+		accelerating: false,
+	};
+
+	// Fonction qui dessine sur le canvas
+	function draw(e) {
+		if (!isDrawing) return;
+
+		// Obtenir la position de la souris relative au canvas
+		const rect = customCanvas.getBoundingClientRect();
+		const x = e.clientX - rect.left;
+		const y = e.clientY - rect.top;
+
+		// Configurer le style de dessin
+		drawingCtx.lineJoin = 'round';
+		drawingCtx.lineCap = 'round';
+		drawingCtx.strokeStyle = colorPicker.value;
+		drawingCtx.lineWidth = brushSize.value;
+
+		// Dessiner une ligne du dernier point au point actuel
+		drawingCtx.beginPath();
+		drawingCtx.moveTo(lastX, lastY);
+		drawingCtx.lineTo(x, y);
+		drawingCtx.stroke();
+
+		// Mettre à jour les dernières coordonnées
+		lastX = x;
+		lastY = y;
+	}
+
+	// Gestionnaires d'événements pour le dessin
+	customCanvas.addEventListener('mousedown', e => {
+		isDrawing = true;
+		const rect = customCanvas.getBoundingClientRect();
+		lastX = e.clientX - rect.left;
+		lastY = e.clientY - rect.top;
+	});
+
+	customCanvas.addEventListener('mousemove', draw);
+
+	customCanvas.addEventListener('mouseup', () => {
+		isDrawing = false;
+	});
+
+	customCanvas.addEventListener('mouseout', () => {
+		isDrawing = false;
+	});
+
+	// Bouton pour effacer le dessin
+	clearButton.addEventListener('click', () => {
+		drawingCtx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+	});
+
+	// Bouton pour sauvegarder le dessin
+	saveButton.addEventListener('click', () => {
+		// Sauvegarder le dessin sous forme d'image base64
+		const imageData = drawingCanvas.toDataURL('image/png');
+		localStorage.setItem('playerCustomDrawing', imageData);
+		playerCustomDrawing = imageData;
+
+		// Afficher une notification
+		const notification = document.createElement('div');
+		notification.className = 'save-notification';
+		notification.textContent = 'Dessin sauvegardé !';
+		document.querySelector('.custom-alien-content').appendChild(notification);
+
+		// Faire disparaître la notification après 2 secondes
+		setTimeout(() => {
+			notification.remove();
+		}, 2000);
+	});
+
+	// Animation pour rendre l'aperçu vivant
+	function animatePreview() {
+		// Effacer le canvas principal
+		ctx.clearRect(0, 0, customCanvas.width, customCanvas.height);
+
+		// Faire bouger légèrement le joueur pour un effet d'animation
+		previewPlayer.direction = Math.sin(Date.now() / 1000) * 0.5;
+		previewPlayer.accelerating = Math.sin(Date.now() / 500) > 0;
+
+		// Dessiner le joueur de base
+		drawPlayer(ctx, previewPlayer);
+
+		// Superposer le dessin de l'utilisateur par-dessus
+		ctx.drawImage(drawingCanvas, 0, 0);
+
+		requestAnimationFrame(animatePreview);
+	}
+
+	animatePreview();
 }
 
 function setControlMode(mode) {
@@ -494,6 +677,7 @@ function quitGame() {
 	isPlayerDead = false;
 }
 
+// Modifier la fonction startGame pour inclure le dessin personnalisé
 function startGame() {
 	const startScreen = document.querySelector('#start-screen');
 	const canvas = document.querySelector('.gameCanvas');
@@ -508,7 +692,32 @@ function startGame() {
 	score.classList.remove('hidden');
 	toggleMenuBtn.classList.remove('hidden');
 	isPlayerDead = false;
-	socket.emit('joinGame', { pseudo: pseudo, startTime: Date.now() });
+
+	// Charger le dessin personnalisé depuis le localStorage si pas déjà en mémoire
+	if (!playerCustomDrawing) {
+		playerCustomDrawing = localStorage.getItem('playerCustomDrawing');
+	}
+
+	// Vérifier si le dessin existe avant de l'envoyer
+	console.log(
+		'Envoi du dessin personnalisé:',
+		playerCustomDrawing ? 'Oui' : 'Non'
+	);
+
+	// Ajouter le dessin personnalisé aux données du joueur et au joueur local
+	const gameData = {
+		pseudo: pseudo,
+		startTime: Date.now(),
+	};
+
+	// Ajouter le dessin uniquement s'il existe
+	if (playerCustomDrawing) {
+		gameData.customDrawing = playerCustomDrawing;
+		// Ajouter également au joueur local pour le voir immédiatement
+		currentPlayer.customDrawing = playerCustomDrawing;
+	}
+
+	socket.emit('joinGame', gameData);
 }
 
 // init principale

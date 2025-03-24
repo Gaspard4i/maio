@@ -450,6 +450,163 @@ canvas.background {
     color: #e74c3c; /* Red color for quit button hover */
 }
 
+/* Custom Alien Screen Styles */
+.custom-alien-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(52, 73, 94, 0.9);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    color: #ecf0f1;
+    font-family: 'Luckiest Guy', cursive;
+    box-sizing: border-box;
+}
+
+.custom-alien-content {
+    width: 80%;
+    max-width: 900px;
+    height: 60%;
+    background-color: rgba(45, 52, 75, 0.8);
+    border-radius: 15px;
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    box-sizing: border-box;
+}
+
+/* Style du canvas de personnalisation */
+.customAlien {
+    background-color: rgba(41, 128, 185, 0.3);
+    border-radius: 10px;
+    margin: 0 auto 20px;
+    display: block;
+    width: 300px;
+    height: 300px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    transform: translateX(0);
+    left: 0;
+    right: 0;
+    cursor: crosshair;  /* Curseur en forme de croix pour le dessin */
+}
+
+/* Outils de dessin */
+.drawing-tools {
+    width: 300px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0 auto 15px;
+    background-color: rgba(41, 128, 185, 0.2);
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.color-picker, .brush-size {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.color-picker span, .brush-size span {
+    margin-right: 10px;
+    font-family: 'Chewy', cursive;
+    font-size: 1rem;
+}
+
+.tool-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.tool-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-family: 'Luckiest Guy', cursive;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+    margin: 0 5px;
+}
+
+.tool-button:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+}
+
+.tool-button.save-button {
+    background-color: #2ecc71;
+}
+
+.tool-button.save-button:hover {
+    background-color: #27ae60;
+}
+
+.save-notification {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(46, 204, 113, 0.8);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-family: 'Chewy', cursive;
+    animation: fadeIn 0.3s, fadeOut 0.3s 1.7s;
+    z-index: 5;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* Ajout des styles manquants pour le bouton Custom Mon Alien */
+#custom-alien-button {
+    background-color: #9b59b6;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-family: 'Luckiest Guy', cursive;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+#custom-alien-button:hover {
+    background-color: #8e44ad;
+    transform: scale(1.05);
+}
+
+.settings-section #custom-alien-button {
+    display: block;
+    margin: 10px auto;
+}
+
 @media (max-width: 768px) {
     #start-screen h1 {
         font-size: 2rem;

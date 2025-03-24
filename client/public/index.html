@@ -254,6 +254,10 @@
                     <p class="mouse-info hidden">Déplacez la souris pour diriger, clic gauche pour accélérer</p>
                 </div>
             </div>
+            <div class="settings-section">
+                <h2>Personnalisation</h2>
+                <button id="custom-alien-button" class="settings-button">Custom Mon Alien</button>
+            </div>
         </div>
     </div>
 
@@ -272,5 +276,29 @@
     <div class="score hidden"><h2>Score: 0</h2></div>
     <div id="fps-counter" class="fps-counter hidden">0 FPS</div>
     <button id="toggle-menu-btn" class="toggle-menu-btn hidden">Menu</button>
+    
+    <!-- Custom Alien Screen -->
+    <div class="custom-alien-screen hidden" id="custom-alien-screen">
+        <h1 class="screen-title">Personnaliser Mon Alien</h1>
+        <div class="custom-alien-content">
+            <canvas class="customAlien" width="300" height="300"></canvas>
+            <div class="drawing-tools">
+                <div class="color-picker">
+                    <span>Couleur:</span>
+                    <input type="color" id="drawing-color" value="#ffffff">
+                </div>
+                <div class="brush-size">
+                    <span>Taille:</span>
+                    <input type="range" id="brush-size" min="1" max="20" value="5">
+                </div>
+                <div class="tool-buttons">
+                    <button id="clear-drawing" class="tool-button">Effacer</button>
+                    <button id="save-drawing" class="tool-button save-button">Sauvegarder</button>
+                </div>
+            </div>
+            <p class="preview-info">Aperçu de votre alien en jeu</p>
+        </div>
+        <button class="back-button" id="custom-alien-back">Retour</button>
+    </div>
 </body>
 </html>

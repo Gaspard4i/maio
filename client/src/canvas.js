@@ -299,6 +299,36 @@ export function drawPlayer(context, player) {
 	context.textAlign = 'center';
 	context.fillText(pseudo, player.x, player.y - player.radius - 10);
 	context.restore();
+
+	// Après avoir dessiné le joueur de base, vérifier s'il a un dessin personnalisé
+	if (player.customDrawing) {
+		try {
+			// Vérifier si customDrawing est une chaîne (URL/base64) ou une Image
+			if (typeof player.customDrawing === 'string') {
+				// Créer une image et la mettre en cache pour éviter de la recréer à chaque frame
+				if (!player._customDrawingImg) {
+					player._customDrawingImg = new Image();
+					player._customDrawingImg.src = player.customDrawing;
+				}
+
+				// Dessiner l'image si elle est chargée
+				if (player._customDrawingImg.complete) {
+					const drawX = player.x - player.radius;
+					const drawY = player.y - player.radius;
+					const drawSize = player.radius * 2;
+					context.drawImage(
+						player._customDrawingImg,
+						drawX,
+						drawY,
+						drawSize,
+						drawSize
+					);
+				}
+			}
+		} catch (error) {
+			console.error('Erreur lors du rendu du dessin personnalisé:', error);
+		}
+	}
 }
 
 function adjustSplatterPosition(context, stain) {
