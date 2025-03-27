@@ -250,7 +250,8 @@ export class Player extends Entity {
 	}
 
 	applyAcceleration() {
-		if (this.isAccelerating) {
+		if (this.keys['Shift']) {
+			this.isAccelerating = true;
 			this.radius = Math.max(10, this.radius - 0.1);
 		}
 	}
