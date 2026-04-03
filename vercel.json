@@ -1,0 +1,6 @@
+{
+  "name": "maio",
+  "buildCommand": "npx webpack --mode=production",
+  "outputDirectory": "client/public",
+  "installCommand": "npm install"
+}
