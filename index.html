@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>MA.IO</title>
+    <link rel="icon" href="./images/favicon.ico" />
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/home.css" />
+    <script src="build/main.bundle.js" defer></script>
+</head>
+<body>
+    <!-- User Profile & Progress Bar -->
+    <header id="home-header">
+        <div class="progress-bar">
+            <div class="progress" style="width: 0%"></div>
+            <div class="score-text"></div>
+        </div>
+    </header>
+    <div class="start-screen" id="start-screen">
+
+        <!-- Main Game Menu -->
+        <main id="home-main">
+            <!-- Leaderboard -->
+            <section class="leaderboard">
+                <h2><a id="score-button" href="">CLASSEMENT</a></h2>
+                <div id="mini-score-screen">
+                    <table>
+                        <tbody>
+                            <!-- Le contenu sera ajouté dynamiquement -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Play Button & Game Title -->
+            <section class="main-menu">
+                <div class="title">
+                    <img src="./images/maio.png" alt="Logo MA.IO">
+                    <div class="menu-options">
+                        <img src="images/UI/setting.png" alt="Réglages">
+                    </div>
+                </div>
+                <!-- Zone de texte pour entrer le pseudo -->
+                <div class="pseudo-input">
+                    <input type="text" id="player-pseudo" placeholder="Entrez votre pseudo" maxlength="20">
+                </div>
+                <div class="play-text" id="play-button">
+                    <a href="#" id="start-game">Jouer</a>
+                </div>
+                <!-- message on game lost -->
+                <div class="lost-message hidden" id="lost-message">PERDU!!</div>
+            </section>
+
+        </main>
+
+        <!-- Bottom Navigation Bar -->
+        <footer id="home-footer">
+            <nav>
+                <a id="credits-button" href="">Crédits</a>
+                <a id="about-button" href="">À propos</a>
+                <a id="contact-button" href="">Contact</a>
+            </nav>
+        </footer>
+    </div>
+    <!-- credit screen -->
+    <div class="hidden credits-screen" id="credits-screen">
+        <h1 class="screen-title">Crédits</h1>
+        <table>
+            <tr>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Groupe</th>
+                <th>Pseudo</th>
+                <th>Jeu préféré</th>
+                <th>Taux de participation</th>
+            </tr>
+            <tr class="Florian">
+                <td>Florian</td>
+                <td>GAMBIRASIO</td>
+                <td>G</td>
+                <td>HydroFlo</td>
+                <td>Persona 5 Royal</td>
+                <td title="33.33%" data-percentage="33.3%">100*ln(e(1))/3 %</td>
+            </tr>
+        
+            <tr class="Gaspard">
+                <td>Gaspard</td>
+                <td>CATRY</td>
+                <td>G</td>
+                <td>Gazai</td>
+                <td>Minecraft</td>
+                <td title="33.33%" data-percentage="33.3%">100000/3000 %</td>
+            </tr>
+            <tr class="ai-contributor hidden">
+                <td>GasAI</td>
+                <td>NEURAL</td>
+                <td>IA</td>
+                <td>CodeWhisperer</td>
+                <td>Neural Chess</td>
+                <td title="99.42%" data-percentage="99.4%">π^4 %</td>
+            </tr>
+            <tr class="Gabriel">
+                <td>Gabriel</td>
+                <td>MILLE</td>
+                <td>G</td>
+                <td>SENSA</td>
+                <td>Rocket League</td>
+                <td title="33.33%" data-percentage="33.3%">100*(sin(pi/2))/3 %</td>
+            </tr>
+            <tr class="ai-contributor hidden">
+                <td>GbriLLM</td>
+                <td>QUANTUM</td>
+                <td>IA</td>
+                <td>BardGab</td>
+                <td>Deep Starcraft</td>
+                <td title="97.31%" data-percentage="97.3%">e^4.578 %</td>
+            </tr>
+        </table>
+        <button class="back-button" id="credits-back">Retour</button>
+    </div>
+    <!-- score screen -->
+    <div class="hidden score-screen" id="score-screen">
+        <h1 class="screen-title">Meilleurs Scores</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Pseudo</th>
+                    <th>Score</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <button class="back-button" id="score-back">Retour</button>
+    </div>
+
+    <!-- about screen -->
+    <div class="hidden about-screen" id="about-screen">
+        <h1 class="screen-title">À propos</h1>
+        <div class="about-content">
+            <div class="about-section">
+                <h2>Qu'est-ce que MA.IO?</h2>
+                <p>MA.IO est un jeu multijoueur en ligne où vous incarnez un alien qui, après avoir goûté à la mayonnaise, en est devenu complètement accro. Votre mission : dévorer toutes les taches de mayo dans l'arène tout en affrontant d'autres joueurs pour devenir le maître de la sauce !</p>
+            </div>
+            
+            <div class="about-section">
+                <h2>Comment jouer</h2>
+                <ul>
+                    <li>Utilisez les <strong>flèches directionnelles</strong> ou la <strong>souris</strong> pour vous déplacer</li>
+                    <li>Appuyez sur <strong>Shift</strong> pour accélérer mais perdre de la masse</li>
+                    <li>Mangez les petites taches pour grandir</li>
+                    <li>Mangez les joueurs plus petits que vous</li>
+                    <li>Évitez les joueurs plus grands !</li>
+                    <li>La <strong>barre de progression</strong> affiche soit votre score actuel si vous êtes le meilleur du serveur, soit votre score par rapport au meilleur score du serveur</li>
+                </ul>
+            </div>
+            <div class="about-section">
+                <h2>Types de bonus</h2>
+                <ul>
+                    <li><span class="bonus-vitesse">Sauce épicée</span> - Augmente temporairement votre vitesse</li>
+                    <li><span class="bonus-taille">Sauce barbecue</span> - Augmente votre taille</li>
+                </ul>
+            </div>
+            
+            <div class="about-section">
+                <h2>Développé dans le cadre de la SAE4 JSAE</h2>
+                <p>Université de Lille - 2024</p>
+            </div>
+        </div>
+        <button class="back-button" id="about-back">Retour</button>
+    </div>
+    
+    <!-- contact screen -->
+    <div class="hidden contact-screen" id="contact-screen">
+        <h1 class="screen-title">Contact</h1>
+        <div class="contact-content">
+            <div class="contact-section">
+                <h2>Équipe de développement</h2>
+                <table>
+                    <tr>
+                        <th>Nom</th>
+                        <th>GitLab</th>
+                        <th>Email</th>
+                    </tr>
+                    <tr class="Florian">
+                        <td>Florian GAMBIRASIO</td>
+                        <td><a href="https://gitlab.univ-lille.fr/florian.gambirasio.etu" target="_blank">@florian.gambirasio.etu</a></td>
+                        <td>florian.gambirasio.etu@univ-lille.fr</td>
+                    </tr>
+                    <tr class="Gaspard">
+                        <td>Gaspard CATRY</td>
+                        <td><a href="https://gitlab.univ-lille.fr/gaspard.catry.etu" target="_blank">@gaspard.catry.etu</a></td>
+                        <td>gaspard.catry.etu@univ-lille.fr</td>
+                    </tr>
+                    <tr class="Gabriel">
+                        <td>Gabriel MILLE</td>
+                        <td><a href="https://gitlab.univ-lille.fr/gabriel.mille.etu" target="_blank">@gabriel.mille.etu</a></td>
+                        <td>gabriel.mille.etu@univ-lille.fr</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="contact-section">
+                <h2>Contribuer au projet</h2>
+                <p>Le code source du projet est disponible sur GitLab :</p>
+                <p><a href="https://gitlab.univ-lille.fr/jsae/projets-2024-2025/groupe-g/equipe-5" target="_blank">https://gitlab.univ-lille.fr/jsae/projets-2024-2025/groupe-g/equipe-5</a></p>
+            </div>
+            
+            <div class="contact-section">
+                <h2>Signaler un bug</h2>
+                <p>Si vous rencontrez un problème ou un bug, n'hésitez pas à ouvrir une issue sur notre GitLab.</p>
+            </div>
+        </div>
+        <button class="back-button" id="contact-back">Retour</button>
+    </div>
+
+    <!-- settings panel -->
+    <div class="hidden settings-panel" id="settings-panel">
+        <div class="settings-header">
+            <h1 class="settings-title">Paramètres</h1>
+            <img src="images/UI/close.png" alt="Fermer" id="close-settings" class="close-icon">
+        </div>
+        <div class="settings-content">
+            <div class="settings-section">
+                <h2>Options de jeu</h2>
+                <div class="setting-option">
+                    <label for="fps-toggle">Afficher FPS</label>
+                    <input type="checkbox" id="fps-toggle">
+                </div>
+            </div>
+            <div class="settings-section">
+                <h2>Contrôles</h2>
+                <div class="control-toggle-container">
+                    <!-- SVG du clavier -->
+                    <svg class="control-icon keyboard-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor" d="M20,5H4C2.9,5,2,5.9,2,7v10c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V7C22,5.9,21.1,5,20,5z M9,7h2v2H9V7z M13,7h2v2h-2V7z M17,7h2v2h-2V7z M9,11h2v2H9V11z M13,11h2v2h-2V11z M17,11h2v2h-2V11z M5,7h2v2H5V7z M5,11h2v2H5V11z M5,17h14v2H5V17z"/>
+                    </svg>
+                    
+                    <!-- Bouton toggle -->
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="control-toggle" class="toggle-input">
+                        <label for="control-toggle" class="toggle-label"></label>
+                    </div>
+                    
+                    <!-- SVG de la souris -->
+                    <svg class="control-icon mouse-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor" d="M12,4C9.24,4,7,6.24,7,9v6c0,2.76,2.24,5,5,5s5-2.24,5-5V9C17,6.24,14.76,4,12,4z M12,18c-1.66,0-3-1.34-3-3V9c0-1.66,1.34-3,3-3s3,1.34,3,3v6C15,16.66,13.66,18,12,18z M11,6.5V11h2V6.5C13,6.22,12.78,6,12.5,6S12,6.22,12,6.5v0C12,6.78,11.78,7,11.5,7S11,6.78,11,6.5z"/>
+                    </svg>
+                </div>
+                <div class="controls-info">
+                    <p class="keyboard-info">Flèches directionnelles pour vous déplacer, Shift pour accélérer</p>
+                    <p class="mouse-info hidden">Déplacez la souris pour diriger, clic gauche pour accélérer</p>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h2>Personnalisation</h2>
+                <button id="custom-alien-button" class="settings-button">Custom Mon Alien</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- game over screen -->
+    <div class="hidden game-over-screen" id="game-over-screen">
+        <h1 class="screen-title game-over-title">PERDU !!</h1>
+        <div class="game-over-content">
+            <div class="game-over-buttons">
+                <button class="restart-button" id="restart-game">Rejouer</button>
+                <button class="home-button" id="back-to-home">Accueil</button>
+            </div>
+        </div>
+    </div>
+
+    <canvas class="gameCanvas background" width="600" height="400"></canvas>
+    <div class="score hidden"><h2>Score: 0</h2></div>
+    <div id="fps-counter" class="fps-counter hidden">0 FPS</div>
+    <button id="toggle-menu-btn" class="toggle-menu-btn hidden">Menu</button>
+    
+    <!-- Custom Alien Screen -->
+    <div class="custom-alien-screen hidden" id="custom-alien-screen">
+        <h1 class="screen-title">Personnaliser Mon Alien</h1>
+        <div class="custom-alien-content">
+            <canvas class="customAlien" width="300" height="300"></canvas>
+            <div class="drawing-tools">
+                <div class="color-picker">
+                    <span>Couleur:</span>
+                    <input type="color" id="drawing-color" value="#ffffff">
+                </div>
+                <div class="brush-size">
+                    <span>Taille:</span>
+                    <input type="range" id="brush-size" min="1" max="20" value="5">
+                </div>
+                <div class="tool-buttons">
+                    <button id="clear-drawing" class="tool-button">Effacer</button>
+                    <button id="save-drawing" class="tool-button save-button">Sauvegarder</button>
+                </div>
+            </div>
+            <p class="preview-info">Aperçu de votre alien en jeu</p>
+        </div>
+        <button class="back-button" id="custom-alien-back">Retour</button>
+    </div>
+</body>
+</html>

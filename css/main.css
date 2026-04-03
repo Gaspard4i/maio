@@ -1,0 +1,669 @@
+@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Chewy&display=swap');
+
+canvas {
+    background-color: #34495e;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Désactive le défilement */
+    width: 100vw;
+    height: 100vh;
+}
+
+.start-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: rgba(52, 73, 94, 0.5); 
+    color: #ecf0f1;
+    font-family: 'Luckiest Guy', cursive;
+    z-index: 1;
+    position: relative;
+    padding: 1rem;
+    text-align: center;
+}
+
+#start-screen h1 {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+}
+
+#start-screen a {
+    padding: 1rem 2rem;
+    color: #ecf0f1;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    margin: 10px;
+}
+
+#start-screen a:hover {
+    color: #2ecc71;
+}
+
+#start-screen .home-button:hover {
+    color: #e74c3c;  /* Red color */
+}
+
+canvas.background {
+    pointer-events: none; 
+    z-index: 0;
+}
+
+.lost-message {
+    position: absolute;
+    top: 30%;
+    left: 25%;
+    transform: rotate(-25deg); /* Inclinaison du texte */
+    font-size: 6rem;
+    font-family: 'Luckiest Guy', cursive;
+    color: red;
+    text-shadow: 3px 3px 5px black;
+    z-index: 2;
+    pointer-events: none; /* Empêche l'interaction avec cet élément */
+}
+
+/* Credits & Score Screens */
+.credits-screen, .score-screen, .about-screen, .contact-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(52, 73, 94, 0.9);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    color: #ecf0f1;
+    font-family: 'Luckiest Guy', cursive;
+    overflow-y: auto;
+}
+
+#credits-screen table, #score-screen table, #contact-screen table {
+    width: 80%;
+    max-width: 900px;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    background-color: rgba(45, 52, 75, 0.8);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+#credits-screen th, #score-screen th, #contact-screen th {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    text-align: center;
+    padding: 1rem;
+    font-size: 1.2rem;
+}
+
+#credits-screen td, #score-screen td, #contact-screen td {
+    padding: 0.8rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 1rem;
+}
+
+/* Credits specific styling */
+#credits-screen tr:hover td {
+    background-color: rgba(46, 204, 113, 0.2);
+}
+
+#credits-screen tr.Florian td {
+    background-color: rgba(52, 152, 219, 0.2);
+}
+
+#credits-screen tr.Gaspard td {
+    background-color: rgba(155, 89, 182, 0.2);
+}
+
+#credits-screen tr.Gabriel td {
+    background-color: rgba(231, 76, 60, 0.2);
+}
+
+/* Score specific styling */
+#score-screen tr.first td {
+    background-color: rgba(241, 196, 15, 0.3);
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+#score-screen tr.second td {
+    background-color: rgba(189, 195, 199, 0.3);
+}
+
+#score-screen tr.third td {
+    background-color: rgba(211, 84, 0, 0.3);
+}
+
+/* Score screen specific styling */
+.score-screen {
+    /* ...existing code... */
+    overflow-y: auto;
+}
+
+#score-screen table {
+    width: 80%;
+    max-width: 900px;
+    max-height: 70vh;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    background-color: rgba(45, 52, 75, 0.8);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+#score-screen table tbody {
+    display: block;
+    max-height: 50vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #3498db rgba(45, 52, 75, 0.5);
+}
+
+#score-screen table thead, 
+#score-screen table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+#score-screen table thead {
+    background-color: #2c3e50;
+    width: calc(100% - 0.7em); /* Ajustement pour la barre de défilement */
+}
+
+#score-screen th {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    text-align: center;
+    padding: 1rem;
+    font-size: 1.2rem;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+/* Styling des scrollbars */
+#score-screen table tbody::-webkit-scrollbar {
+    width: 0.7em;
+}
+
+#score-screen table tbody::-webkit-scrollbar-track {
+    background: rgba(45, 52, 75, 0.5);
+    border-radius: 10px;
+}
+
+#score-screen table tbody::-webkit-scrollbar-thumb {
+    background-color: #3498db;
+    border-radius: 10px;
+}
+
+/* About screen specific styling */
+.about-content, .contact-content {
+    width: 80%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.about-section, .contact-section {
+    background-color: rgba(45, 52, 75, 0.8);
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.about-section h2, .contact-section h2 {
+    color: #3498db;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.about-section p, .contact-section p {
+    line-height: 1.6;
+    font-family: 'Chewy', cursive;
+    font-size: 1.1rem;
+}
+
+.about-section ul {
+    list-style-type: none; /* Changed from disc to none to remove bullet points */
+    padding-left: 0.5rem; /* Reduced padding since we don't have bullets */
+    font-family: 'Chewy', cursive;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.bonus-vitesse {
+    color: #ff4500; /* Changed from #2ecc71 (green) to #ff4500 (sauce épicée) */
+    font-weight: bold;
+}
+
+.bonus-taille {
+    color: #8b4513; /* Changed from #3498db (blue) to #8b4513 (sauce barbecue) */
+    font-weight: bold;
+}
+
+/* Contact screen specific styling */
+#contact-screen a {
+    color: #3498db;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+#contact-screen a:hover {
+    color: #2ecc71;
+    text-decoration: underline;
+}
+
+#contact-screen table {
+    margin-left: auto; /* Center the table */
+    margin-right: auto; /* Center the table */
+    text-align: center; /* Center the text within cells */
+}
+
+/* Back button for screens */
+.back-button {
+    padding: 0.8rem 1.5rem;
+    background-color: #e74c3c;
+    color: #ecf0f1;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+}
+
+/* Screen title */
+.screen-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Game Over Screen */
+.game-over-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(52, 73, 94, 0.9);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    color: #ecf0f1;
+    font-family: 'Luckiest Guy', cursive;
+}
+
+.game-over-title {
+    color: #e74c3c;
+    font-size: 5rem;
+    text-shadow: 3px 3px 5px black;
+    margin-bottom: 2rem;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.game-over-content {
+    width: 80%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.game-over-section {
+    background-color: rgba(45, 52, 75, 0.8);
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.game-over-section h2 {
+    color: #3498db;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+}
+
+#final-score {
+    font-size: 2.5rem;
+    color: #f1c40f;
+    font-family: 'Luckiest Guy', cursive;
+}
+
+.game-over-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.restart-button, .home-button {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.restart-button {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.restart-button:hover {
+    background-color: #27ae60;
+    transform: scale(1.05);
+}
+
+.home-button {
+    background-color: #3498db;
+    color: white;
+}
+
+.home-button:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+}
+
+/* Menu Toggle Button */
+.toggle-menu-btn {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(52, 73, 94, 0.8);
+    color: #ecf0f1;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 1rem;
+    cursor: pointer;
+    z-index: 5;
+    transition: all 0.3s ease;
+}
+
+.toggle-menu-btn:hover {
+    background-color: #2ecc71;
+    transform: scale(1.05);
+}
+
+/* Style for start screen when displayed as overlay */
+.start-screen.overlay {
+    z-index: 2;
+    background-color: rgba(52, 73, 94, 0.9);
+    pointer-events: auto;
+}
+
+/* When in overlay mode, make sure elements are still clickable */
+.start-screen.overlay a, 
+.start-screen.overlay button,
+.start-screen.overlay input {
+    pointer-events: auto;
+}
+
+/* Style for quit button */
+.start-screen.overlay #start-game {
+    color: #ecf0f1;
+    transition: color 0.3s ease;
+}
+
+.start-screen.overlay #start-game:hover {
+    color: #e74c3c; /* Red color for quit button hover */
+}
+
+/* Custom Alien Screen Styles */
+.custom-alien-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(52, 73, 94, 0.9);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    color: #ecf0f1;
+    font-family: 'Luckiest Guy', cursive;
+    box-sizing: border-box;
+}
+
+.custom-alien-content {
+    width: 80%;
+    max-width: 900px;
+    height: 60%;
+    background-color: rgba(45, 52, 75, 0.8);
+    border-radius: 15px;
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    box-sizing: border-box;
+}
+
+/* Style du canvas de personnalisation */
+.customAlien {
+    background-color: rgba(41, 128, 185, 0.3);
+    border-radius: 10px;
+    margin: 0 auto 20px;
+    display: block;
+    width: 300px;
+    height: 300px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    transform: translateX(0);
+    left: 0;
+    right: 0;
+    cursor: crosshair;  /* Curseur en forme de croix pour le dessin */
+}
+
+/* Outils de dessin */
+.drawing-tools {
+    width: 300px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0 auto 15px;
+    background-color: rgba(41, 128, 185, 0.2);
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.color-picker, .brush-size {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.color-picker span, .brush-size span {
+    margin-right: 10px;
+    font-family: 'Chewy', cursive;
+    font-size: 1rem;
+}
+
+.tool-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.tool-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-family: 'Luckiest Guy', cursive;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+    margin: 0 5px;
+}
+
+.tool-button:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+}
+
+.tool-button.save-button {
+    background-color: #2ecc71;
+}
+
+.tool-button.save-button:hover {
+    background-color: #27ae60;
+}
+
+.save-notification {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(46, 204, 113, 0.8);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-family: 'Chewy', cursive;
+    animation: fadeIn 0.3s, fadeOut 0.3s 1.7s;
+    z-index: 5;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* Ajout des styles manquants pour le bouton Custom Mon Alien */
+#custom-alien-button {
+    background-color: #9b59b6;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-family: 'Luckiest Guy', cursive;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+#custom-alien-button:hover {
+    background-color: #8e44ad;
+    transform: scale(1.05);
+}
+
+.settings-section #custom-alien-button {
+    display: block;
+    margin: 10px auto;
+}
+
+@media (max-width: 768px) {
+    #start-screen h1 {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    #start-screen button {
+        padding: 0.8rem 1.5rem;
+        font-size: 1.2rem;
+    }
+    
+    #credits-screen table, #score-screen table {
+        width: 95%;
+    }
+    
+    #credits-screen th, #score-screen th {
+        padding: 0.7rem;
+        font-size: 1rem;
+    }
+    
+    #credits-screen td, #score-screen td {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+    
+    .screen-title {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #start-screen h1 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    #start-screen button {
+        padding: 0.6rem 1rem;
+        font-size: 1rem;
+    }
+    
+    #credits-screen table, #score-screen table {
+        font-size: 0.8rem;
+    }
+    
+    #credits-screen th, #score-screen th,
+    #credits-screen td, #score-screen td {
+        padding: 0.5rem;
+    }
+    
+    .screen-title {
+        font-size: 1.5rem;
+    }
+    
+    .back-button {
+        padding: 0.6rem 1rem;
+        font-size: 1rem;
+    }
+}
+

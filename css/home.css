@@ -1,0 +1,680 @@
+@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Chewy&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Luckiest Guy', cursive;
+    text-align: center;
+    overflow: hidden; 
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-size: 1rem;
+}
+
+/* ===== HEADER ===== */
+header {
+    background-color: rgba(52, 73, 94, 0.5); 
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1.2vh 1.2vw;
+    z-index: 1;
+    justify-content: center;
+
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+}
+
+.profile img {
+    width: 4vw;
+    height: 4vw;
+    margin-right: 0.7vw;
+}
+
+.progress-bar {
+    width: 16vw;
+    height: 2.2vh;
+    background-color: #7f8c8d;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+} 
+
+.progress-bar .progress {
+    width: 73.2%; 
+    height: 100%;
+    background-color: #FFD700;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.progress-bar .score-text {
+    position: relative;
+    z-index: 2;
+    font-size: 0.8rem;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    white-space: nowrap;
+    font-family: 'Chewy', cursive;
+}
+
+/* ===== MAIN CONTENT ===== */
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    gap: 2vw;
+}
+
+/* ===== LEADERBOARD ===== */
+.leaderboard {
+    font-family: 'Luckiest Guy', cursive;
+    width: 26vw;
+    background: rgba(45, 52, 75, 0.8); /* Updated to a nicer dark blue with opacity */
+    padding: 1.2vh;
+    border-radius: 15px;
+    color: #ecf0f1;
+}
+
+.leaderboard h2 {
+    margin-bottom: 0.8rem;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    font-size: 1.8rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.leaderboard h2::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 25%;
+    width: 50%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #f1c40f, transparent);
+    border-radius: 3px;
+}
+
+.leaderboard h2 a {
+    transition: all 0.3s ease;
+}
+
+.leaderboard h2 a:hover {
+    color: #f1c40f;
+    text-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+    transform: scale(1.05);
+}
+
+.leaderboard ul {
+    list-style: none;
+    text-align: left;
+    padding: 0.7vh;
+}
+
+.leaderboard li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.3rem;
+    color: #ecf0f1;
+}
+
+/* Leaderboard styling for home screen */
+.leaderboard #mini-score-screen {
+    background: none;
+    padding: 0;
+    height: auto;
+    position: static;
+    display: block;
+    overflow: visible;
+}
+
+.leaderboard #mini-score-screen table {
+    width: 100%;
+    background: none;
+    box-shadow: none;
+    margin: 0;
+    max-height: none;
+    border-collapse: separate;
+    border-spacing: 0 0.5rem;
+}
+
+.leaderboard #mini-score-screen th {
+    display: none; /* Masquer les en-têtes pour un design plus compact */
+}
+
+.leaderboard #mini-score-screen td {
+    padding: 0.8rem 0.5rem;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #ecf0f1;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.leaderboard #mini-score-screen tr {
+    background: rgba(52, 73, 94, 0.3);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    position: relative;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.leaderboard #mini-score-screen tr:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.leaderboard #mini-score-screen tr.first {
+    background: rgba(241, 196, 15, 0.25);
+}
+
+.leaderboard #mini-score-screen tr.first::before {
+    content: "👑";
+    position: absolute;
+    left: -1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    animation: float 2s ease-in-out infinite;
+}
+
+.leaderboard #mini-score-screen tr.second {
+    background: rgba(189, 195, 199, 0.25);
+}
+
+.leaderboard #mini-score-screen tr.third {
+    background: rgba(211, 84, 0, 0.25);
+}
+
+.leaderboard #mini-score-screen td:first-child {
+    border-radius: 8px 0 0 8px;
+    font-weight: bold;
+    text-align: left;
+    padding-left: 1rem;
+}
+
+.leaderboard #mini-score-screen td:last-child {
+    border-radius: 0 8px 8px 0;
+    font-family: 'Chewy', cursive;
+    font-weight: bold;
+    text-align: right;
+    padding-right: 1rem;
+}
+
+.leaderboard #mini-score-screen tr.first td:last-child {
+    color: #f1c40f;
+}
+
+.leaderboard #mini-score-screen tr.second td:last-child {
+    color: #bdc3c7;
+}
+
+.leaderboard #mini-score-screen tr.third td:last-child {
+    color: #d35400;
+}
+
+@keyframes float {
+    0% { transform: translateY(-50%) translateX(0); }
+    50% { transform: translateY(-50%) translateX(3px) rotate(5deg); }
+    100% { transform: translateY(-50%) translateX(0); }
+}
+
+/* Icône de trophée pour les positions */
+.position-icon {
+    display: inline-block;
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+/* ===== MAIN MENU ===== */
+.main-menu {
+    background: rgba(45, 52, 75, 0.8); /* Updated to a nicer dark blue with opacity */
+    width: 36vw;
+    padding: 2.2vh;
+    border-radius: 20px;
+}
+
+.play-text {
+    cursor: pointer;
+}
+
+.play-text h1 {
+    color: #ecf0f1;
+    background: none;
+    font-size: 4.6rem;
+    font-family: 'Luckiest Guy', cursive;
+}
+
+.play-text a {
+    color: #ecf0f1;
+    font-size: 3.5rem;
+    transition: color 0.3s ease;
+    display: inline-block;
+    padding: 10px 30px;
+}
+
+.play-text a:hover {
+    color: #2ecc71;
+    transform: scale(1.05);
+}
+
+.menu-options {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.2vh;
+}
+
+.menu-options img {
+    width: 4vw;
+    cursor: pointer;
+}
+
+.title img {
+    width: 13vw;
+}
+
+.main-menu .title {
+	position: relative;
+	display: inline-block;
+}
+
+.main-menu .menu-options {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.main-menu .menu-options img {
+	width: 32px; /* Ajustez la taille si nécessaire */
+	height: 32px;
+	cursor: pointer;
+}
+
+/* ===== CUSTOMIZATION ===== */
+.customization {
+    width: 26vw;
+    background: rgba(45, 52, 75, 0.8); /* Updated to a nicer dark blue with opacity */
+    padding: 1.2vh;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.customization img {
+    width: 6vw;
+    height: 6vw;
+    object-fit: contain;
+}
+
+/* ===== FOOTER NAVIGATION ===== */
+footer {
+    background: rgba(45, 52, 75, 0.8);
+    padding: 1.2vh;
+    width: 100%;
+    position: fixed; 
+    bottom: 0;
+    left: 0; 
+    z-index: 5; 
+}
+
+a {
+    color: #ecf0f1;
+    font-size: 1.3rem;
+    margin: 0 0.7vw;
+    text-decoration: none;
+    font-family: 'Luckiest Guy', cursive;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Settings Panel Styles */
+.settings-panel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50vw;
+    max-height: 80vh;
+    background: #2d344b; /* Couleur mate au lieu de transparente */
+    border-radius: 15px;
+    padding: 1.5rem;
+    color: #ecf0f1;
+    z-index: 10;
+    font-family: 'Chewy', cursive;
+    overflow-y: auto;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5); /* Ajout d'une ombre pour plus de profondeur */
+}
+
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 0.5rem;
+}
+
+.settings-title {
+    font-family: 'Luckiest Guy', cursive;
+    margin: 0;
+    font-size: 2rem;
+}
+
+.close-icon {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.close-icon:hover {
+    transform: scale(1.1);
+}
+
+.settings-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.settings-section h2 {
+    font-family: 'Luckiest Guy', cursive;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.setting-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+.setting-option label {
+    font-size: 1.1rem;
+}
+
+.setting-option input[type="range"],
+.setting-option select {
+    width: 50%;
+    padding: 0.5rem;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    outline: none;
+}
+
+.setting-option input[type="checkbox"] {
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.pseudo-input {
+    margin: 1rem 0;
+}
+
+.pseudo-input input {
+    width: 80%;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    border: 2px solid #ecf0f1;
+    border-radius: 10px;
+    text-align: center;
+    outline: none;
+}
+
+.pseudo-input input:focus {
+    border-color: #2ecc71;
+    box-shadow: 0 0 5px rgba(46, 204, 113, 0.8);
+}
+
+.controls-info {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 0.8rem;
+    margin-top: 0.5rem;
+    text-align: left;
+}
+
+.controls-info p {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    font-family: 'Chewy', cursive;
+}
+
+/* Toggle Switch Styles */
+.control-toggle-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem 0;
+    padding: 0.5rem;
+    background: rgba(91, 156, 209, 0.05);
+    border-radius: 8px;
+}
+
+.control-icon {
+    width: 28px;
+    height: 28px;
+    color: #ecf0f1;
+    transition: color 0.3s ease;
+}
+
+.keyboard-icon {
+    margin-right: 1rem;
+}
+
+.mouse-icon {
+    margin-left: 1rem;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 42px; 
+    height: 22px; 
+}
+
+.toggle-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #6ba3f3;
+    transition: .3s;
+    border-radius: 34px;
+    cursor: pointer;
+}
+
+.toggle-label:before {
+    position: absolute;
+    content: "";
+    height: 16px;  
+    width: 16px;   
+    left: 3px;  
+    bottom: 3px; 
+    background-color: #ecf0f1;
+    transition: .3s;
+    border-radius: 50%;
+}
+
+.toggle-input:checked + .toggle-label {
+    background-color: #2ecc71;
+}
+
+.toggle-input:checked + .toggle-label:before {
+    transform: translateX(20px); 
+}
+
+/* Active control styling */
+.toggle-input:not(:checked) ~ .keyboard-icon {
+    color: #2ecc71;
+}
+
+.toggle-input:checked ~ .mouse-icon {
+    color: #2ecc71;
+}
+
+/* FPS Counter Style */
+.fps-counter {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #2ecc71;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-family: 'Chewy', cursive;
+    font-size: 1rem;
+    z-index: 100;
+    pointer-events: none;
+}
+
+
+/* Credits table styling */
+.credits-screen table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+
+.credits-screen th, 
+.credits-screen td {
+    padding: 8px 12px;
+    text-align: center;
+}
+
+.credits-screen th {
+    background-color: rgba(52, 73, 94, 0.8);
+    color: #ecf0f1;
+}
+
+/* Participation rate hover effect */
+.credits-screen td:last-child {
+    position: relative;
+    transition: background-color 0.3s ease;
+}
+
+.credits-screen td:last-child:hover {
+    background-color: rgba(46, 204, 113, 0.3);
+}
+
+/* AI Contributors styling */
+.ai-contributor {
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background-color: rgba(142, 68, 173, 0.2);
+}
+
+.ai-contributor td {
+    padding: 0;
+}
+
+/* Show AI contributors on hover */
+tr.ai-contributor:hover{
+    height: 40px;
+    opacity: 1;
+}
+
+tr.ai-contributor:hover {
+    height: 40px;
+    opacity: 1;
+}
+
+/* AI contributor special styling */
+.ai-contributor td:first-child::before {
+    content: "🤖 ";
+}
+
+.ai-contributor td:last-child {
+    font-weight: bold;
+    color: #8e44ad;
+}
+
+/* Custom tooltip style - browsers will use the title attribute */
+.credits-screen td:last-child:hover::after {
+    content: attr(data-percentage);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(44, 62, 80, 0.9);
+    color: #ecf0f1;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    animation: extendThrees 5s forwards;
+}
+
+/* Add arrow to the tooltip */
+.credits-screen td:last-child:hover::before {
+    content: "";
+    position: absolute;
+    bottom: calc(100% - 5px);
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(44, 62, 80, 0.9) transparent transparent transparent;
+    z-index: 10;
+}
+
+/* Animation to extend the 3s */
+@keyframes extendThrees {
+    0% { content: "33.3%" }
+    10% { content: "33.33%" }
+    20% { content: "33.333%" }
+    30% { content: "33.3333%" }
+    40% { content: "33.33333%" }
+    50% { content: "33.333333%" }
+    60% { content: "33.3333333%" }
+    70% { content: "33.33333333%" }
+    80% { content: "33.333333333%" }
+    90% { content: "33.3333333333%" }
+    100% { content: "33.33333333333...%" }
+}
+
+/* Special 3s animation for AI contributor hover */
+.ai-contributor td:last-child:hover::after {
+    animation: extendNines 5s forwards;
+}
+
+@keyframes extendNines {
+    0% { content: "98.7%" }
+    10% { content: "98.75%" }
+}

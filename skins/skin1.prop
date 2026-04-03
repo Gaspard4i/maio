@@ -1,0 +1,57 @@
+# Bordure du halo lumineux
+halo.border.color = #e0f7e0
+
+# Halo lumineux autour du vaisseau
+halo.fill.color = #f0fff0
+
+# Base du vaisseau
+ship.base.color = #a0b0c0
+
+# Ombre sous le vaisseau
+ship.shadow.color = lighten(#a0b0c0, -10%)
+
+# Lumière et ombre sur la vitre du vaisseau
+ship.window.lightShadow.color = #c0d0e0
+
+# Bordure entre la vitre et le vaisseau
+ship.window.border.color = #a0b0c0
+
+# Zone lumineuse dans le vaisseau
+ship.interior.light.color = #b0c0d0
+
+# Haut de la vitre
+ship.window.top.color = #d0e0f0
+
+# Alien à l'intérieur du vaisseau
+alien.body.color = rgb(150, 220, 180)
+
+# Cornes de l'alien
+alien.horn.left.color = rgb(150, 220, 180)
+alien.horn.right.color = rgb(150, 220, 180)
+
+# Ronds autour des phares du vaisseau
+ship.lights.rings.color = #c0d0e0
+
+# Oeil gauche de l'alien
+alien.eye.left.color = rgb(50, 50, 50)
+
+# Oeil droit de l'alien
+alien.eye.right.color = rgb(50, 50, 50)
+
+# Lumière sur la vitre du vaisseau (rendue transparente)
+ship.window.light.color = rgba(240, 250, 255, 0.5)
+
+# Halo lumineux sous le vaisseau
+halo.under.color = #e0f7e0
+
+# Phare central du vaisseau
+ship.light.center.color = #80a0e0
+
+# Phare gauche du vaisseau
+ship.light.left.color = #ff8080
+
+# Phare droit du vaisseau
+ship.light.right.color = #ffa060
+
+# Contour du phare droit
+ship.light.right.border.color = #ff9c52

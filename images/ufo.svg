@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 8.013999938964844 448.0009765625 431.97198486328125">
+  <g>
+    <!-- halo -->
+    <path d="M224 344.014c91.806 0 168.451 16.119 187.402 37.647l-72.776-105.819-5.25 1.297c-66.625 16.406-152.141 16.406-218.766 0l-5.25-1.297L35.411 382.97h.105C52.45 360.789 130.341 344.014 224 344.014z" style="" fill="#deefdd" data-original="#deefdd" class="" aria-label="Halo lumineux autour du vaisseau"/>
+    <!-- base vaisseau -->
+    <ellipse cx="224.001" cy="199.986" rx="224" ry="96" style="" fill="#7f8fa0" data-original="#7f8fa0" class="" aria-label="Base du vaisseau"/>
+    <!-- ombre vaisseau -->
+    <path d="M224 267.761c-112.706 0-205.704-35.71-221.406-82.149C.92 190.31 0 195.113 0 200.014c0 53.019 100.288 96 224 96s224-42.981 224-96c0-4.902-.92-9.705-2.594-14.402-15.701 46.438-108.7 82.149-221.406 82.149z" style="" fill="#738394" data-original="#738394" class="" aria-label="Ombre sous le vaisseau"/>
+    <!-- lumiere ombre vitre vaisseau -->
+    <path d="M96.972 120.983c-.558 5.056-.909 10.16-.829 15.346.074 4.813 2.54 9.364 6.402 12.238 27.543 20.499 58.434 35.448 121.456 35.448s93.913-14.95 121.457-35.448c3.86-2.873 6.326-7.424 6.399-12.235.079-5.185-.274-10.29-.835-15.35-36.108-10.68-79.831-16.967-127.022-16.967-47.193-.001-90.919 6.287-127.028 16.968z" style="" fill="#a6b5c8" data-original="#a6b5c8" class="" aria-label="Lumière et ombre sur la vitre du vaisseau"/>
+    <!-- bordure vitre/vaisseau -->
+    <path d="M346.355 147.518c-15.58-11.824-64.203-20.504-122.354-20.504-58.15 0-106.774 8.68-122.354 20.505.348.31.522.767.898 1.047 27.543 20.499 58.434 35.448 121.456 35.448s93.913-14.95 121.457-35.448c.375-.279.549-.738.897-1.048z" style="" fill="#7f8fa0" data-original="#7f8fa0" class="" aria-label="Bordure entre la vitre et le vaisseau"/>
+    <!-- zone de lumiere dans le vaisseau -->
+    <path d="M346.355 147.518c-15.58-11.824-64.203-20.504-122.354-20.504-58.15 0-106.774 8.68-122.354 20.505.348.31.522.767.898 1.047 27.543 20.499 58.434 35.448 121.456 35.448s93.913-14.95 121.457-35.448c.375-.279.549-.738.897-1.048z" style="" fill="#8d9dae" data-original="#8d9dae" class="" aria-label="Zone lumineuse dans le vaisseau"/>
+    <!-- haut de la vitre -->
+    <path d="M224 104.014c47.19 0 90.913 6.287 127.022 16.967C344.159 59.014 290.779 8.014 224 8.014c-66.53 0-120.165 50.798-127.028 112.969 36.109-10.681 79.835-16.969 127.028-16.969z" style="" fill="#cddcf0" data-original="#cddcf0" class="" aria-label="Haut de la vitre du vaisseau"/>
+   
+    <!-- alien -->
+    <path d="M224 184.014c18.03 0 33.206-1.34 46.65-3.567 5.751-13.656 9.35-29.322 9.35-45.433 0-30.875-25.125-56-56-56s-56 25.125-56 56c0 16.11 3.598 31.776 9.35 45.433 13.444 2.227 28.62 3.567 46.65 3.567z" style="" fill="#acc6b9" data-original="#acc6b9" class="" aria-label="Alien à l'intérieur du vaisseau"/>
+    <!-- rond autour des phare du vaisseau -->
+    <path d="M224 200.014c-17.673 0-32 14.326-32 32s14.327 32 32 32 32-14.326 32-32-14.326-32-32-32zM80 176.014c-17.673 0-32 14.326-32 32s14.327 32 32 32 32-14.326 32-32-14.326-32-32-32zM368 176.014c-17.673 0-32 14.326-32 32s14.327 32 32 32 32-14.326 32-32-14.326-32-32-32z" style="" fill="#a6b5c8" data-original="#a6b5c8" class="" aria-label="Ronds autour des phares du vaisseau"/>
+    <!-- oeil de gauche -->
+    <ellipse cx="197.909" cy="147.403" rx="20.257" ry="10.128" transform="rotate(-148.54 197.906 147.398)" fill="#000000" opacity="1" data-original="#000000" class="" aria-label="Oeil gauche de l'alien"/>
+    <ellipse cx="250.008" cy="147.414" rx="10.128" ry="20.256" transform="rotate(-121.46 250.008 147.415)" fill="#000000" opacity="1" data-original="#000000" class="" aria-label="Oeil droit de l'alien"/>
+    <!-- lumiere sur la vitre -->
+    <path d="M219.53 79.466c-3.406-14.012-15.948-24.452-31.009-24.452-17.673 0-32 14.326-32 32 0 11.631 6.267 21.714 15.548 27.316 7.721-19.305 25.875-33.12 47.461-34.864z" style="" fill="#dce7f6" data-original="#dce7f6" class="" aria-label="Lumière sur la vitre du vaisseau"/>
+    <!-- bordure lumiere sur le crane de l'alien -->
+    <path d="M220.521 87.014c0-2.614-.4-5.116-.991-7.548-21.586 1.744-39.74 15.558-47.461 34.864 4.822 2.91 10.41 4.683 16.452 4.683 17.673.001 32-14.326 32-31.999z" style="" fill="#acc6b9" data-original="#acc6b9" class="" aria-label="Bordure lumineuse sur le crâne de l'alien"/>
+    <!-- lumiere sur le crane de l'alien -->
+    <path d="M220.521 87.014c0-2.614-.4-5.116-.991-7.548-21.586 1.744-39.74 15.558-47.461 34.864 4.822 2.91 10.41 4.683 16.452 4.683 17.673.001 32-14.326 32-31.999z" style="" fill="#c5d8d0" data-original="#c5d8d0" aria-label="Lumière sur le crâne de l'alien"/>
+    <!-- halo elipse en bas -->
+    <ellipse cx="224.001" cy="391.986" rx="192" ry="48" style="" fill="#c7e4c7" data-original="#c7e4c7" class="" aria-label="Halo lumineux sous le vaisseau"/>
+    <!-- phare centre -->
+    <path d="M224 216.014c8.822 0 16 7.178 16 16s-7.178 16-16 16-16-7.178-16-16 7.178-16 16-16" style="" fill="#5886c5" data-original="#5886c5" class="" aria-label="Phare central du vaisseau"/>
+    <!-- phare gauche -->
+    <path d="M80 192.014c8.822 0 16 7.178 16 16s-7.178 16-16 16-16-7.178-16-16 7.178-16 16-16" style="" fill="#ee6058" data-original="#ee6058" class="" aria-label="Phare gauche du vaisseau"/>
+    <!-- phare droite -->
+    <path d="M368 192.014c8.822 0 16 7.178 16 16s-7.178 16-16 16-16-7.178-16-16 7.178-16 16-16" style="" fill="#eb7a25" data-original="#eb7a25" aria-label="Phare droit du vaisseau"/>
+  </g>
+</svg>
