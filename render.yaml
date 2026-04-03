@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: maio
+    runtime: node
+    buildCommand: npm install && npx webpack --mode=production
+    startCommand: node .
+    envVars:
+      - key: NODE_ENV
+        value: production

@@ -1,4 +1,6 @@
 import http from 'http';
+import fs from 'fs';
+import path from 'path';
 import { Server as IOServer } from 'socket.io';
 import { Player, BotPlayer } from './player.js';
 import { Stains } from './stains.js';
@@ -14,19 +16,52 @@ import {
 	DEFAULT_PLAYER,
 	MAX_PLAYERS,
 } from './config.js';
-/////////////////// SERVEUR HTTP ///////////////////
+
+/////////////////// SERVEUR HTTP + STATIC ///////////////////
+const MIME_TYPES = {
+	'.html': 'text/html',
+	'.js': 'application/javascript',
+	'.css': 'text/css',
+	'.png': 'image/png',
+	'.jpg': 'image/jpeg',
+	'.svg': 'image/svg+xml',
+	'.ico': 'image/x-icon',
+	'.json': 'application/json',
+};
+
+const clientDir = path.resolve(import.meta.dirname, '../client/public');
+
 const httpServer = http.createServer((req, res) => {
-	res.writeHead(302, { Location: 'http://localhost:8000' });
-	res.end();
+	let filePath = path.join(clientDir, req.url === '/' ? 'index.html' : req.url);
+	const ext = path.extname(filePath);
+	const mimeType = MIME_TYPES[ext] || 'application/octet-stream';
+
+	fs.readFile(filePath, (err, data) => {
+		if (err) {
+			// Fallback to index.html for SPA
+			fs.readFile(path.join(clientDir, 'index.html'), (err2, data2) => {
+				if (err2) {
+					res.writeHead(404);
+					res.end('Not Found');
+					return;
+				}
+				res.writeHead(200, { 'Content-Type': 'text/html' });
+				res.end(data2);
+			});
+			return;
+		}
+		res.writeHead(200, { 'Content-Type': mimeType });
+		res.end(data);
+	});
 });
 
 const port = process.env.PORT || PORT;
-httpServer.listen(port, () =>
-	console.log(`Server running at http://localhost:${port}/`)
+httpServer.listen(port, '0.0.0.0', () =>
+	console.log(`MA.IO server running at http://0.0.0.0:${port}/`)
 );
 
 /////////////////// SOCKET.IO ///////////////////
-const io = new IOServer(httpServer, { cors: true });
+const io = new IOServer(httpServer, { cors: { origin: '*' } });
 
 /////////////////// VARIABLES GLOBALES ///////////////////
 export const players = {};
